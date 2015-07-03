@@ -1,5 +1,6 @@
 # corecontrol
 Control Almost Anything With Almost Anything
+
 Copyright 2015, Neyrinck LLC
 
 Quickstart
@@ -10,9 +11,10 @@ Data Models
 
 CoreControl lets a data model be controlled remotely. To connect a data model to CoreControl, just write some code like this C++ example:
 
-#include "corecontrol.h"
+/#include "corecontrol.h"
 
 void MyWidgetDataModel::Setup()
+
 {
   CCModule* module = CCModuleCreate("model", "widgetx", "Widget X");
   CCModuleAddControl(module, "power", "boolean");
