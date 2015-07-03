@@ -123,7 +123,7 @@ Core Control "modules" represent the data models and control surfaces connected 
 * JSON Patch - https://tools.ietf.org/html/rfc6901
 
 The Core Control Module API is used to create, modify, and connect a module. A software programmer typically does not need to know anything how Core Control uses JSON, but it might help a software programmer better understand how flexible, extensible, and powerful the Core Control system is. Here is a partial JSON representation of the Cute Control module example:
-
+```
 {
   type:'surface',
   identifier:'cutecontrol',
@@ -135,7 +135,7 @@ The Core Control Module API is used to create, modify, and connect a module. A s
     display:{...},
   }
 }
-
+```
 Core Control uses JSON schemas to define how modules are structured.
 
 
