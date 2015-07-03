@@ -1,17 +1,18 @@
 # corecontrol
-Control Almost Anything With Almost Anything
+### Control Almost Anything With Almost Anything
 
 Copyright 2015, Neyrinck LLC
 
-Quickstart
+#### Quickstart
 
 The CoreControl system connects things so one thing can be controlled by another thing. For example, an audio EQ software plug-in can be adjusted by a hardware control surface. CoreControl uses the model-adapter-view pattern. A "data model" is remotely controlled by a "surface." An "adapter" translates between the two. CoreControl uses modern, standards-based technologies such as JSON schema, JSON pointers, and web sockets.
 
-Data Models
+###### Data Models
 
 CoreControl lets a data model be controlled remotely. To connect a data model to CoreControl, just write some code like this C++ example:
 
-/#include "corecontrol.h"
+```
+#include "corecontrol.h"
 
 void MyWidgetDataModel::Setup()
 
@@ -48,10 +49,10 @@ void MyWidgetDataModel::ReceiveControlValueNumber(const char * controlName, floa
     CCModuleSetValue("channel", controlValue);
   }
 }
-
+```
 Now MyWidgetDataModel has connected its controls to CoreControl and it can be controlled remotely. If any values are changed, the data model just calls CCModuleSetValue(..) and CoreControl will broadcast those values to any remote controllers that are connected. CoreControl provides other powerful, optional features that you can read more about further down. These features include hierarchical models, meters, and rich metadata.
 
-Surfaces
+###### Surfaces
 
 CoreControl surfaces are user interfaces used to remotely control a data model. A surface exposes controls just like a data model does, but has a slightly different behavior. It sends out value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to CoreControl, just write some code like this C++ example:
 
