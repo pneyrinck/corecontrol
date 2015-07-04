@@ -243,25 +243,32 @@ Core Control modules uses a concept called "object groups." An object group is a
 
 There are two types of object groups that can exist in a module at this time: "controls" and "meters." New object groups can be created for Core Control if needed in future schemas.
 
-#### Core Control Module APIs
+#### Core Control APIs
 
 Core Control provides a low-level module API and a high-level module API built on top of the low-level API. The low-level API assumes an understanding of the Core Control schemas and JSON technologies. The high-level API provides a friendly interface that can be improved, customized, and extended to different langauges.
 
 ###### Low-Level Module API
 
-The low-level API is implemented in C and Javascript at this time. It 
+The low-level API is implemented in C and Javascript at this time.
+```
+struct CoreControlModule* CC_API CCModuleCreate(const char* type, const char * identifier, const char * name, struct CoreControlModule *parent);
+
+void CC_API CCModuleDestroy(struct CoreControlModule *module);
+
+void CC_API CCModuleSetValue(struct CoreControlModule *module, const char* jsonPtr, const char* msgPackData, int msgPackDataSize);
+
+char* CC_API CCModuleGetValue(struct CoreControlModule *module, const char* jsonPtr, int* sizeOut);
+
+void CC_API CCModuleConnect(struct CoreControlModule *module);
+
+void CC_API CCModuleDisconnect(struct CoreControlModule *module);
+
+void CC_API CCModuleAddObserver(struct CoreControlModule* module, CCRecvValueCallback callback, void* context);
+void CC_API CCModuleRemoveObserver(struct CoreControlModule* module, CCRecvValueCallback callback, void* context);
+```
 
 
 ###### High-Level Module API
 
 Core Control also provides a friendly, high-level API implemented with open-source convenience functions. The high-level API is implemented in C++ and Javascript at this time. The high-level API is open-source for any improvements necessary.
-
-
-JSON is   that A Core Control module is a JSON document, which is what 
-
-which is a The Core Control API 
-CoreControl is a sophisticated system with a simple API to expose data models and controllers and connect them together. It can be used for many useful things. For example, an audio workstation can expose its audio mixer data model, and a hardware surface with faders and knobs can remotely control it over a network connection. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." The possibilities are endless. 
-
-CoreControl is programmed using the model-view-adapter pattern. The model and the view don't have any knowledge of each other. The adapter provides a mapping between them so that the view controls the adapter. In CoreControl, the model part is called a "model" and the view part is called a "surface." A surface can change the model and it can display the state of the data model.
-
 
