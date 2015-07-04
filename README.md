@@ -1,5 +1,5 @@
 # corecontrol
-### Control Almost Anything With Almost Anything
+### Control Anything With Anything
 
 Copyright 2015, Neyrinck LLC
 
@@ -183,15 +183,13 @@ With these two key/value pairs, a Core Control adapter can map it to a different
 
 
 ###### Core Control Adapters
-
 An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Anything With Anything." Core Control is designed so that any model and any surface can potentially be connected with an adapter. An adapter relies on the JSON representation of modules to know how to map them. 
-
-###### Module Object Groups
 
 
 ###### Core Control SubModules / Array Modules
 
 A powerful feature of Core Control is submodules. By using submodules you can connect complicated models and surfaces that are organized as multiple modules using parent/child relationships. Array modules are a special type of module that lets you organize a set of submodules that are ordered and indexed.
+
 
 ###### CoolDAW Module Example
 
@@ -236,6 +234,14 @@ And finally we create 1024 track modules:
 All 1024 track modules are identical. But they are submodules of the array module which organizes them as an ordered, indexed set.
 
 
+###### Module Object Groups
+Core Control modules uses a concept called "object groups." An object group is an object that contains a set of objects that are of the same type. The most common object group in a module is named "controls." The "controls" object group contains all the control objects as key/value pairs where the key is the control name. This comes in really handy because we can construct JSON pointers that are simple and readable. Here are some example JSON pointers that point to key/value pairs in control objects:
+```
+/cooldaw/transport/play/valueNumber
+/cooldaw/tracks/0/track/fader
+```
+
+There are two types of object groups that can exist in a module at this time: "controls" and "meters." New object groups can be created for Core Control if needed in future schemas.
 
 #### Core Control Module APIs
 
