@@ -122,7 +122,23 @@ Core Control "modules" represent the models and surfaces connected to Core Contr
 * JSON Pointers - https://tools.ietf.org/html/rfc6901
 * JSON Patch - https://tools.ietf.org/html/rfc6901
 
-Core Control has an easy-to-use software API so that a software programmer does not need to know anything how Core Control uses JSON internally. But a software programmer may find it helpful to understand how flexible, extensible, and powerful the Core Control system is. And a software programmer may need to understand JSON schema to best implement a module. Here is a partial JSON representation of the Cute Control module example:
+Core Control has an easy-to-use software API so that a software programmer does not need to know anything how Core Control uses JSON internally. But a software programmer may find it helpful to understand how flexible, extensible, and powerful the Core Control system is. And a software programmer may need to understand JSON schema to best implement a module.
+
+Here is a partial JSON representation of the MyWidgetDataModel module example:
+```
+{
+  type:'model',
+  identifier:'widgetx',
+  name:'Widget X',
+  controls: {
+    power:{...},
+    volume:{...},
+    channel:{...},
+  }
+}
+```
+
+Here is a partial JSON representation of the Cute Control module example:
 ```
 {
   type:'surface',
@@ -138,17 +154,21 @@ Core Control has an easy-to-use software API so that a software programmer does 
 ```
 The JSON representation of a module must follow the JSON schema for a Core Control module:
 
-Note that the module has a key/value object named "controls." The "controls" object represents the module's controls. 
+TBD - Link For Module Schema
+
+Note that a module's JSON has a key/value object named "controls." The "controls" object represents the module's controls. 
 
 ###### Core Control Controls
 
-Controls are a fundamental part of Core Control. For a model, a control is a piece of the data model exposed so it can be changed for some useful purpose. For a surface, a control is a piece of the user interface that a user interacts with. An adapter can implement a mapping between the two types so that as a user changes a surface control, a model control changes. Core Control uses a JSON schema to represent a control. Here is a partial JSON representation of an audio volume control:
+Controls are a fundamental part of Core Control. For a model, a control is a piece of the data model exposed so it can be changed for some useful purpose. For a surface, a control is a piece of the user interface that a user interacts with. An adapter can implement a mapping so that as a user changes a surface control, a model control changes. Core Control uses a JSON schema for controls. Here is a partial JSON representation of an audio volume control:
 ```
 {
   type:'continuous',
   name:'Volume',
   valueNumber:0.707,
   valueString:'-3.0',
+  minimumValueNumber: 0.0,
+  maximumValueNumber: 1.0,
   units:'dB',
   taper:{...}
   enabled:true,
@@ -164,7 +184,72 @@ With these two key/value pairs, a Core Control adapter can map it to a different
 
 ###### Core Control Adapters
 
-An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Almost Anything Control Almost Anything." Core Control is designed so that any model and any surface can potentially be connected with an adapter. An adapter relies on the JSON representation of modules to know how to map them. 
+An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Anything With Anything." Core Control is designed so that any model and any surface can potentially be connected with an adapter. An adapter relies on the JSON representation of modules to know how to map them. 
+
+###### Module Object Groups
+
+
+###### Core Control SubModules / Array Modules
+
+A powerful feature of Core Control is submodules. By using submodules you can connect complicated models and surfaces that are organized as multiple modules using parent/child relationships. Array modules are a special type of module that lets you organize a set of submodules that are ordered and indexed.
+
+###### CoolDAW Module Example
+
+To illustrate submodules and module arrays, consider a digital audio software application called "CoolDAW.' CoolDAW has an audio mixer with 1024 tracks, each having a volume and pan control, and a transport section with stop, play, and record controls.
+
+The first module we will create is the top-level parent:
+```
+{
+  type:'model',
+  identifier:'cooldaw',
+  name:'Cool DAW',
+  controls: {}
+}
+```
+Note that it has no controls. The controls will be in sub-modules.
+
+The next module we create is for the transport section:
+```
+{
+  type:'model',
+  identifier:'transport',
+  name:'Transport',
+  controls: {
+    'stop':{...},
+    'play':{...},
+    'record':{...},
+  }
+}
+```
+And finally we create 1024 track modules:
+```
+{
+  type:'model',
+  identifier:'track',
+  name:'Track',
+  controls: {
+    'fader':{...},
+    'pan':{...}
+  }
+}
+```
+All 1024 track modules are identical. But they are submodules of the array module which organizes them as an ordered, indexed set.
+
+
+
+#### Core Control Module APIs
+
+Core Control provides a low-level module API and a high-level module API built on top of the low-level API. The low-level API assumes an understanding of the Core Control schemas and JSON technologies. The high-level API provides a friendly interface that can be improved, customized, and extended to different langauges.
+
+###### Low-Level Module API
+
+The low-level API is implemented in C and Javascript at this time. It 
+
+
+###### High-Level Module API
+
+Core Control also provides a friendly, high-level API implemented with open-source convenience functions. The high-level API is implemented in C++ and Javascript at this time. The high-level API is open-source for any improvements necessary.
+
 
 JSON is   that A Core Control module is a JSON document, which is what 
 
