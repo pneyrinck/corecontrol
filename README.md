@@ -5,11 +5,11 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The CoreControl system connects things to be controlled by other things. For example, an audio mixer can be adjusted by a hardware control surface and/or a touch screen control surface. CoreControl uses the model-adapter-view pattern. A "data model" is remotely controlled by one or more "surfaces." An "adapter" translates between a model and surface. CoreControl is built with modern, standards-based technologies including JSON schema, JSON pointers, and web sockets.
+The CoreControl software system connects things to be controlled by other things. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." CoreControl is designed to be very flexible and powerful so that almost anything can control almost anything. CoreControl uses the model-adapter-view pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. CoreControl is implemented with modern, standards-based technologies including JSON schema, JSON pointers, and web sockets.
 
-###### Data Models
+###### Models
 
-CoreControl lets a data model be controlled remotely. To connect a data model to CoreControl, just write some code like this C++ example:
+CoreControl lets a data model be controlled remotely. To connect a model to CoreControl, just write some code like this C++ example:
 
 ```
 #include "corecontrol.h"
@@ -68,11 +68,11 @@ void MyWidgetDataModel::ReceiveControlValueNumber(std::string controlName, float
   }
 }
 ```
-Now MyWidgetDataModel has connected its controls to CoreControl and it can be controlled remotely. If any data model values are changed, the data model must call CCModuleSetValue(..) and CoreControl will broadcast those values to any remote controllers that are connected. CoreControl provides other powerful, optional features that you can read more about further down. These features include hierarchical models and surfaces, meters, metadata, discovery, and more.
+Now MyWidgetDataModel has connected its controls to CoreControl and it can be controlled remotely by surfaces that are interfaced via adapters. If any model values are changed, the model must call CCModuleSetValue(..) and CoreControl will send the values to any surfaces that are connected via adapters. CoreControl provides other powerful, optional features that you can read more about further down. These features include hierarchical models and surfaces, meters, metadata, discovery, and more.
 
 ###### Surfaces
 
-CoreControl surfaces are user interfaces used to remotely control a data model. A surface has controls just like a data model does, but differs in its behavior. It sends value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to CoreControl, just write some code like this C++ example:
+CoreControl surfaces are user interfaces used to remotely control a model. A surface has controls just like a model does, but differs in its behavior. It sends value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to CoreControl, just write some code like this C++ example:
 
 ```
 #include "corecontrol.h"
@@ -103,26 +103,26 @@ void MyCuteController::ReceiveControlValueString(const char * controlName, std::
 ```
 C++ Projects
 
-To use CoreControl to your C++ project, add these files:
+To use CoreControl in your C++ project, add these files:
 * /includes/corecontrol.h
 * /module/corecontrol_interface.cpp
 * /module/corecontrol_library.c
 
-Javascript Projects
+To use CoreControl in your javascript project, add this file:
 * /js/corecontrol.js
 
 ### Core Control - Documentation
 
 ###### Core Control Modules
 
-Core Control "modules" represent the data models and control surfaces connected to Core Control. A module is nothing more than structured data. Internally, a module is represented and manipulated by using JSON standard technologies:
+Core Control "modules" represent the models and surfaces connected to Core Control. A module is structured data that an adapter uses to interface it to other modules. Internal to Core Control, a module is represented and manipulated using standard JSON technologies:
 
 * JSON Data Interchange Format - https://tools.ietf.org/html/rfc7159
 * JSON Schema - json-schema.org
 * JSON Pointers - https://tools.ietf.org/html/rfc6901
 * JSON Patch - https://tools.ietf.org/html/rfc6901
 
-The Core Control Module API is used to create, modify, and connect a module. A software programmer typically does not need to know anything how Core Control uses JSON, but it might help a software programmer better understand how flexible, extensible, and powerful the Core Control system is. Here is a partial JSON representation of the Cute Control module example:
+Core Control has an easy-to-use software API so that a software programmer does not need to know anything how Core Control uses JSON internally. But a software programmer may find it helpful to understand how flexible, extensible, and powerful the Core Control system is. And a software programmer may need to understand JSON schema to best implement a module. Here is a partial JSON representation of the Cute Control module example:
 ```
 {
   type:'surface',
@@ -136,8 +136,35 @@ The Core Control Module API is used to create, modify, and connect a module. A s
   }
 }
 ```
-Core Control uses JSON schemas to define how modules are structured.
+The JSON representation of a module must follow the JSON schema for a Core Control module:
 
+Note that the module has a key/value object named "controls." The "controls" object represents the module's controls. 
+
+###### Core Control Controls
+
+Controls are a fundamental part of Core Control. For a model, a control is a piece of the data model exposed so it can be changed for some useful purpose. For a surface, a control is a piece of the user interface that a user interacts with. An adapter can implement a mapping between the two types so that as a user changes a surface control, a model control changes. Core Control uses a JSON schema to represent a control. Here is a partial JSON representation of an audio volume control:
+```
+{
+  type:'continuous',
+  name:'Volume',
+  valueNumber:0.707,
+  valueString:'-3.0',
+  units:'dB',
+  taper:{...}
+  enabled:true,
+  ....
+}
+```
+The JSON schema for a control requires it to have these key/value pairs:
+* type
+* valueNumber, valueString, or valueBlob
+
+With these two key/value pairs, a Core Control adapter can map it to a different control in a different module. Additional key/value pairs enhance an adapter's ability to provide a great user experience. Because Core Control uses JSON schema, a wide variety of control schemas can be defined.
+
+
+###### Core Control Adapters
+
+An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Almost Anything Control Almost Anything." Core Control is designed so that any model and any surface can potentially be connected with an adapter. An adapter relies on the JSON representation of modules to know how to map them. 
 
 JSON is   that A Core Control module is a JSON document, which is what 
 
