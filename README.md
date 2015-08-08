@@ -5,11 +5,11 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The CoreControl software system connects things to be controlled by other things. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." CoreControl is designed to be very flexible and powerful so that almost anything can control almost anything. CoreControl uses the model-adapter-view pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. CoreControl is implemented with modern, standards-based technologies including JSON schema, JSON pointers, and web sockets.
+The Core Control software system connects things to be controlled by other things. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." CoreControl is designed to be very flexible and powerful so that almost anything can control almost anything. CoreControl uses the model-adapter-view pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. Core Control is implemented with modern, standards-based technologies including JSON schema, JSON pointers, and web sockets.
 
 ###### Models
 
-CoreControl lets a data model be controlled remotely. To connect a model to CoreControl, just write some code like this C++ example:
+Core Control lets a data model be controlled remotely. To connect a model to Core Control, just write some code like this C++ example:
 
 ```
 #include "corecontrol.h"
@@ -72,7 +72,7 @@ Now MyWidgetDataModel has connected its controls to CoreControl and it can be co
 
 ###### Surfaces
 
-CoreControl surfaces are user interfaces used to remotely control a model. A surface has controls just like a model does, but differs in its behavior. It sends value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to CoreControl, just write some code like this C++ example:
+CoreControl surfaces are user interfaces used to remotely control a model. A surface has controls just like a model does, but differs in its behavior. It sends value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to Core Control, just write some code like this C++ example:
 
 ```
 #include "corecontrol.h"
