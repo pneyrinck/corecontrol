@@ -40,7 +40,7 @@
 		"description":"Controls are objects with a control value property that the adapter maps between model modules and surface modules. A model exposes its controls so they can be broadcast to one or more adapters and be changed by those adapters. A surface exposes its controls to be changed by a single adapter and broadcast to a single adapter."
             	"type": "object",
 		"properties": {
-			"*": { "$ref": "http://corecontrol.io/schemas/module/control" }
+			"*": { "$ref": "https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/control.json" }
 		},
             "uniqueItems": true
         }
@@ -48,14 +48,14 @@
 		"description":"Meters are similar to controls, but a model only broadcasts the values and a surface only displays the values."
             "type": "object",
 		"properties": {
-			"*": { "$ref": "http://corecontrol.io/schemas/module/meter" }
+			"*": { "$ref": "https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/meter.json" }
 		},
             "uniqueItems": true
         }
         "category": { "type": "string" },
         "icon": { "type": "string", "format": "uri"},
         "host": { "type": "string"},
-		"hostLocation": { "$ref": "http://corecontrol.io/schemas/module/location" }
+		"hostLocation": { "$ref": "https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/location.json" }
 	},
 	"color": {
 		"type": "string"
