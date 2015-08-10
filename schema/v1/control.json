@@ -1,0 +1,70 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+	"self": {
+		"vendor": "corecontrol.io",
+		"name": "Core Control Control",
+		"format": "jsonschema",
+		"version": "0-0-1"
+	},
+    "description": "A CoreControl control is an object contained in a Core Control module. Modules expose these controls so an adapter can map them between a model and a surface. The valueNumber and valueString are special properties intended for fast realtime mapping. The other properties are metadata that adapters use to implement the mapping.",
+    "type": "object",
+    "required": [ "sendType", "name", "index" ],
+    "properties": {
+		"valueNumber": {
+            		"type": "number",
+		},
+		"valueString": {
+			"type": "string"
+			"default" : ""
+		},
+		"index": {
+        		 "type": "integer",
+            		"minimum": 0,
+            		"maximum": 0xFFFF
+		},
+        "sendType": {
+            "type": "string",
+			"enum": ["continuous", "indexed", "bool", "delta", "momentary", "string", "blob"],
+            "description": "The type of control messages that are broadcast by this control to adapters. This helps and adapter map it to a different module."
+        },
+        "receiveType": {
+            "type": "string",
+		"enum": ["continuous", "indexed", "bool", "delta", "momentary", "string", "blob"],
+            "description": "The type of control message it will receive. This helps and adapter map it to a different module. Typically, a model modules receives the same type that is sent. Often, a surface module uses a different type. For example, a surface may send delta values with a rotery encoder but receive continuous values for display."
+        },
+        "name": {
+            "type": "string",
+            "description": "A readable name such as 'Fader.' It can be localized and change freely."
+        },
+	"numSteps": {
+		"type": "integer",
+		"default" : 100,
+            "minimum": 0,
+            "maximum": 0xFFFFFFFF,
+            "description": ""
+		},
+	"default": {
+            "description": "The default value of the control"
+		},
+	"maximumValue": {
+            	"type": "number",
+		"default" : 1.0
+	},
+        "category": {
+		"type": "string"
+		},
+        "units": {
+		"type": "string"
+		"description": "The string displayed after a numerical value such as 'dB' or 'kHz.'"
+		},
+		"color": {
+			"type": "string"
+			"default" : "none",
+			"description": "A CSS color value for application specific use."
+		},
+		"displayMode": {
+			"type": "array"
+			"description": "An array of keywords that can be used to represent the control in a useful manner."
+		},
+    }
+}
