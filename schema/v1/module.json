@@ -4,7 +4,8 @@
 		"vendor": "corecontrol.io",
 		"name": "Core Control Module",
 		"format": "jsonschema",
-		"version": "0-0-1"
+		"version": "0-0-1",
+		"copyright": "2015 Neyrinck LLC"
 	},
     "description": "A Core Control(CC) module. Core Control is a model-view-adapter pattern-based system that lets control 'surfaces' display and adjust remote data models. For example, an audio software plug-in can be controlled remotely from a device with knobs and buttons.  A CoreControl 'module' is either a surface or a data model. This schema is for CoreControl modules.",
     "type": "object",
