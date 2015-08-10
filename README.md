@@ -154,7 +154,7 @@ Here is a partial JSON representation of the Cute Control module example:
 ```
 The JSON representation of a module must follow the JSON schema for a Core Control module:
 
-TBD - Link For Module Schema
+https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/module.json
 
 Note that a module's JSON has a key/value object named "controls." The "controls" object represents the module's controls. 
 
@@ -180,6 +180,9 @@ The JSON schema for a control requires it to have these key/value pairs:
 * valueNumber, valueString, or valueBlob
 
 With these two key/value pairs, a Core Control adapter can map it to a different control in a different module. Additional key/value pairs enhance an adapter's ability to provide a great user experience. Because Core Control uses JSON schema, a wide variety of control schemas can be defined.
+
+You can see the schema for a control here:
+https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/control.json
 
 
 ###### Core Control Adapters
@@ -234,14 +237,14 @@ And finally we create 1024 track modules:
 All 1024 track modules are identical. But they are submodules of the array module which organizes them as an ordered, indexed set.
 
 
-###### Module Object Groups
-Core Control modules uses a concept called "object groups." An object group is an object that contains a set of objects that are of the same type. The most common object group in a module is named "controls." The "controls" object group contains all the control objects as key/value pairs where the key is the control name. This comes in really handy because we can construct JSON pointers that are simple and readable. Here are some example JSON pointers that point to key/value pairs in control objects:
+###### The Controls Object And Meters Object
+The Core Control module schema has an object named "controls" and an object named "meters." The "controls" object contains control objects as key/value pairs where the key is the control name. This comes in really handy because we can construct JSON pointers that are simple and readable. Here are some example JSON pointers that point to key/value pairs in control objects:
 ```
 /cooldaw/transport/play/valueNumber
-/cooldaw/tracks/0/track/fader
+/cooldaw/tracks/0/track/fader/valueString
 ```
 
-There are two types of object groups that can exist in a module at this time: "controls" and "meters." New object groups can be created for Core Control if needed in future schemas.
+The "meters" object is very similar.
 
 #### Core Control APIs
 
