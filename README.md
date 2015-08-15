@@ -5,7 +5,18 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The Core Control software system connects things to be controlled by other things. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." CoreControl is designed to be very flexible and powerful so that almost anything can control almost anything. CoreControl uses the model-adapter-view pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. Core Control is implemented with modern, standards-based technologies including JSON schema, JSON pointers, and web sockets.
+The Core Control software system connects things to be controlled by other things. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." CoreControl is designed to be very flexible and powerful so that almost anything can control almost anything.
+
+Simple And Extensible
+Many people like OSC for remote because it is so simple. But OSC does not scale well and has many limitations. Core Control can be used just as simply as OSC but has additional features that allow it to scale.
+
+CCModuleSetValue("volume", 0.7);
+
+Extensible
+
+
+
+CoreControl uses the model-adapter-view pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. Core Control is implemented with modern, standards-based technologies including JSON schema, JSON pointers, and web sockets.
 
 ###### Models
 
