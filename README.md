@@ -7,33 +7,39 @@ Copyright 2015, Neyrinck LLC
 
 The Core Control system connects things to be controlled by other things over a network such as a LAN or the internet. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." Core Control provides simple, flexible, fast messaging with additional support for legacy protocols such as OSC and MIDI. CoreControl is designed to be very flexible and powerful so that almost anything can control almost anything.
 
-JSON, JSON Schema, And JSON Pointers
+###### JSON, JSON Schema, And JSON Pointers
+
 Core Control is designed using JSON technologies. You do not need to understand JSON to use Core Control, but it is helpful. 
 
-Core Control Modules
+###### Core Control Modules
+
 Core Control "modules" are things that can control other modules or be controlled by other modules. A module is represented using JSON which is a standard way to repersent structured data. JSON schemas are used to define how modules are represented with JSON. JSON pointers are used to reference the data within a module. Every module has a "type" value that indicates the kind of module it is. Example types are "model", "surface", "osc", and "midi." The first two types, "model" and "surface" are the core types that let you build incredibly powerful, scalable systems. The second two, "osc" and "midi" provide support for OSC and MIDI messaging. 
 
+###### The OSC Module
 
-OSC
-Many people use Open Sound Control (OSC) for control messaging on a network. But OSC does not scale well, is difficult to configure, and has many limitations. Nonetheless, OSC is simple and useful. Core Control fully supports OSC messaging.
+Many people use Open Sound Control (OSC) for control messaging on a network. But OSC does not scale well, is difficult to configure, and has many limitations. Nonetheless, OSC is simple and useful. Core Control fully supports OSC messaging using its built-in OSC module.
 
-Here is a simple C++ example to send OSC messages with Core Control:
-
+Here is a simple C++ example to send OSC messages with Core Control's OSC module:
+```
 // set the protocol and destination for sending messages
 CCConnect("send", "udp", "192.168.1.10", 7000);
-// this sends a float value message with OSC address /volume.
-CCSendValue("/osc/controls/volume", 0.7);
 
+// send a float value message with OSC address /volume.
+CCSendValue("/osc/0/controls/volume", 0.7);
+```
 Please note that the OSC message sent uses the address '/volume' and can be received by any OSC application. The beginning part of the path, '/osc/controls', tells Core Control to send an OSC message.
 
 Here is a simple C++ example to receive OSC messages with Core Control:
-
+```
+// set the protocol and port for receiving messages
 CCConnect("receive", "udp", 0, 7000);
-CCSetReceiveCallbck(receive);
+
+// set the callback function to receive values
+CCSetReceiveCallback(receive);
 
 void receive(const char* jsonPtr, const char* type, void* data, int length)
 {
-  if (strcmp(jsonPtr, "/osc/controls/volume")
+  if (strcmp(jsonPtr, "/osc/0/controls/volume")
   {
     if (type == "number")
     {
@@ -41,12 +47,8 @@ void receive(const char* jsonPtr, const char* type, void* data, int length)
     }
   }
 }
-
+```
 Please note that the OSC message received has the addresss '/volume' and can be sent by any OSC application. The beginning part of the path, '/osc/controls', indicates that Core Control received an OSC message.
-
-
-
-One Core Control module that is always available is the OSC module.
 
 
 CoreControl uses the model-adapter-view pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. Core Control is implemented with modern, standards-based technologies including JSON schema, JSON pointers, and web sockets.
