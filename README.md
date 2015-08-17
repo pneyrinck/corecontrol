@@ -5,7 +5,7 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The Core Control system connects things to be controlled by other things over a network such as a LAN or the internet. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." Core Control provides simple, flexible, fast messaging with additional support for legacy protocols such as OSC and MIDI. Core Control is designed to be very flexible and powerful so that almost anything can control almost anything.
+The Core Control system connects things to be controlled by other things connected on a network. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." Core Control provides simple, flexible, fast messaging with additional support for legacy protocols such as OSC and MIDI. Core Control is designed to be very flexible and powerful so that almost anything can control almost anything.
 
 ###### JSON, JSON Schema, And JSON Pointers
 
@@ -39,7 +39,23 @@ CCConnect(true, "/osc/0");
 // send a float value message with OSC address /volume.
 CCSendValue("/osc/0/controls/volume/valueNumber", 0.7);
 ```
-Please note that the OSC message sent has the address '/volume' and can be received by any OSC application. The beginning part of the path, '/osc/controls', tells Core Control to send an OSC message.
+Please note that the OSC message sent has the address '/volume' and can be received by any OSC application. The beginning part of the path, '/osc/0/controls', tells Core Control to send a message from the OSC module.
+
+The JSON representation for Core Control's OSC module is:
+
+{
+  type:'osc',
+  identifier:'osc',
+  name:'OSC',
+  ipProtocol:'udp',
+  sendIpAddress:'192.168.1.10',
+  sendIpPort:7000,
+  controls: {
+    'volume':{
+      valueNumber:0.7
+    }
+  }
+}
 
 Here is a simple C++ example to receive OSC messages with Core Control:
 ```
@@ -49,10 +65,9 @@ Here is a simple C++ example to receive OSC messages with Core Control:
 CCSetProperty("/osc/0", "ipProtocol", "udp");
 CCSetProperty("/osc/0", "receiveIpPort", 7000);
 
-// set the callback function to receive values
-CCSetReceiveCallback(receive);
-CCConnect(true, "/osc/0");
-
+// set a callback function to receive values
+CCModuleAddControlObserver("/osc/0", receive);
+CCConnect("/osc/0", true);
 
 void receive(const char* jsonPtr, void* data, int length)
 {
@@ -62,23 +77,23 @@ void receive(const char* jsonPtr, void* data, int length)
   }
 }
 ```
-Please note that the OSC message received has the addresss '/volume' and could have been sent by any OSC application. The beginning part of the path, '/osc/controls', indicates that Core Control received an OSC message. The '/valueNumber' part of the path indicates a floating point number was received. The middle part of the path indicates the OSC address of the message. 
+Please note that the OSC message received has the addresss '/volume' and could have been sent by any OSC application. The beginning part of the path, '/osc/0/controls', indicates that Core Control's OSC module received a  message. The '/valueNumber' part of the path indicates the most recent floating point value received. The middle part of the path indicates the OSC address of the message. 
 
 
 ###### Core Control Models / Core Control Surfaces
 
-Core Control provides two different module types that are important to understand: "model" and "surface". 
+Core Control provides two module types that are important to understand: "model" and "surface". 
 
-First, it will help to understand the that Core Control uses the model-adapter-view software pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. It is very important to understand these things:
+First, it will help to understand that Core Control uses the model-adapter-view software pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the name "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. It is very important to understand these things:
 
 * A model can be controlled by one or more surfaces simultaneously through adapters.
 * A surface typically controls one model through an adapter.
 * A surface never assumes it is the only thing controlling a model.
 * A model typically has no knowledge of what is controlling it.
 
-Model and surface modules mostly identical except for how they behave. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected surfaces. A surface sends requested control value changes to a model. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to control a module. This is an example of something that OSC can not do.
+Model and surface modules are mostly identical except for how they behave. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected adapters which forward the value changes to surfaces. A surface sends requested control value changes to a model through an adpater. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to control a module.
 
-To connect a model to Core Control, just write some code like this C++ example:
+Here is example C++ code for a model that has three values that can be controlled:
 
 ```
 #include "corecontrol.h"
@@ -88,15 +103,14 @@ bool MyWidgetDataModel::power = true;
 float MyWidgetDataModel::volume = 0.7;
 int MyWidgetDataModel::channel = 36;
 
-// setup corecontrol
+// setup core control
 void MyWidgetDataModel::Setup()
 {
-  // connect to any Core Control server using TCP
-  CCConnect("bidirectional", "tcp", "servers");
-
   // create a CoreControl module
   CCModule* module = CCModuleCreate("model", "widgetx", "Widget X");
   
+  CCSetProperty(module, "ipProtocol", "tcp");
+
   // add controls to the module that reperesent the data model
   CCModuleAddControl(module, "power", "boolean");
   CCModuleAddControl(module, "volume", "continuous");
