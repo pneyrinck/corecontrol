@@ -5,11 +5,11 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The Core Control system connects things to be controlled by other things over a network such as a LAN or the internet. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." Core Control provides simple, flexible, fast messaging with additional support for legacy protocols such as OSC and MIDI. CoreControl is designed to be very flexible and powerful so that almost anything can control almost anything.
+The Core Control system connects things to be controlled by other things over a network such as a LAN or the internet. For example, audio mixer software can be adjusted by a hardware control surface and/or a touch screen control surface. Or a coffee machine can expose its data model so that a phone can turn it on when you say "I want coffee." Core Control provides simple, flexible, fast messaging with additional support for legacy protocols such as OSC and MIDI. Core Control is designed to be very flexible and powerful so that almost anything can control almost anything.
 
 ###### JSON, JSON Schema, And JSON Pointers
 
-Core Control is designed using JSON technologies. You do not need to understand JSON to use Core Control, but it is helpful. 
+Core Control is designed using JSON technologies. You do not need to understand JSON to use Core Control, but it can be helpful. 
 
 * JSON Data Interchange Format - https://tools.ietf.org/html/rfc7159
 * JSON Schema - json-schema.org
@@ -19,7 +19,7 @@ Core Control is designed using JSON technologies. You do not need to understand 
 
 ###### Core Control Modules
 
-Core Control "modules" are things that can control other modules or be controlled by other modules. A module is represented using JSON which is a standard way to repersent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" value that indicates the kind of module it is. Example types are "model", "surface", "osc", and "midi." The first two types, "model" and "surface" are the core types that let you build incredibly powerful, scalable systems. The second two, "osc" and "midi" provide support for OSC and MIDI messaging.
+Core Control "modules" are things that can control other modules or be controlled by other modules. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" value that indicates the kind of module it is. Example types are "model", "surface", "osc", and "midi." The first two types, "model" and "surface" are the core types that let you build incredibly powerful, scalable systems. The second two, "osc" and "midi" provide support for OSC and MIDI messaging.
 
 
 ###### The OSC Module
@@ -30,47 +30,51 @@ Here is a simple C++ example to send OSC messages with Core Control's OSC module
 ```
 #include "corecontrol.h"
 
-// set the protocol and destination for sending messages
-CCConnect("send", "udp", "192.168.1.10", 7000);
+// set the protocol, address, and port for the OSC module
+CCSetProperty("/osc/0", "ipProtocol", "udp");
+CCSetProperty("/osc/0", "sendIpAddress", "192.168.1.10");
+CCSetProperty("/osc/0", "sendIpPort", 7000);
+CCConnect(true, "/osc/0");
 
 // send a float value message with OSC address /volume.
-CCSendValue("/osc/0/controls/volume", 0.7);
+CCSendValue("/osc/0/controls/volume/valueNumber", 0.7);
 ```
-Please note that the OSC message sent uses the address '/volume' and can be received by any OSC application. The beginning part of the path, '/osc/controls', tells Core Control to send an OSC message.
+Please note that the OSC message sent has the address '/volume' and can be received by any OSC application. The beginning part of the path, '/osc/controls', tells Core Control to send an OSC message.
 
 Here is a simple C++ example to receive OSC messages with Core Control:
 ```
 #include "corecontrol.h"
 
 // set the protocol and port for receiving messages
-CCConnect("receive", "udp", 0, 7000);
+CCSetProperty("/osc/0", "ipProtocol", "udp");
+CCSetProperty("/osc/0", "receiveIpPort", 7000);
 
 // set the callback function to receive values
 CCSetReceiveCallback(receive);
+CCConnect(true, "/osc/0");
 
-void receive(const char* jsonPtr, const char* type, void* data, int length)
+
+void receive(const char* jsonPtr, void* data, int length)
 {
-  if (strcmp(jsonPtr, "/osc/0/controls/volume")
+  if (strcmp(jsonPtr, "/osc/0/controls/volume/valueNumber")
   {
-    if (type == "number")
-    {
-      float receivedValue = (float)data;
-    }
+    float receivedValue = (float)data;
   }
 }
 ```
-Please note that the OSC message received has the addresss '/volume' and can be sent by any OSC application. The beginning part of the path, '/osc/controls', indicates that Core Control received an OSC message.
+Please note that the OSC message received has the addresss '/volume' and could have been sent by any OSC application. The beginning part of the path, '/osc/controls', indicates that Core Control received an OSC message. The '/valueNumber' part of the path indicates a floating point number was received. The middle part of the path indicates the OSC address of the message. 
 
 
-###### Core Control Models And Surfaces
+###### Core Control Models / Core Control Surfaces
 
 Core Control provides two different module types that are important to understand: "model" and "surface". 
 
-Core Control uses the model-adapter-view pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. It is very important to understand these things:
+First, it will help to understand the that Core Control uses the model-adapter-view software pattern (https://en.wikipedia.org/wiki/Model–view–adapter), but uses the term "surface" instead of "view." A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. It is very important to understand these things:
 
 * A model can be controlled by one or more surfaces simultaneously through adapters.
 * A surface typically controls one model through an adapter.
 * A surface never assumes it is the only thing controlling a model.
+* A model typically has no knowledge of what is controlling it.
 
 Model and surface modules mostly identical except for how they behave. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected surfaces. A surface sends requested control value changes to a model. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to control a module. This is an example of something that OSC can not do.
 
@@ -346,12 +350,12 @@ Core Control also provides a friendly, high-level API implemented with open-sour
 
 ###### Why Not Just Use OSC?
 
-OSC is a very simple thing. It is a defined way to send simple messages between two OSC programs on a network. Each message has an address and a value. Its simplicity makes it very useful but has many limitations:
+OSC is a simple way to send simple messages between two OSC programs on a network. Each message has an address and a value. Its simplicity makes it very useful but has many limitations:
 
-* The two OSC programs exchanging messages must use matching messages.
-* It does not provide for more more than two OSC programs to be connected.
+* The two OSC programs exchanging messages must be using the same message addresses and data types.
+* OSC does not provide for more more than one OSC program to be controlling another program.
 * The message address inefficently uses a text value that can be any length.
-* There is no architecture for discovery.
+* There is no system for describing and discovering OSC programs on a network.
 
 
 
