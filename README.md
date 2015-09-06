@@ -74,7 +74,7 @@ Here is a simple C++ example to receive OSC messages with Core Control:
 
 // create an OSC module
 CCModule* module = CCModuleCreate("osc", "widgetx", "Widget X");
-// create a socket to send messages
+// create a socket to receive messages
 CCSocket* socket = CCSocketCreate("udp", "receive", 7001);
 
 // set a callback function to receive values
