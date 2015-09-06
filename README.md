@@ -19,7 +19,7 @@ Core Control is designed using JSON technologies. You do not need to understand 
 
 ###### Core Control Modules
 
-A Core Control "module" is primarily a set of controls whose values can be sent to other modules and changes can be received from other modules. They can also send and receive property and configuraton messages. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" value that indicates the kind of module it is. Example types are "oci", "osc", and "midi." The first type, "oci" is the core type that let you build incredibly powerful, scalable systems. The second two, "osc" and "midi" provide support for legacy systems using OSC and MIDI messaging. Core Control is extensible to support additional messaging systems.
+A Core Control "module" is primarily a set of controls whose values can be sent to other modules and changes can be received from other modules. They can also send and receive property and configuraton messages. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" property that specifies the kind of module it is. Example types are "oci", "osc", and "midi." The first type, "oci" is the core type that let you build incredibly powerful, scalable systems. The second two, "osc" and "midi" provide support for legacy systems using OSC and MIDI messaging. Core Control is extensible to support additional messaging systems.
 
 
 ###### Legacy OSC And MIDI Modules
