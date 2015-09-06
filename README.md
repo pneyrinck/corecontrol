@@ -260,6 +260,7 @@ Here is a partial JSON representation of the MyWidgetDataModel module example fr
     start:{...},
     type:{...},
     shots:{
+      index:2,
       type:'integer',
       name:'Shots',
       valueInteger:2,
@@ -287,13 +288,14 @@ The JSON schema for a Core Control module can be seen here:
 
 https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/module.json
 
-Note that a module's JSON has a key/value object named "controls." The "controls" object provides info about the module's controls. Because it follows a schema, other applications can look at the JSON and know what a module's controls are. 
+Note that a module's JSON has a key/value object named "controls." The "controls" object provides info about the module's controls. Because it follows a schema, other applications can look at the JSON and know what a module's controls are.
 
 ###### Core Control Controls
 
 Controls are a fundamental part of Core Control. For a model, a control is a piece of the data model exposed so it can be changed for some useful purpose. For a surface, a control is a piece of the user interface that a user interacts with. An adapter can implement a mapping so that as a user changes a surface control, a model control changes. Core Control uses a JSON schema for controls. Here is a partial JSON representation of an audio volume control:
 ```
 {
+  index:2,
   type:'continuous',
   name:'Volume',
   valueNumber:0.707,
@@ -307,10 +309,10 @@ Controls are a fundamental part of Core Control. For a model, a control is a pie
 }
 ```
 The JSON schema for a control requires it to have these key/value pairs:
+* index
 * type
-* valueNumber, valueString, or valueBlob
 
-With these two key/value pairs, a Core Control adapter can map it to a different control in a different module. Additional key/value pairs enhance an adapter's ability to provide a great user experience. Because Core Control uses JSON schema, a wide variety of control schemas can be defined.
+With knowledge of these two key/value pairs, a Core Control program send values to this module and control it. Additional key/value pairs enhance a programs ability to provide a great user experience. In the example above, it provides onfo about the fader taper which lets a controlling application draw line marks in a user interface. Because Core Control uses JSON schema, a wide variety of control schemas can be defined.
 
 You can see the schema for a control here:
 https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/control.json
