@@ -22,9 +22,9 @@ Core Control is designed using JSON technologies. You do not need to understand 
 Core Control "modules" primarily send and receive control value messages. They can also send and receive property and configuraton messages. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" value that indicates the kind of module it is. Example types are "oci", "osc", and "midi." The first type, "oci" is the core type that let you build incredibly powerful, scalable systems. The second two, "osc" and "midi" provide support for legacy systems using OSC and MIDI messaging. Core Control is extensible to support additional messaging systems.
 
 
-###### Legacy OSC Modules
+###### Legacy OSC And MIDI Modules
 
-Many people use Open Sound Control (OSC) for control messaging on a network. Despite its limitations, OSC is simple and useful. Core Control fully supports OSC messaging using OSC modules.
+Many people use Open Sound Control (OSC) for control messaging on a network. Despite its limitations, OSC is simple and useful. Core Control fully supports OSC messaging using OSC modules. And, of course, MIDI is very common so COre Control supports MIDI.
 
 Here is a simple C++ example to send OSC messages with Core Control:
 ```
@@ -93,18 +93,18 @@ Please note that the OSC message received has the addresss '/volume' and could h
 
 ###### OCI (Open Control Interface) Modules
 
-The OSC protocol is very good, but it has many limitations. The OCI protocol is designed to solve these limitations. One limitation of OSC is that it does not scale well to large systems with arbitrary control address names. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. Another limitation is that an OSC software application has no way to describe itself so that other applications can and understand its role and its control addresses to send messages to it. OCI lets modules describe themselves with rich metadata. Another limitation is that OSC provides a single, flat address space for controls with no concept of modules or hierarchies. OCI provides hierarchical sub-modules that provide many benefits. For example, an audio control surface can have an array of track modules, a transport module, and edit module. And finally, OSC has no mechanism for multiple control surfaces to control a single data model. OCI solves this in a simple, elegant manner. 
+The OSC protocol is very good, but it has many limitations. The OCI protocol is designed to solve these limitations. One limitation of OSC is that it does not scale well to large systems with arbitrary control address names. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. Another limitation is that an OSC software application has no way to describe itself so that other applications can and understand its role and its control addresses to send messages to it. OCI lets modules describe themselves with rich metadata. Another limitation is that OSC provides a single, flat address space for controls with no concept of modules or hierarchies. OCI provides hierarchical sub-modules that provide many benefits. For example, an audio control surface can organize its many controls within submodules such as an array of track modules, a transport module, and edit module. And finally, OSC has no mechanism for multiple control surfaces to control a single data model. OCI solves this in a simple, elegant manner. 
 
 ###### Core Control Module Roles
 
-Core Control modules can specify their role as a data model or a control surface which allows a flexible, extensible system. Core Control uses the software design pattern known as 'model-view-adapter' which is described here: https://en.wikipedia.org/wiki/Model–view–adapter. Core Control modules must specify their role and implement the behavior appropriate to that role. There are two roles at this time: "model" and "surface". The "surface" role is equivalent to the "view" role in the 'model-view-adapter' pattern. A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface. It is very important to understand these things about model and surface roles:
+Core Control modules can specify their role as a data 'model' or a control 'surface' which allows a flexible, extensible system. Core Control uses the software design pattern known as 'model-view-adapter' which is described here: https://en.wikipedia.org/wiki/Model–view–adapter. Core Control modules must specify their role and implement the behavior appropriate to that role. There are two roles at this time: "model" and "surface". The "surface" role is equivalent to the "view" role in the 'model-view-adapter' pattern. A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface so that almost anything can control almost anything.  It is helpful to understand these things about model and surface roles:
 
 * A model can be controlled by one or more surfaces simultaneously through adapters.
 * A surface typically controls a model through an adapter.
 * A surface never assumes it is the only thing controlling a model.
 * A model typically has no knowledge of what is controlling it.
 
-Model and surface modules are mostly identical except for how they behave. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected adapters which forward the value changes to surfaces. A surface sends requested control value changes to a model through an adpater. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to control a module.
+Model and surface modules are technically identical, but behave slightly different. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected adapters which forward the value changes to surfaces. A surface sends requested control value changes to a model through an adpater. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to simultaneously control a single data model.
 
 Here is example C++ code for a model that has three values that can be controlled:
 
