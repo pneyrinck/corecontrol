@@ -24,7 +24,7 @@ A Core Control "module" is primarily a set of controls whose values can be sent 
 
 ###### Legacy OSC And MIDI Modules
 
-Many people use Open Sound Control (OSC) for control messaging on a network. Despite its limitations, OSC is simple and useful. Core Control fully supports OSC messaging using OSC modules. And, of course, MIDI is very common so Core Control supports MIDI messaging.
+Many people use Open Sound Control (OSC) for control messaging on a network. Despite its limitations, OSC is simple and useful. Core Control fully supports OSC messaging using OSC modules. And, of course, MIDI is very common so Core Control supports MIDI messaging using MIDI modules.
 
 Here is a simple C++ example to send OSC messages with Core Control:
 ```
