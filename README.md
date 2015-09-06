@@ -104,7 +104,7 @@ The OSC protocol is very good, but it has many limitations.
 * OSC programs are not modular. All controls are organized into a single flat space.
 * OSC does not provide for more more than one OSC program to be controlling another program.
 
-The OCI protocol is designed to solve these limitations. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. OCI lets modules describe themselves with rich metadata. OCI provides hierarchical sub-modules for modular and organized control. For example, an audio control surface can organize its many controls within submodules such as an array of track modules, a transport module, and edit module. OCI allows any number fo control surfaces to be controlling a model. 
+The OCI protocol is designed to solve these limitations. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. OCI lets modules describe themselves with rich metadata. OCI provides hierarchical sub-modules for modular and organized control. OCI allows any number fo control surfaces to be controlling a model. 
 
 
 ###### Core Control Module Roles
