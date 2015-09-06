@@ -5,7 +5,7 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface. Or a coffee machine can can turn on when you say "I want coffee" to a smartphone. Core Control provides simple, flexible, fast messaging and supports legacy protocols such as OSC and MIDI and supports the new OCI (open control interface) protocol. Core Control is designed to be very flexible and powerful so that almost anything can control almost anything.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface. Or a coffee machine can can turn on when you say "I want coffee" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging and supports legacy protocols such as OSC and MIDI and supports the new OCI (open control interface) protocol. Core Control is designed to be very flexible and powerful so that almost anything can control almost anything.
 
 ###### JSON, JSON Schema, And JSON Pointers
 
