@@ -39,18 +39,18 @@ CCSocket* socket = CCSocketCreate("udp", "192.168.100.1:7000");
 CCConnect(true, module, socket);
 
 // send a float value message with OSC address /volume.
-CCSendValue("/controls/volume/valueFloat", 0.7);
+CCSetControlValue("/volume/valueFloat", 0.7);
 // send a string value message with OSC address /volume.
-CCSendValue("/controls/name/valueString", "John Doe");
+CCSetControlValue("/name/valueString", "John Doe");
 // send an integer value message with OSC address /volume.
-CCSendValue("/controls/year/valueInteger", 1963);
+CCSetControlValue("/year/valueInteger", 1963);
 // send a blob value message with OSC address /volume.
-CCSendValue("/controls/data/valueBlob", blobdata, 100);
+CCSetControlValue("/data/valueBlob", blobdata, 100);
 ```
 Please note that the OSC messages sent have the OSC addresses '/volume', '/name', 'year', and 'data' and can be received by any OSC application. The beginning part of the path, '/controls', tells Core Control to send OSC control messages from the OSC module.
 
 The JSON representation for this OSC module is:
-
+```
 {
   type:'osc',
   identifier:'widgetx',
@@ -67,7 +67,7 @@ The JSON representation for this OSC module is:
     }
   }
 }
-
+```
 Here is a simple C++ example to receive OSC messages with Core Control:
 ```
 #include "corecontrol.h"
