@@ -39,13 +39,13 @@ CCSocket* socket = CCSocketCreate("udp", "192.168.100.1:7000");
 CCConnect(true, module, socket);
 
 // send a float value message with OSC address /volume.
-CCSetControlValue("/volume/valueFloat", 0.7);
+CCSetControlValue(module, "/volume/valueFloat", 0.7);
 // send a string value message with OSC address /volume.
-CCSetControlValue("/name/valueString", "John Doe");
+CCSetControlValue(module, "/name/valueString", "John Doe");
 // send an integer value message with OSC address /volume.
-CCSetControlValue("/year/valueInteger", 1963);
+CCSetControlValue(module, "/year/valueInteger", 1963);
 // send a blob value message with OSC address /volume.
-CCSetControlValue("/data/valueBlob", blobdata, 100);
+CCSetControlValue(module, "/data/valueBlob", blobdata, 100);
 ```
 Please note that the OSC messages sent have the OSC addresses '/volume', '/name', '/year', and '/data' and can be sent to any OSC application.
 
