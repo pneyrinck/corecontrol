@@ -107,7 +107,7 @@ Core Control modules can specify their role as a data 'model' or a control 'surf
 * A surface never assumes it is the only thing controlling a model.
 * A model typically has no knowledge of what is controlling it.
 
-Model and surface modules are technically identical, but behave slightly different. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected adapters which forward the value changes to surfaces. A surface sends requested control value changes to a model through an adpater. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to simultaneously control a single data model.
+Model and surface modules are technically identical, but behave slightly different according to their role. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected adapters which forward the value changes to surfaces. A surface sends requested control value changes to a model through an adpater. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to simultaneously control a single data model.
 
 Here is example C++ code for a model that has three values that can be controlled:
 
