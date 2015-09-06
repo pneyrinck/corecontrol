@@ -5,7 +5,7 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface. Or a coffee machine can can turn on when you say "I want coffee" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging and supports legacy protocols such as OSC and MIDI and supports the new OCI (open control interface) protocol. Core Control is designed to be very flexible and powerful so that anything can control anything.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a coffee machine can can turn on when you say "I want coffee" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging and supports legacy protocols such as OSC and MIDI and supports the new OCI (open control interface) protocol. Core Control is designed to be very flexible and powerful so that anything can control anything.
 
 ###### JSON, JSON Schema, And JSON Pointers
 
@@ -96,7 +96,16 @@ As you can see Core Control provides basic OSC messaging using its software API.
 
 ###### OCI (Open Control Interface) Modules
 
-The OSC protocol is very good, but it has many limitations. The OCI protocol is designed to solve these limitations. One limitation of OSC is that it does not scale well to large systems with arbitrary control address names. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. Another limitation is that an OSC software application has no way to describe itself so that other applications can understand its role and its control addresses to send messages. OCI lets modules describe themselves with rich metadata. Another limitation is that OSC provides a single, flat address space for controls with no concept of modules or hierarchies. OCI provides hierarchical sub-modules that provide many benefits. For example, an audio control surface can organize its many controls within submodules such as an array of track modules, a transport module, and edit module. And finally, OSC has no mechanism for multiple control surfaces to control a single data model. OCI solves this in a simple, elegant manner. 
+The OSC protocol is very good, but it has many limitations.
+
+* The message address inefficently uses a text value that can be any length which limits its scalability.
+* There is no system for describing and discovering OSC programs on a network.
+* Two OSC programs exchanging messages must be using the same message addresses and data types.
+* OSC programs are not modular. All controls are organized into a single flat space.
+* OSC does not provide for more more than one OSC program to be controlling another program.
+
+The OCI protocol is designed to solve these limitations. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. OCI lets modules describe themselves with rich metadata. OCI provides hierarchical sub-modules for modular and organized control. For example, an audio control surface can organize its many controls within submodules such as an array of track modules, a transport module, and edit module. OCI allows any number fo control surfaces to be controlling a model. 
+
 
 ###### Core Control Module Roles
 
@@ -109,83 +118,100 @@ Core Control modules can specify their role as a data 'model' or a control 'surf
 
 Model and surface modules are technically identical, but behave slightly different according to their role. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected adapters which forward the value changes to surfaces. A surface sends requested control value changes to a model through an adpater. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to simultaneously control a single data model.
 
-Here is example C++ code for a model that has three values that can be controlled:
+Here is example C++ code for a model that has four values that can be controlled:
 
 ```
 #include "corecontrol.h"
 
 // data model
-bool MyWidgetDataModel::power = true;
-float MyWidgetDataModel::volume = 0.7;
-int MyWidgetDataModel::channel = 36;
+std::string CoffeeBotDataModel::type = "cappuccino";
+int CoffeeBotDataModel::shots = 2;
+float CoffeeBotDataModel::progress = 0.0;
+bool CoffeeBotDataModel::make = false;
 
 // setup core control
-void MyWidgetDataModel::Setup()
+void CoffeeBotDataModel::Setup()
 {
   // create a OCI module with role = model
-  CCModule* module = CCModuleCreate("oci", "widgetx", "Widget X", "model");
+  CCModule* module = CCModuleCreate("oci", "coffeebot", "Coffee Bot", "model");
   
   // create a socket to send and receive messages to a core control websocket server
   CCSocket* socket = CCSocketCreate("tcp", "ws://192.168:100.1:8080/models");
 
   // add controls to the module that reperesent the data model
-  CCModuleAddControl(module, "power", "boolean");
-  CCModuleAddControl(module, "volume", "continuous");
-  CCModuleAddControl(module, "channel", "discrete");
+  CCModuleAddControl(module, "type", "Type", "string");
+  CCModuleAddControl(module, "progress", "Progress", "continuous");
+  CCModuleAddControl(module, "shots", "Shots", "integer");
+  CCModuleAddControl(module, "start", "Start", "integer");
   
   // provide a callback for CoreControl to receive control changes
-  CCModuleAddControlObserver(module, WidgetX::ReceiveControlValueNumber);
-  
-  // set the module control values 
-  CCModuleSetValue("power", MyWidgetDataModel::power);
-  CCModuleSetValue("volume", MyWidgetDataModel::volume);
-  CCModuleSetValue("channel", MyWidgetDataModel::channel);
+  CCModuleAddControlObserver(module, CoffeeBotDataModel::ReceiveControlValueNumber);
+  CCModuleAddControlObserver(module, CoffeeBotDataModel::ReceiveControlValueString);
+
+  // initialize the module control values 
+  CCModuleSetValue("type", CoffeeBotDataModel::type);
+  CCModuleSetValue("progress", CoffeeBotDataModel::progress);
+  CCModuleSetValue("shots", CoffeeBotDataModel::shots);
+  CCModuleSetValue("start", CoffeeBotDataModel::start);
   
   // connect the module to the server
   CCConnect(true, module, socket);
 }
 
 // this function is called by CoreControl to inform the data model of changes from a remote control surface
-void MyWidgetDataModel::ReceiveControlValueNumber(std::string controlName, float controlValue, void* context)
+void CoffeeBotDataModel::ReceiveControlValueNumber(std::string controlName, double controlValue, void* context)
 {
-  if (controlName.compare("power")==0)
+  if (controlName.compare("make")==0)
   {
     // update your data model here
-    MyWidgetDataModel::power = controlValue;
+    MyWidgetDataModel::make = controlValue;
     // tell core control the new value
-    CCModuleSetValue("power", controlValue > 0.5);
+    CCModuleSetValue("make", controlValue > 0.5);
   }
-  else if (controlName.compare("volume")==0)
+  else if (controlName.compare("progress")==0)
   {
     // update your data model here
-    MyWidgetDataModel::volume = controlValue;
+    MyWidgetDataModel::progress = controlValue;
     // tell core control the new value
-    CCModuleSetValue("volume", controlValue);
+    CCModuleSetValue("progress", controlValue);
   }
-  else if (controlName.compare("channel")==0)
+  else if (controlName.compare("shots")==0)
   {
     // update your data model here
-    MyWidgetDataModel::channel = controlValue;
+    MyWidgetDataModel::shots = controlValue;
     // tell core control the new value
-    CCModuleSetValue("channel", controlValue);
+    CCModuleSetValue("shots", controlValue);
+  }
+  
+  void CoffeeBotDataModel::ReceiveControlValueString(std::string controlName, std::string controlValue, void* context)
+  {
+    if (controlName.compare("type")==0)
+    {
+      // update your data model here
+      MyWidgetDataModel::type = controlValue;
+      // tell core control the new value
+      CCModuleSetValue("type", controlValue > 0.5);
+    }
   }
 }
 ```
-Now MyWidgetDataModel has connected its controls to CoreControl and it can be controlled remotely by surfaces that are interfaced via adapters. If any model values are changed, the model must call CCModuleSetValue(..) and CoreControl will send the values to any surfaces that are connected via adapters. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical models and surfaces, meters, metadata, discovery, and more.
+Now CoffeeBotDataModel has described its controls and connected to Core Control. Now any other Core Control application can observe that there is a module connected named "Coffee Bot", that its role is a model, and info about its controls. 
+
+Because its role is model, if any model values are changed, the model must call CCModuleSetValue(..) and Core Control will send the values to any surfaces that are connected via adapters. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical models and surfaces, meters, metadata, discovery, and more.
 
 ###### Surfaces
 
-CoreControl surfaces are user interfaces used to remotely control a model. A surface has controls just like a model does, but differs in its behavior. It sends value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to Core Control, just write some code like this C++ example:
+Core Control surfaces are user interfaces used to remotely control a model. A surface has controls just like a model does, but differs in its behavior. It sends value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to Core Control, just write some code like this C++ example:
 
 ```
 #include "corecontrol.h"
 void MyCuteController::Setup()
 {
   CCModule* module = CCModuleCreate("surface", "cutecontrol", "Cute Control");
-  CCModuleAddControl(module, "knob", "delta");      // rotary encoder knob
-  CCModuleAddControl(module, "up", "momentary");    // momentary push button
-  CCModuleAddControl(module, "down", "momentary");  // momentary push button
-  CCModuleAddControl(module, "display", "text");		// LCD text display
+  CCModuleAddControl(module, "knob", "Adjust", "delta");      // rotary encoder knob
+  CCModuleAddControl(module, "up", "Previous", "momentary");    // momentary push button
+  CCModuleAddControl(module, "down", "Next", "momentary");  // momentary push button
+  CCModuleAddControl(module, "display", "Value", "text");		// LCD text display
   CCModuleAddControlObserver(module, MyCuteController::ReceiveControlValueString);
   CCModuleConnect(module);
 }
@@ -204,6 +230,10 @@ void MyCuteController::ReceiveControlValueString(const char * controlName, std::
   }
 }
 ```
+###### Core Control API
+
+Core Control is implemented with a code library that provides an API to make it easy to integrate Core Control into hardware and software projects.
+
 C++ Projects
 
 To use CoreControl in your C++ project, add these files:
@@ -214,20 +244,13 @@ To use CoreControl in your C++ project, add these files:
 To use CoreControl in your javascript project, add this file:
 * /js/corecontrol.js
 
-### Core Control - Documentation
+### Going Deeper - Core Control Documentation
 
 ###### Core Control Modules
 
-Core Control "modules" represent the models and surfaces connected to Core Control. A module is structured data that an adapter uses to interface it to other modules. Internal to Core Control, a module is represented and manipulated using standard JSON technologies:
+This provides a deeper look at modules which are the heart and soul of Core Control. Modules are a structured data representation of an application / widget that is using Core Control. JSON is used to represent modules. The layout of the JSON must follow a defined schema.
 
-* JSON Data Interchange Format - https://tools.ietf.org/html/rfc7159
-* JSON Schema - json-schema.org
-* JSON Pointers - https://tools.ietf.org/html/rfc6901
-* JSON Patch - https://tools.ietf.org/html/rfc6901
-
-Core Control has an easy-to-use software API so that a software programmer does not need to know anything how Core Control uses JSON internally. But a software programmer may find it helpful to understand how flexible, extensible, and powerful the Core Control system is. And a software programmer may need to understand JSON schema to best implement a module.
-
-Here is a partial JSON representation of the MyWidgetDataModel module example:
+Here is a partial JSON representation of the MyWidgetDataModel module example from above:
 ```
 {
   type:'model',
@@ -255,11 +278,11 @@ Here is a partial JSON representation of the Cute Control module example:
   }
 }
 ```
-The JSON representation of a module must follow the JSON schema for a Core Control module:
+The JSON schema for a Core Control module can be seen here:
 
 https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/module.json
 
-Note that a module's JSON has a key/value object named "controls." The "controls" object represents the module's controls. 
+Note that a module's JSON has a key/value object named "controls." The "controls" object provides info about the module's controls. Because it follows a schema, other applications can look at the JSON and know what a module's controls are. 
 
 ###### Core Control Controls
 
@@ -294,7 +317,7 @@ An adapter implements a mapping between a model and a surface. Adapters are the 
 
 ###### Core Control SubModules / Array Modules
 
-A powerful feature of Core Control is submodules. By using submodules you can connect complicated models and surfaces that are organized as multiple modules using parent/child relationships. Array modules are a special type of module that lets you organize a set of submodules that are ordered and indexed.
+A powerful feature of Core Control is submodules. By using submodules you can connect models and surfaces that are organized as multiple modules using parent/child relationships. Array modules are a special type of module that lets you organize a set of submodules that are ordered and indexed.
 
 
 ###### CoolDAW Module Example
@@ -378,15 +401,6 @@ void CC_API CCModuleRemoveObserver(struct CoreControlModule* module, CCRecvValue
 
 Core Control also provides a friendly, high-level API implemented with open-source convenience functions. The high-level API is implemented in C++ and Javascript at this time. The high-level API is open-source for any improvements necessary.
 
-
-###### Why Not Just Use OSC?
-
-OSC is a simple way to send simple messages between two OSC programs on a network. Each message has an address and a value. Its simplicity makes it very useful but has many limitations:
-
-* The two OSC programs exchanging messages must be using the same message addresses and data types.
-* OSC does not provide for more more than one OSC program to be controlling another program.
-* The message address inefficently uses a text value that can be any length.
-* There is no system for describing and discovering OSC programs on a network.
 
 
 
