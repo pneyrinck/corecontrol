@@ -254,12 +254,17 @@ Here is a partial JSON representation of the MyWidgetDataModel module example fr
 ```
 {
   type:'model',
-  identifier:'widgetx',
-  name:'Widget X',
+  identifier:'coffeebot',
+  name:'Coffee Bot',
   controls: {
-    power:{...},
-    volume:{...},
-    channel:{...},
+    start:{...},
+    type:{...},
+    shots:{
+      type:'integer',
+      name:'Shots',
+      valueInteger:2,
+    },
+    progress:{...},
   }
 }
 ```
