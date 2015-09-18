@@ -148,7 +148,7 @@ void CoffeeBotDataModel::Setup()
   
   // add controls to the module that reperesent the data model
   CCModuleAddControl(module, "type", "Type", "string");
-  CCModuleAddControl(module, "progress", "Progress", "continuous");
+  CCModuleAddControl(module, "progress", "Progress", "float");
   CCModuleAddControl(module, "shots", "Shots", "integer");
   CCModuleAddControl(module, "start", "Start", "integer");
   
