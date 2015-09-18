@@ -19,8 +19,14 @@ Core Control is designed using JSON technologies. You do not need to understand 
 
 ###### Core Control Modules
 
-A Core Control "module" encapsulates a set of controls and an object that uses those controls. The control values can be sent to other modules and control value changes can be received from other modules. Modules can also send and receive property and configuration messages. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" property that specifies the kind of module it is. Example types are "oci", "osc", and "midi." The first type, "oci" is the core type that let you build incredibly powerful, scalable systems. The second two, "osc" and "midi" provide support for legacy systems using OSC and MIDI messaging. Core Control is extensible to support additional messaging systems.
+A Core Control "module" encapsulates an object that has properties. A fundamental module property is the 'controls' property which describes a module's controls that can be used for realtime control. Each control has properties that can be sent to other modules and control property changes can be received from other modules. A fundamental control property is its value. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" property that specifies the kind of module it is. Example types are "oci", "osc", and "midi." The first type, "oci" is the core type that lets you build extensible, powerful, scalable systems. The second two, "osc" and "midi" provide support for legacy systems using OSC and MIDI messaging.
 
+
+###### OCI (Open Control Interface)
+
+Core Control modules send and receive OCI messages. OCI is a binary message format that can be sent over a wire using any transport layer. Typical transport layers are UDP, TCP, and MIDI Sysex. OCI is inspired by OSC (Open Sound Control) and designed to be compatible with OSC. In fact, an OSC message is a type of OCI message. OCI provides other message types that help implement scalable systems not possible with OSC.
+
+ 
 
 ###### Legacy OSC And MIDI Modules
 
@@ -39,15 +45,17 @@ CCSocket* socket = CCSocketCreate("udp", "192.168.100.1:7000");
 CCConnect(true, module, socket);
 
 // send a float value message with OSC address /volume.
-CCSetControlValue(module, "/volume/valueFloat", 0.7);
-// send a string value message with OSC address /volume.
-CCSetControlValue(module, "/name/valueString", "John Doe");
-// send an integer value message with OSC address /volume.
-CCSetControlValue(module, "/year/valueInteger", 1963);
-// send a blob value message with OSC address /volume.
-CCSetControlValue(module, "/data/valueBlob", blobdata, 100);
+CCSetControlValue(module, "volume", 0.7);
+// send a string value message with OSC address /name/first.
+CCSetControlValue(module, "name/first", "John");
+// send a string value message with OSC address /name/last.
+CCSetControlValue(module, "name/last", "Doe");
+// send an integer value message with OSC address /year.
+CCSetControlValue(module, "year", 1963);
+// send a blob value message with OSC address /data.
+CCSetControlValue(module, "data", blobdata, 100);
 ```
-Please note that the OSC messages sent have the OSC addresses '/volume', '/name', '/year', and '/data' and can be sent to any OSC application.
+Please note that the OSC messages sent have the OSC addresses '/volume', '/name', '/year', and '/data' and can be sent to any application that is programmed to receive OSC messages.
 
 The JSON representation for this OSC module is:
 ```
@@ -59,8 +67,11 @@ The JSON representation for this OSC module is:
     'volume':{
       valueFloat:0.7
     },
-    'name':{
-      valueString:'John Doe'
+    'name/first':{
+      valueString:'John'
+    },
+    'name/last':{
+      valueString:'Doe'
     },
     'year':{
       valueInteger:1963
@@ -98,25 +109,25 @@ As you can see Core Control provides basic OSC messaging using its software API.
 
 The OSC protocol is very good, but it has many limitations.
 
-* The message address inefficently uses a text value that can be any length which limits its scalability.
-* There is no system for describing and discovering OSC programs on a network.
+* The message address inefficently uses a text value that can be any length which limits scalability.
+* There is no system for describing OSC programs on a network.
 * Two OSC programs exchanging messages must be using the same message addresses and data types.
 * OSC programs are not modular. All controls are organized into a single flat space.
 * OSC does not provide for more more than one OSC program to be controlling another program.
 
-The OCI protocol is designed to solve these limitations. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. OCI lets modules describe themselves with rich metadata. OCI provides hierarchical sub-modules for modular and organized control. OCI allows any number fo control surfaces to be controlling a model. 
+The OCI protocol is designed to solve these limitations. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. OCI lets modules describe themselves with rich metadata. OCI provides hierarchical sub-modules for modular and organized control. OCI allows any number of control surfaces to be controlling a single data model. 
 
 
 ###### Core Control Module Roles
 
 Core Control modules can specify their role as a data 'model' or a control 'surface' which is very simple distinction, but incredibly important. Core Control uses the software design pattern known as 'model-view-adapter' which is described here: https://en.wikipedia.org/wiki/Model–view–adapter. Core Control modules can specify their role and implement the behavior appropriate to that role. There are two roles at this time: "model" and "surface". The "surface" role is equivalent to the "view" role in the 'model-view-adapter' pattern. A data "model" is remotely controlled by one or more "surfaces." An "adapter" implements a mapping between a model and surface so that almost anything can control almost anything.  It is helpful to understand these things about model and surface roles:
 
-* A model can be controlled by one or more surfaces simultaneously through adapters.
-* A surface typically controls a model through an adapter.
+* A model can be controlled by one or more surfaces simultaneously.
+* A surface typically controls a model.
 * A surface never assumes it is the only thing controlling a model.
 * A model typically has no knowledge of what is controlling it.
 
-Model and surface modules are technically identical, but behave slightly different according to their role. A model receives requests to change control values from surfaces or other sources private to the model.  When a model control value changes for any reason, it must send the change to all connected adapters which forward the value changes to surfaces. A surface sends requested control value changes to a model through an adpater. When a surface receives a change to a control value, it updates its user interface. These behaviors allow any number of surfaces to simultaneously control a single data model.
+Model and surface modules are technically identical, but behave slightly different according to their role. A model receives requests to change control values from surfaces or other internal sources private to the model.  When a model control value changes for any reason, it must send the change to all connected destinations. A surface sends a control value to request a change to a model. When a surface receives a change to a control value, it must updates its user interface. These behaviors allow any number of surfaces to simultaneously control a single data model.
 
 Here is example C++ code for a model that has four values that can be controlled:
 
@@ -135,9 +146,6 @@ void CoffeeBotDataModel::Setup()
   // create a OCI module with role = model
   CCModule* module = CCModuleCreate("oci", "coffeebot", "Coffee Bot", "model");
   
-  // create a socket to send and receive messages to a core control websocket server
-  CCSocket* socket = CCSocketCreate("tcp", "ws://192.168:100.1:8080/models");
-
   // add controls to the module that reperesent the data model
   CCModuleAddControl(module, "type", "Type", "string");
   CCModuleAddControl(module, "progress", "Progress", "continuous");
@@ -154,16 +162,19 @@ void CoffeeBotDataModel::Setup()
   CCModuleSetValue("shots", CoffeeBotDataModel::shots);
   CCModuleSetValue("start", CoffeeBotDataModel::start);
   
+  // create a socket to send and receive messages to a core control websocket server
+  CCSocket* socket = CCSocketCreate("tcp", "ws://192.168:100.1:8080/models");
+
   // connect the module to the server
   CCConnect(true, module, socket);
 }
 
-// this function is called by CoreControl to inform the data model of changes from a remote control surface
+// this function is called by CoreControl to inform the data model of requested changes from a remote control surface
 void CoffeeBotDataModel::ReceiveControlValueNumber(std::string controlName, double controlValue, void* context)
 {
   if (controlName.compare("make")==0)
   {
-    // update your data model here
+    // update the data model here
     MyWidgetDataModel::make = controlValue;
     // tell core control the new value
     CCModuleSetValue("make", controlValue > 0.5);
@@ -197,7 +208,7 @@ void CoffeeBotDataModel::ReceiveControlValueNumber(std::string controlName, doub
 ```
 Now CoffeeBotDataModel has described its controls and connected to Core Control. Now any other Core Control application can observe that there is a module connected named "Coffee Bot", that its role is a model, and info about its controls. 
 
-Because its role is model, if any model values are changed, the model must call CCModuleSetValue(..) and Core Control will send the values to any surfaces that are connected via adapters. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical models and surfaces, meters, metadata, discovery, and more.
+Because its role is model, if any model values are changed, the model must call CCModuleSetValue(..) and Core Control will send the values to any surfaces it is connected to. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical modules, meters, metadata, discovery, and more.
 
 ###### Surfaces
 
@@ -319,7 +330,7 @@ https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/control.json
 
 
 ###### Core Control Adapters
-An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Anything With Anything." Core Control is designed so that any model and any surface can potentially be connected with an adapter. An adapter relies on the JSON representation of modules to know how to map them. 
+An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Anything With Anything." Core Control is designed so that any model and any surface can potentially be connected via an adapter. An adapter relies on the JSON representation of modules to know how to map control values between them. 
 
 
 ###### Core Control SubModules / Array Modules
