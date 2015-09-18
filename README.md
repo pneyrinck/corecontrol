@@ -55,7 +55,7 @@ CCSetControlValue(module, "year", 1963);
 // send a blob value message with OSC address /data.
 CCSetControlValue(module, "data", blobdata, 100);
 ```
-Please note that the OSC messages sent have the OSC addresses '/volume', '/name', '/year', and '/data' and can be sent to any application that is programmed to receive OSC messages.
+Please note that the OSC messages sent have the OSC addresses '/volume', '/name/first', '/name/last', '/year', and '/data' and can be sent to any application that is programmed to receive OSC messages.
 
 The JSON representation for this OSC module is:
 ```
