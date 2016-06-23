@@ -1,3 +1,5 @@
+// copyright Neyrinck LLC 2016
+
 const kVCModulePropertySet_Module =         "module"
 const kVCModulePropertySet_Control =         "control"
 const kVCModulePropertySet_Meter   =         "meter"
