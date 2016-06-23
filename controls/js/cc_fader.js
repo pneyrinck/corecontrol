@@ -95,4 +95,4 @@
       }
       vcproSurface.setControlValue(scope.id, controlValue);
   }}]);
-}
+});
