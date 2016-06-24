@@ -59,4 +59,4 @@
           } //DOM manipulation
       }
   }]);
-});
+})( angular );

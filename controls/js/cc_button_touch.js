@@ -25,4 +25,4 @@
       installTouchHandler(el["0"], {touchStart:touchStart, touchMove:0, touchEnd:touchEnd});
   }
   }]);
-});
+})( angular );

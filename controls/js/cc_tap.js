@@ -4,4 +4,4 @@
 	    scope.tapId = attr['vcTap'];
 	}
 	}]);
-});
+})( angular );
