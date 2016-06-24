@@ -85,7 +85,7 @@ class CCButton: UIButton {
     }
     
     func stateForIndex(index: Int) -> CCButtonState {
-        if let res: CCButtonState = buttonStates[Int(index)] as! CCButtonState {
+        if let res: CCButtonState = buttonStates[Int(index)] as? CCButtonState {
             return res
         } else {
             return buttonStates[Int(0)] as! CCButtonState
