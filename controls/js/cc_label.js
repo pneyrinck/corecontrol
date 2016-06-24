@@ -1,15 +1,16 @@
 (function ( angular ) { 	
-	angular.module('ui.corecontrol').directive('ccLabel', ['vcproSurface', function(vcproSurface) {
-	return function ccLabelDirective(scope, element, attr){
-	    // bind to vcontrol
-	    var id="";
-		if (attr['vcId'])
-			id = attr['vcId'];
-		else if (attr['ccId'])
-			id = attr['ccId'];
-	    var label = vcproSurface.getControlLabel(id);
-		if (label)
-			scope.label = label;
-	}
+	angular.module('ui.corecontrol').directive('ccLabel', ['vcproSurface', function(vcproSurface){
+	return function ($scope, element, attr) {
+	    $scope.label = ""
+	    var id = (attr['ccId'] != undefined)?attr['ccId']:"";
+	    id = (attr['vcId'] != undefined)?attr['vcId']:id;
+	    vcproSurface.subscribe(id, updateControlValue);
+
+	    function updateControlValue(value) {
+	        var newValue = String(value);
+	        if (newValue == $scope.label) return;
+	        $scope.label = newValue;
+	    }
+	  }
 	}]);
 })( angular );
