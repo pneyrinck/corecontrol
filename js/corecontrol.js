@@ -1,3 +1,23 @@
+/* ==============================================================================
+ 
+ This file is part of the CoreControl library.
+ Copyright (c) 2015 - Neyrinck LLC.
+ 
+ Permission is granted to use this software under the terms of the GPL v2.
+ Details of this licenses can be found at: www.gnu.org/licenses
+ 
+ CoreControl is distributed in the hope that it will be useful, but WITHOUT ANY
+ WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+ 
+ To release a closed-source product which uses the CoreControl library, commercial
+ licenses are available. Typically, a commercial license for a CoreControl Module
+ is free. A CoreControl Module uses CoreControl only to be controllable by control
+ surfaces or any other thing that uses CoreControl.
+ 
+ Visit www.corecontrol.io/developer for more information.
+ 
+ ==============================================================================*/
 // copyright Neyrinck LLC 2016
 
 const kVCModulePropertySet_Module =         "module"
