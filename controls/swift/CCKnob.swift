@@ -77,7 +77,7 @@ class CCKnob: UIControl {
         position = 6.0 / 11.0
         updateMagicNumbers()
       
-        let recognizer = UIPanGestureRecognizer(target: self, action:#selector(handlePan(_:)))
+        let recognizer = UIPanGestureRecognizer(target: self, action:Selector("handlePan:"))
         self.addGestureRecognizer(recognizer)
     }
     
