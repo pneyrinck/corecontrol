@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 enum EEncoderMode: Int {
     case eEncoderDotMode = 0
     case eEncoderBoostCutMode = 1
@@ -17,6 +18,34 @@ enum EEncoderMode: Int {
 
 
 class CCKnob: UIControl {
+//    var encoder: UIImage?
+//    var encoder_overlay: UIImage?
+//    var encoderon: UIImage?
+    
+    var position: Float = 0
+    var lastpoint = CGPoint(x:0, y:0)
+    var firsthandle: Bool?
+    var lit: Bool = true
+    var isPanning: Bool?
+    var isLinear: Bool?
+    var startAngle: Float = 10
+    var absoluteMode: Bool = false
+    var displayValue: UILabel?
+    var displayName: UILabel?
+    var numdots:Int = 11;
+    var mode = EEncoderMode.eEncoderDotMode.rawValue
+    var centerLightOn: Bool = true;
+    var rawposition: Float = 0
+    var basePosition: Float = 0
+    var initPosition: Float = 0
+    var numTicks:Int = 0
+   
+    
+    override var enabled: Bool {
+        didSet {
+            print("did set ")
+        }
+    }
     
     var knobData: [String : AnyObject?] =
         [
@@ -32,49 +61,27 @@ class CCKnob: UIControl {
             "lightRadiusOuter": 0.96
         ]
     
-
-    var initPosition: Float = 0
-    var position: Float = 0
-    var lastpoint = CGPoint(x:0, y:0)
-    var firsthandle: Bool?
-    var lit: Bool = true
-    var absoluteMode: Bool = false
-    var isPanning: Bool?
-    var isLinear: Bool?
-    var startAngle: Float = 0
-    var displayValue: UILabel?
-    var displayName: UILabel?
-    var numdots:Int = 11;
-    var mode = EEncoderMode.eEncoderBoostCutMode.rawValue
-    var rawposition: Float = 0
-    var basePosition: Float = 0
-    var numTicks:Int = 0
-    
-    override var enabled : Bool {
-        didSet {
-            setEnabled(enabled)
-        }
-    }
-    
    
-    
-   
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
-
-//        setEnabled(true);
+        numdots = 11
+        absoluteMode = false
+        lit = true
+        enabled = true
+        
         self.backgroundColor = UIColor.clearColor()
-        self.updateMagicNumbers()
-        let recognizer: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: #selector(self.handlePan(_:)))
+        position = 6.0 / 11.0
+        updateMagicNumbers()
+      
+        let recognizer = UIPanGestureRecognizer(target: self, action:#selector(handlePan(_:)))
         self.addGestureRecognizer(recognizer)
     }
     
-   @nonobjc
+    @nonobjc
     func setEnabled(ienabled: Bool) {
         enabled = ienabled
         self.setNeedsDisplay()
@@ -87,6 +94,7 @@ class CCKnob: UIControl {
     }
     
     override func drawRect(rect: CGRect) {
+        print("drawRect rawposition : \(rawposition)")
         let ctx: CGContextRef = UIGraphicsGetCurrentContext()!
         
         // Drawing code
@@ -141,7 +149,7 @@ class CCKnob: UIControl {
         }
         
         
-        if rawposition >= 0.0 {
+        if rawposition >= 0.0 || absoluteMode == true {
             print("rawpostion :\(rawposition)")
             let radiusinner = knobData["backRadiusInner"]as? Float
             let radiusouter = knobData["backRadiusOuter"] as? Float
@@ -159,24 +167,30 @@ class CCKnob: UIControl {
             CGContextFillEllipseInRect(ctx, smallerRectangle)
       
             
-            // **** TO DO : *****
-            // strokeArc is a function from from C++ arcs.h/arcs.mm
-            // need to find solution to import them or find alternatives
-            //
             CGContextSetFillColorWithColor(ctx, (knobData["displayBackColor"] as! UIColor).CGColor)
-            Arcs.StrokeArc(ctx, r: rect, startAngle: 45, arcAngle: 270, radius: radiusouter!, radius2: radiusinner!)
+            self.strokeArc(ctx, r: rect, startAngle: 45, arcAngle: 270, radius: radiusouter!, radius2: radiusinner!)
             CGContextSetFillColorWithColor(ctx, (knobData["displayLightColor"] as! UIColor).CGColor)
-            Arcs.StrokeArc(ctx, r: rect, startAngle: 5+270 * Int32(start), arcAngle: 270*Int32(arcdistance), radius: radiusouter!, radius2: radiusinner!)
-            Arcs.StrokeArc(ctx, r: rect, startAngle: 305, arcAngle:10, radius: radiusouter!, radius2: radiusinner!)
+           
+            
+            
+            self.strokeArc(ctx, r: rect, startAngle: Int(45+(270 * start)), arcAngle:Int(270*arcdistance), radius: radiusouter!, radius2: radiusinner!)
+            
+           
+            print("start : \(start)")
+            print("arcdistance : \(arcdistance)")
+            
+            print("startAngle : \(Int32(45+270 * start))")
+            print("arcAngle : \(Int32(270*arcdistance))")
 
         }
-        
 
     }
     
-    func setValue(to: Double) {
-        print("setValue");
+    
+    func setValue(to: Float) {
+        print("setValue : \(to)");
         lit = (to > 0)
+        print("lit :\(lit)")
         self.setNeedsDisplay()
     }
     
@@ -274,24 +288,29 @@ class CCKnob: UIControl {
     
     func handlePan(recognizer: UIPanGestureRecognizer) {
         print("handlePan");
-        var translation: CGPoint = recognizer.locationInView(self)
+        let translation: CGPoint = recognizer.locationInView(self)
         var x: CGFloat
         var y: CGFloat
-        var ourSize: CGSize = self.frame.size
-        var center = CGPoint(x: 0, y: 0)
-        center.x = ourSize.width / 2
-        center.y = ourSize.height / 2
+        let ourSize: CGSize = self.frame.size
+        print("ourSize :\(ourSize)")
+        let center = CGPoint(x: ourSize.width / 2, y: ourSize.height / 2)
         x = translation.x - center.x
         y = translation.y - center.y
+        
         if isnan(x) || isnan(y) {
             return
         }
+        
+        
         if absoluteMode {
+
             // touch
             if recognizer.state == .Began {
+                
                 self.sendActionsForControlEvents(.EditingDidBegin)
             }
-            var newPosition: Float = basePosition + (self.XYToPosition(Float((translation.x) - ourSize.width) / 2, y: Float(ourSize.height / 2 - translation.y)) - initPosition) * 0.5
+            
+            var newPosition: Float = basePosition + (self.XYToPosition(Float((translation.x) - ourSize.width/2), y: Float(ourSize.height / 2 - translation.y)) - initPosition) * 0.5
             if newPosition > 1.0 {
                 newPosition = 1.0
             }
@@ -300,11 +319,13 @@ class CCKnob: UIControl {
             }
             self.sendKnobValue(newPosition)
             if recognizer.state == .Ended {
+                print("Ended ")
                 self.sendActionsForControlEvents(.EditingDidEnd)
             }
             return
         }
-        if (firsthandle != nil) {
+        if (firsthandle == true) {
+            print("firsthandle == true")
             isPanning = true
             firsthandle = false
             lastpoint = translation
@@ -312,22 +333,29 @@ class CCKnob: UIControl {
             if rad > 250 {
                 isLinear = false
                 startAngle = atan2(Float(y), Float(x))
+                print("x :\(x)  y:\(y)")
             }
             else {
                 isLinear = true
             }
         }
         else {
+            print("firsthandle == false")
+           
             numTicks = 0
             var angle: Float = 0
-            if (isLinear != nil) {
-                numTicks = Int((translation.x - lastpoint.x) + (translation.y - lastpoint.y) * 0.5)
+            if (isLinear == true) {
+                numTicks = Int(((translation.x - lastpoint.x) + (translation.y - lastpoint.y))*0.5)
                 // top-right gain.
+                print("top-right gain numTicks \(numTicks)")
             }
             else {
                 let goatseconstant: Float = 50.0
                 angle = atan2(Float(y), Float(x))
-                if angle * startAngle < 0 && fabs(angle - startAngle) > 3.141 {
+                print("angle 1 :\(angle)")
+                print("startAngle 1 :\(startAngle)")
+                print("fab :\(fabs(angle - startAngle))")
+                if (angle * startAngle < 0 && fabs(angle - startAngle) > 3.141 ){
                     if angle < 0 {
                         startAngle -= 3.14159 * 2
                     }
@@ -335,16 +363,58 @@ class CCKnob: UIControl {
                         startAngle += 3.14159 * 2
                     }
                 }
+                print("angle 2 :\(angle)")
+                print("startAngle 2 :\(startAngle)")
                 numTicks = Int((angle - startAngle) * goatseconstant)
+                print("* goatseconstant startAngle \(startAngle)")
+                 print("* goatseconstant numTicks \(numTicks)")
             }
             if numTicks != 0 {
-                print("numTicks \(numTicks)")
+                print("numTicks != 0 \(numTicks)")
                 self.sendActionsForControlEvents(.ValueChanged)
                 lastpoint = translation
                 startAngle = angle
             }
             
         }
+        
+        print("numTicks :: \(numTicks)")
+    }
+    
+    func strokeArc(context:CGContextRef, r:CGRect, startAngle:Int, arcAngle:Int, radius:Float, radius2:Float){
+        // Signal the start of a path
+        CGContextBeginPath(context)
+        // Set the start of the path to the arcs focal point
+        CGContextMoveToPoint(context, r.origin.x + r.size.width / 2, r.origin.y + r.size.height / 2)
+        var start: Float
+        var end: Float
+        var matrix: CGAffineTransform
+        CGContextSaveGState(context)
+        // Save the context's state because we are going to scale it
+        // Create a transform to scale the context so that a radius of 1 maps to the bounds
+        // of the rectangle, and transform the origin of the context to the center of
+        // the bounding rectangle.
+        matrix = CGAffineTransformMake(r.size.width / 2, 0, 0, r.size.height / 2, r.origin.x + r.size.width / 2, r.origin.y + r.size.height / 2)
+        CGContextConcatCTM(context, matrix)
+        // Apply the transform to the context
+        // Calculate the start and ending angles
+        if arcAngle > 0 {
+            start = Float(90 - startAngle - arcAngle) * Float(M_PI / 180)
+            end = Float(90 - startAngle) * Float(M_PI / 180)
+        }
+        else {
+            start = Float(90 - startAngle) * Float(M_PI / 180)
+            end = Float(90 - startAngle - arcAngle) * Float(M_PI / 180)
+        }
+        // Add the Arc to the path
+        CGContextAddArc(context, 0, 0, CGFloat(radius), CGFloat(start), CGFloat(end), 0)
+        CGContextAddArc(context, 0, 0, CGFloat(radius2), CGFloat(end), CGFloat(start), 1)
+        CGContextRestoreGState(context)
+        // Complete the path closing the arc at the focal point
+        CGContextClosePath(context)
+        // Fill the path
+        CGContextFillPath(context)
+
     }
    
   
