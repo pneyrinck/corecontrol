@@ -5,7 +5,7 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a coffee machine can make coffee when you say "I want a latte with two shots" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging and supports legacy protocols such as OSC and MIDI and supports the new OCI (open control interface) protocol. Core Control is designed to be very flexible and powerful so that anything can control anything.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a coffee machine can make coffee when you say "I want a latte with two shots" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging and supports legacy OSC messaging as well as the new CC messaging. Core Control supports messaging using TCP or UDP protocols. Core Control uses web sockets for TCP messaging which is compatible with web browsers and internet-based servers.  Core Control is designed to be very flexible and powerful so that anything can control anything.
 
 ###### JSON, JSON Schema, And JSON Pointers
 
@@ -19,18 +19,18 @@ Core Control is designed using JSON technologies. You do not need to understand 
 
 ###### Core Control Modules
 
-A Core Control "module" is an object that has properties. A fundamental module property is the 'controls' property which describes a module's controls that can be used for realtime control. Each control has properties that can be sent to other modules and control property changes can be received from other modules. A control has fundamental 'value' properties such as 'valueFloat' and 'valueString' that can be sent in a message over a wire very fast. A module has a 'role' that defines its behavior when it receives messages. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" property that specifies the kind of module it is. Example types are "oci", "osc", and "midi." The first type, "oci" is the core type that lets you build extensible, powerful, scalable systems. The second two, "osc" and "midi" provide support for legacy systems using OSC and MIDI messaging.
+A Core Control "module" is an object that has properties. A fundamental module property is the 'controls' property which describes a module's controls that can be used for realtime control. Each control has properties that can be sent to other modules and control property changes can be received from other modules. A control has fundamental 'value' properties such as 'valueFloat' and 'valueString' that can be sent in a message over a wire very fast. A module has a 'role' that defines its behavior when it receives messages. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" property that specifies the kind of module it is. Example types are "cc" and "osc". "midi" mightbe a future type. The first type, "cc" is the core type that lets you build extensible, powerful, scalable systems. The second, "osc", provides support for legacy systems using OSC and MIDI messaging.
 
 
-###### OCI (Open Control Interface)
+###### CC Messages
 
-Core Control modules send and receive OCI messages. OCI is a binary message format that can be sent over a wire using any transport layer. Typical transport layers are UDP, TCP, and MIDI Sysex. OCI is inspired by OSC (Open Sound Control) and designed to be compatible with OSC. In fact, an OSC message is a type of OCI message. OCI provides other message types that help implement scalable systems not possible with OSC.
+Core Control modules send and receive CC messages. CC is a binary or text message format that can be sent over a wire using any transport layer. Typical transport layers are UDP, TCP, and MIDI Sysex. CC is inspired by OSC (Open Sound Control) and designed to be compatible with OSC. In fact, an OSC message is a type of CC message. CC provides other message types that help implement scalable systems not possible with OSC.
 
  
 
 ###### Legacy OSC And MIDI Modules
 
-Open Sound Control (OSC) is popular for control messaging on a network because it is simple. Core Control fully supports OSC messaging using OSC modules. MIDI is a popular protocol for messaging music performance and control  messsages. Core Control supports MIDI messaging using MIDI modules.
+Open Sound Control (OSC) is popular for control messaging on a network because it is simple. Core Control fully supports OSC messaging using OSC modules. MIDI is a popular protocol for messaging music performance and control  messsages. Core Control might support MIDI messaging using MIDI modules.
 
 Here is a simple C++ example to send OSC messages with Core Control:
 ```
@@ -102,12 +102,12 @@ void receiveControlValueFloat(std::string controlName, float controlValue)
 ```
 Please note that the OSC message received has the addresss '/volume' and could have been sent by any OSC application.
 
-As you can see Core Control provides basic OSC messaging using its software API. As you will see below, Core Control provides additional features with OCI messaging that make it a powerful, extensible system.  
+As you can see Core Control provides basic OSC messaging using its software API. As you will see below, Core Control provides additional features with CC messaging that make it a powerful, extensible system.  
 
 
-###### OCI (Open Control Interface) Modules
+###### CC Modules
 
-The OSC protocol is very good, but it has many limitations.
+The OSC message format is very good, but it has many limitations.
 
 * The message address inefficently uses a text value that can be any length which limits scalability.
 * There is no system for describing OSC programs on a network.
@@ -115,7 +115,7 @@ The OSC protocol is very good, but it has many limitations.
 * OSC programs are not modular. All controls are organized into a single flat space.
 * OSC does not provide for more more than one OSC program to be controlling another program.
 
-The OCI protocol is designed to solve these limitations. OCI messages are tiny no matter how large the system is and no matter what the control addresses are. OCI lets modules describe themselves with rich metadata. OCI provides hierarchical sub-modules for modular and organized control. OCI allows any number of control surfaces to be controlling a single data model. 
+The CC message format is designed to solve these limitations. CC control messages are tiny no matter how large the system is and no matter what the control addresses are. CC lets modules describe themselves with rich metadata. CC provides hierarchical sub-modules for modular and organized control. CC allows any number of control surfaces to be controlling a single data model. 
 
 
 ###### Core Control Module Roles
@@ -143,8 +143,8 @@ bool CoffeeBotDataModel::make = false;
 // setup core control
 void CoffeeBotDataModel::Setup()
 {
-  // create a OCI module with role = model
-  CCModule* module = CCModuleCreate("oci", "coffeebot", "Coffee Bot", "model");
+  // create a CC module with role = model
+  CCModule* module = CCModuleCreate("cc", "coffeebot", "Coffee Bot", "model");
   
   // add controls to the module that reperesent the data model
   CCModuleAddControl(module, "type", "Type", "string");
