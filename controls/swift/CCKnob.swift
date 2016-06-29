@@ -27,14 +27,14 @@ class CCKnob: UIControl {
     var firsthandle: Bool?
     var lit: Bool = true
     var isPanning: Bool?
-    var isLinear: Bool?
-    var startAngle: Float = 10
+    var isLinear: Bool = false
+    var startAngle: Float = 0
     var absoluteMode: Bool = false
     var displayValue: UILabel?
     var displayName: UILabel?
     var numdots:Int = 11;
     var mode = EEncoderMode.eEncoderDotMode.rawValue
-    var centerLightOn: Bool = true;
+    var centerLightOn: Bool = false
     var rawposition: Float = 0
     var basePosition: Float = 0
     var initPosition: Float = 0
@@ -94,7 +94,6 @@ class CCKnob: UIControl {
     }
     
     override func drawRect(rect: CGRect) {
-        print("drawRect rawposition : \(rawposition)")
         let ctx: CGContextRef = UIGraphicsGetCurrentContext()!
         
         // Drawing code
@@ -109,6 +108,7 @@ class CCKnob: UIControl {
             //dot mode
             start = (1.0 - rawposition) * (Float(numdots) - 1.0) / (Float(numdots))
             arcdistance = 1.0 / (Float(numdots))
+            break
         case EEncoderMode.eEncoderBoostCutMode.rawValue:
             //boost cut mode
             if rawposition <= 0.5 {
@@ -129,16 +129,19 @@ class CCKnob: UIControl {
                 }
                 arcdistance = end - start
             }
+            break
         case EEncoderMode.eEncoderWrapMode.rawValue:
             //wrap mode
             end = 1.0
             start = 1.0 - rawposition
             arcdistance = end - start
+            break
         case EEncoderMode.eEncoderSpreadMode.rawValue:
             //spread mode
             start = 0.5 - rawposition * 0.5
             end = 1.0 - start
             arcdistance = end - start
+            break
         default:
             break
         }
@@ -150,7 +153,6 @@ class CCKnob: UIControl {
         
         
         if rawposition >= 0.0 || absoluteMode == true {
-            print("rawpostion :\(rawposition)")
             let radiusinner = knobData["backRadiusInner"]as? Float
             let radiusouter = knobData["backRadiusOuter"] as? Float
             // draw inner circles-
@@ -174,13 +176,6 @@ class CCKnob: UIControl {
             
             
             self.strokeArc(ctx, r: rect, startAngle: Int(45+(270 * start)), arcAngle:Int(270*arcdistance), radius: radiusouter!, radius2: radiusinner!)
-            
-           
-            print("start : \(start)")
-            print("arcdistance : \(arcdistance)")
-            
-            print("startAngle : \(Int32(45+270 * start))")
-            print("arcAngle : \(Int32(270*arcdistance))")
 
         }
 
@@ -188,26 +183,21 @@ class CCKnob: UIControl {
     
     
     func setValue(to: Float) {
-        print("setValue : \(to)");
         lit = (to > 0)
-        print("lit :\(lit)")
         self.setNeedsDisplay()
     }
     
     func getValue() -> Int {
-        print("getValue");
         return numTicks
     }
     
 
     func updateMagicNumbers(){
-        print("updateMagicNumbers")
         rawposition = position
     }
 
     
     func setEncoderValue(to: Float){
-        print("setEncoderValue : \(to)")
         position = to
         self.updateMagicNumbers()
         self.setNeedsDisplay()
@@ -224,7 +214,6 @@ class CCKnob: UIControl {
     }
     
     func touchesBegan(touches: NSSet, event: UIEvent){
-        print("touchesBegan")
         firsthandle = true
         if absoluteMode {
             var t: [AnyObject] = touches.allObjects
@@ -277,7 +266,6 @@ class CCKnob: UIControl {
     
     
     func touchesEnded(touches : NSSet, event : UIEvent){
-         print("touchesEnded")
         isPanning = false
         self.setNeedsDisplay()
     }
@@ -287,15 +275,14 @@ class CCKnob: UIControl {
     }
     
     func handlePan(recognizer: UIPanGestureRecognizer) {
-        print("handlePan");
         let translation: CGPoint = recognizer.locationInView(self)
         var x: CGFloat
         var y: CGFloat
         let ourSize: CGSize = self.frame.size
-        print("ourSize :\(ourSize)")
         let center = CGPoint(x: ourSize.width / 2, y: ourSize.height / 2)
         x = translation.x - center.x
         y = translation.y - center.y
+        
         
         if isnan(x) || isnan(y) {
             return
@@ -319,13 +306,11 @@ class CCKnob: UIControl {
             }
             self.sendKnobValue(newPosition)
             if recognizer.state == .Ended {
-                print("Ended ")
                 self.sendActionsForControlEvents(.EditingDidEnd)
             }
             return
         }
         if (firsthandle == true) {
-            print("firsthandle == true")
             isPanning = true
             firsthandle = false
             lastpoint = translation
@@ -333,28 +318,21 @@ class CCKnob: UIControl {
             if rad > 250 {
                 isLinear = false
                 startAngle = atan2(Float(y), Float(x))
-                print("x :\(x)  y:\(y)")
             }
             else {
                 isLinear = true
             }
         }
         else {
-            print("firsthandle == false")
-           
             numTicks = 0
             var angle: Float = 0
             if (isLinear == true) {
                 numTicks = Int(((translation.x - lastpoint.x) + (translation.y - lastpoint.y))*0.5)
                 // top-right gain.
-                print("top-right gain numTicks \(numTicks)")
             }
             else {
                 let goatseconstant: Float = 50.0
                 angle = atan2(Float(y), Float(x))
-                print("angle 1 :\(angle)")
-                print("startAngle 1 :\(startAngle)")
-                print("fab :\(fabs(angle - startAngle))")
                 if (angle * startAngle < 0 && fabs(angle - startAngle) > 3.141 ){
                     if angle < 0 {
                         startAngle -= 3.14159 * 2
@@ -363,22 +341,19 @@ class CCKnob: UIControl {
                         startAngle += 3.14159 * 2
                     }
                 }
-                print("angle 2 :\(angle)")
-                print("startAngle 2 :\(startAngle)")
+                
                 numTicks = Int((angle - startAngle) * goatseconstant)
-                print("* goatseconstant startAngle \(startAngle)")
-                 print("* goatseconstant numTicks \(numTicks)")
+                
             }
             if numTicks != 0 {
-                print("numTicks != 0 \(numTicks)")
                 self.sendActionsForControlEvents(.ValueChanged)
                 lastpoint = translation
                 startAngle = angle
             }
+           
             
         }
         
-        print("numTicks :: \(numTicks)")
     }
     
     func strokeArc(context:CGContextRef, r:CGRect, startAngle:Int, arcAngle:Int, radius:Float, radius2:Float){
