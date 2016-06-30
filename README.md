@@ -38,10 +38,10 @@ unsigned char blobdata[100];
 CCModule* module = CCCreateModule("osc", "widget1", "Widget 1");
 
 // create a socket to send messages
-CCSocket* socket = CCCreateSocket("udp", "192.168.100.1:7000", "send");
+CCSocket* oscSendSocket = CCCreateSocket("udp", "192.168.100.1:7000", "send");
 
 // connect the OSC module to the socket
-CCConnect(module, socket);
+CCConnect(module, oscSendSocket);
 
 // send a float value message with OSC address /volume.
 CCSetControlValueFloat(module, "volume", 0.7);
@@ -97,11 +97,11 @@ Here is a simple C example to receive OSC messages with Core Control:
 // create an OSC module
 CCModule* oscmodule = CCCreateModule("osc", "toucher", "Toucher");
 // create a socket to receive messages
-CCSocket* socket = CCCreateSocket("udp", "receive", 7001);
+CCSocket* oscReceiveSocket = CCCreateSocket("udp", "receive", 7001);
 
 // set a callback function to receive control property changes
 CCSubscribeFPtr(oscmodule, "controls", receiveFunction);
-CCConnect(oscmodule, socket);
+CCConnect(oscmodule, oscReceiveSocket);
 
 void receiveFunction(CCModule* module, std::string path, std::string * key, SCCPropertyValue* value)
 {
