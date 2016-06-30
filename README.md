@@ -5,7 +5,7 @@ Copyright 2015, Neyrinck LLC
 
 #### Quickstart
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a coffee machine can make coffee when you say "I want a latte with two shots" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging and supports legacy OSC messaging as well as the new CC messaging. Core Control supports messaging using TCP or UDP protocols. Core Control uses web sockets for TCP messaging which is compatible with web browsers and internet-based servers.  Core Control is designed to be very flexible and powerful so that anything can control anything.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a coffee machine can make coffee when you say "I want a latte with two shots" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol that supports legacy OSC messages. Core Control supports CC messaging using TCP or UDP protocols. Core Control uses web sockets for TCP messaging which is compatible with web browsers and the internet.  Core Control is designed to be very flexible and powerful so that anything can control anything.
 
 ###### JSON, JSON Schema, And JSON Pointers
 
@@ -17,16 +17,15 @@ Core Control is designed using JSON technologies. You do not need to understand 
 * JSON Patch - https://tools.ietf.org/html/rfc6901
 
 
-###### Core Control Modules
-
-A Core Control "module" is an object that has properties. A fundamental module property is the 'controls' property which describes a module's controls that can be used for realtime control. Each control has properties that can be sent to other modules and control property changes can be received from other modules. A control has fundamental 'value' properties such as 'valueFloat' and 'valueString' that can be sent in a message over a wire very fast. A module has a 'role' that defines its behavior when it receives messages. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" property that specifies the kind of module it is. Example types are "cc" and "osc". "midi" mightbe a future type. The first type, "cc" is the core type that lets you build extensible, powerful, scalable systems. The second, "osc", provides support for legacy systems using OSC and MIDI messaging.
-
-
 ###### CC Messages
 
-Core Control modules send and receive CC messages. CC is a binary or text message format that can be sent over a wire using any transport layer. Typical transport layers are UDP, TCP, and MIDI Sysex. CC is inspired by OSC (Open Sound Control) and designed to be compatible with OSC. In fact, an OSC message is a type of CC message. CC provides other message types that help implement scalable systems not possible with OSC.
+Core Control modules send and receive CC messages. CC is a binary or text message protocol that can be sent over a wire using any transport layer. Typical transport layers are UDP, TCP, and MIDI Sysex. CC is inspired by OSC (Open Sound Control) and designed to be compatible with OSC. In fact, an OSC message is a type of CC message. CC provides other message types that help implement scalable systems not possible with OSC.
 
- 
+
+###### Core Control Modules
+
+A Core Control "module" is an object that has properties. A fundamental module property is the 'controls' property which describes a module's controls that can be used for realtime control. Each control has properties that can be sent to other modules and control property changes can be received from other modules. A control has 'value' properties such as 'valueFloat' and 'valueString' that can be sent in a message over a wire very fast. A module has a 'role' that defines its behavior when it receives messages so that controllers and data models can behave properly. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how module data is structured. JSON pointers are used to reference the data within a module. Every module has a "type" property that specifies the kind of module it is. Example types are "cc" and "osc". "midi" mightbe a future type. The first type, "cc" is the core type that lets you build extensible, powerful, scalable systems. The second, "osc", provides support for legacy systems using OSC and MIDI messaging.
+
 
 ###### Legacy OSC And MIDI Modules
 
@@ -38,39 +37,39 @@ Here is a simple C++ example to send OSC messages with Core Control:
 unsigned char blobdata[100];
 
 // create an OSC module
-CCModule* module = CCModuleCreate("osc", "widgetx", "Widget X");
+CCModule* module = CCModuleCreate("surface", "osc", "OSC");
 // create a socket to send messages
 CCSocket* socket = CCSocketCreate("udp", "192.168.100.1:7000");
 // connect the OSC module to the socket
 CCConnect(true, module, socket);
 
 // send a float value message with OSC address /volume.
-CCSetControlValue(module, "volume", 0.7);
+CCSetControlValue("osc/controls/volume", 0.7);
 // send a string value message with OSC address /name/first.
-CCSetControlValue(module, "name/first", "John");
+CCSetControlValue("osc/controls/firstname", "John");
 // send a string value message with OSC address /name/last.
-CCSetControlValue(module, "name/last", "Doe");
+CCSetControlValue("osc/controls/lastname", "Doe");
 // send an integer value message with OSC address /year.
-CCSetControlValue(module, "year", 1963);
+CCSetControlValue("osc/controls/year", 1963);
 // send a blob value message with OSC address /data.
-CCSetControlValue(module, "data", blobdata, 100);
+CCSetControlValue("osc/controls/data", blobdata, 100);
 ```
 Please note that the OSC messages sent have the OSC addresses '/volume', '/name/first', '/name/last', '/year', and '/data' and can be sent to any application that is programmed to receive OSC messages.
 
 The JSON representation for this OSC module is:
 ```
 {
-  type:'osc',
-  identifier:'widgetx',
-  name:'Widget X',
+  type:'model',
+  identifier:'osc',
+  name:'OSC',
   controls: {
     'volume':{
       valueFloat:0.7
     },
-    'name/first':{
+    'firstname':{
       valueString:'John'
     },
-    'name/last':{
+    'lastname':{
       valueString:'Doe'
     },
     'year':{
@@ -84,19 +83,23 @@ Here is a simple C++ example to receive OSC messages with Core Control:
 #include "corecontrol.h"
 
 // create an OSC module
-CCModule* module = CCModuleCreate("osc", "widgetx", "Widget X");
+CCModule* module = CCModuleCreate("surface", "osc", "OSC");
 // create a socket to receive messages
 CCSocket* socket = CCSocketCreate("udp", "receive", 7001);
 
 // set a callback function to receive values
-CCModuleAddControlObserver(module, receive);
+CCSubscribe("osc/controls", receiveFunction);
 CCConnect(true, module, socket);
 
-void receiveControlValueFloat(std::string controlName, float controlValue)
+void receiveFunction(std::string path, std::string * key, SCCPropertyValue* value)
 {
-  if (controlName.compare("volume")==0)
+  if ((path.compare("/osc/controls/volume")==0) && (key.compare("valueNumber"))
   {
-    float receivedValue = controlValue;
+    float receivedValue = value->valueFloat;
+  }
+  if ((path.compare("/osc/controls/firstname")==0) && (key.compare("valueString"))
+  {
+    const char* receivedStringValue = value->valueString;
   }
 }
 ```
