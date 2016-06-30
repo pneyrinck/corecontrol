@@ -81,10 +81,11 @@ A Core Control "module" is a thing that sends and receives CC messages. Core Con
 The JSON representation for the OSC module in the first code example above is:
 ```
 {
-  type:'osc',
-  identifier:'songcontrol',
-  name:'Song Control',
-  controls: {
+  songcontrol:{
+    type:'osc',
+    identifier:'songcontrol',
+    name:'Song Control',
+    controls: {
     'volume':{
       valueFloat:0.7
     },
@@ -94,6 +95,7 @@ The JSON representation for the OSC module in the first code example above is:
     'artist/name':{
       valueString:'Doe'
     }
+  }
   }
 }
 ```
@@ -275,6 +277,7 @@ This provides a deeper look at modules which are the heart and soul of Core Cont
 Here is a partial JSON representation of the MyWidgetDataModel module example from above:
 ```
 {
+coffeebot:{
   type:'model',
   identifier:'coffeebot',
   name:'Coffee Bot',
@@ -291,6 +294,7 @@ Here is a partial JSON representation of the MyWidgetDataModel module example fr
     progress:{...},
     }
   }
+}
 }
 ```
 
@@ -399,6 +403,7 @@ Here is a partial JSON representation of the Cool Daw module:
 
 ```
 {
+cooldaw:{
   type:'model',
   identifier:'cooldaw',
   name:'Cool DAW',
@@ -419,14 +424,14 @@ Here is a partial JSON representation of the Cool Daw module:
     tracks:[
       {
         track1:{
-          identifier:'track1',
+          identifier:'track',
           name:'Track 1',
           controls: {
             'fader':{...},
             'pan':{...}
           },
         track2: {
-          identifier:'track2',
+          identifier:'track',
           name:'Track 2',
           controls: {
             'fader':{...},
@@ -437,13 +442,15 @@ Here is a partial JSON representation of the Cool Daw module:
     ]
   }
 }
+}
 ```
 
-Why organize modules with sub-modules and arrays? For one thing, it lets us write code that is object oriented, modular, and reusable. For example, the code for a transport module can be combined with other modules. Another thing is that we can use JSON path and JSON patch standard technologies to refer 
+Why organize modules using sub-modules and arrays? For one thing, it lets us write code that is object oriented, structured, modular and reusable. Another thing is that we can use JSON path and JSON patch standard technologies to reference data. A JSON path lets us refer to any property. For example: /cooldaw/mixer/tracks/0/track/controls/fader/valueNumber. Looks a lot like an OSC control address, huh? Yes it does. Just like OSC we have readable paths for control addresses. Unlike OSC though, CC messages do not have to send the address as a long string in the message. A CC message can be very tiny so that fast realtime systems can operate with thousands of controls changing at the same time.
 
 
 ###### The Controls Object And Meters Object
 The Core Control module schema has an object named "controls" and an object named "meters." The "controls" object contains control objects as key/value pairs where the key is the control name. This comes in really handy because we can construct JSON pointers that are simple and readable. Here are some example JSON pointers that point to key/value pairs in control objects:
+
 ```
 /cooldaw/transport/controls/play/valueNumber
 /cooldaw/tracks/0/track/controls/fader/valueString
@@ -453,34 +460,7 @@ The "meters" object is very similar.
 
 #### Core Control APIs
 
-Core Control provides a low-level module API and a high-level module API built on top of the low-level API. The low-level API assumes an understanding of the Core Control schemas and JSON technologies. The high-level API provides a friendly interface that can be improved, customized, and extended to different langauges.
-
-###### Low-Level Module API
-
-The low-level API is implemented in C and Javascript at this time.
-```
-struct CoreControlModule*  CCModuleCreate(const char* type, const char * identifier, const char * name, struct CoreControlModule *parent);
-
-void CC_API CCModuleDestroy(struct CoreControlModule *module);
-
-void CC_API CCModuleSetValue(struct CoreControlModule *module, const char* jsonPtr, const char* msgPackData, int msgPackDataSize);
-
-char* CC_API CCModuleGetValue(struct CoreControlModule *module, const char* jsonPtr, int* sizeOut);
-
-void CC_API CCModuleConnect(struct CoreControlModule *module);
-
-void CC_API CCModuleDisconnect(struct CoreControlModule *module);
-
-void CC_API CCModuleAddObserver(struct CoreControlModule* module, CCRecvValueCallback callback, void* context);
-void CC_API CCModuleRemoveObserver(struct CoreControlModule* module, CCRecvValueCallback callback, void* context);
-```
-
-
-###### High-Level Module API
-
-Core Control also provides a friendly, high-level API implemented with open-source convenience functions. The high-level API is implemented in C++ and Javascript at this time. The high-level API is open-source for any improvements necessary.
-
-
+Core Control provides a high-level API that can be seen in corecontrol.h.
 
 
 
