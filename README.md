@@ -5,7 +5,7 @@ Copyright 2015, Neyrinck LLC
 
 #### Like OSC On Steroids
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol. The CC protocol is like OSC on steroids. Core Control is designed to be very flexible and powerful so that anything can control anything.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol. The Core Control system and the CC protocol are like OSC on steroids. Core Control is flexible and powerful so that anything can control anything.
 
 
 ###### CC Protocol
@@ -15,7 +15,7 @@ Core Control uses the CC message protocol which was inspired by the simplicity o
 
 ###### Core Control Modules
 
-A Core Control "module" is a thing that sends and receives CC messages. Core Control modules have properties that describe the module. A fundamental module property is the 'controls' property which describes a module's controls that can be used for realtime control. Each control has properties that can be sent to other modules and control property changes can be received from other modules. Two important control properties are the 'valueFloat' and 'valueString' properties that can be sent in a message over a wire very fast using very little bandwidth. A module has a 'role' that defines its behavior when it receives messages so that controllers and data models can behave properly. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how a module is structured. JSON pointers are used to reference the data within a module. You do not need to understand JSON to use Core Control, but it can be helpful. 
+A Core Control "module" is a thing that sends and receives CC messages. Core Control modules have properties that describe the module. An important module property is the 'controls' property which describes a module's controls that can be used for realtime control. A control has properties that can be sent to other modules and control property changes can be received from other modules. Two important control properties are the 'valueFloat' and 'valueString' properties that can be sent in a message over a wire very fast using very little bandwidth. A module has a 'role' that defines its behavior when it receives messages so that controllers and data models can behave properly. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how a module is structured. JSON pointers are used to reference the data within a module. You do not need to understand JSON to use Core Control, but it can be helpful. 
 ```
 * JSON Data Interchange Format - https://tools.ietf.org/html/rfc7159
 * JSON Schema - json-schema.org
@@ -29,31 +29,31 @@ Every module has a "type" property that specifies the kind of module it is. Exam
 
 Open Sound Control (OSC) is popular for control messaging on a network because it is simple. Core Control fully supports OSC messaging using OSC modules. MIDI is a popular protocol for messaging music performance and control  messsages. Core Control can be extended to support MIDI messaging using MIDI modules.
 
-Here is a simple C++ example to send OSC messages with Core Control:
+Here is a simple C example to send OSC messages with Core Control:
 ```
 #include "corecontrol.h"
 unsigned char blobdata[100];
 
 // create an OSC module
-CCModule* module = CCModuleCreate("osc", "widget1", "Widget 1");
+CCModule* module = CCCreateModule("osc", "widget1", "Widget 1");
 
 // create a socket to send messages
-CCSocket* socket = CCSocketCreate("udp", "send", "192.168.100.1:7000");
+CCSocket* socket = CCCreateSocket("udp", "192.168.100.1:7000", "send");
 
 // connect the OSC module to the socket
 CCConnect(module, socket);
 
 // send a float value message with OSC address /volume.
-CCSetControlValue(module, "volume", 0.7);
+CCSetControlValueFloat(module, "volume", 0.7);
 
 // send a string value message with OSC address /name/first.
-CCSetControlValue(module, "name/first", "John");
+CCSetControlValueString(module, "name/first", "John");
 
 // send a string value message with OSC address /name/last.
-CCSetControlValue(module, "name/last", "Doe");
+CCSetControlValueString(module, "name/last", "Doe");
 
 // send an integer value message with OSC address /year.
-CCSetControlValue(module, "year", 1963);
+CCSetControlValueInt(module, "year", 1963);
 ```
 Please note that the OSC messages sent have the OSC addresses '/volume', '/name/first', '/name/last', '/year', and '/data' and can be sent to any application that is programmed to receive OSC messages.
 
@@ -90,18 +90,18 @@ Core Control is designed using JSON technologies. You do not need to understand 
 * JSON Patch - https://tools.ietf.org/html/rfc6901
 
 
-Here is a simple C++ example to receive OSC messages with Core Control:
+Here is a simple C example to receive OSC messages with Core Control:
 ```
 #include "corecontrol.h"
 
 // create an OSC module
-CCModule* oscmodule = CCModuleCreate("osc", "toucher", "Toucher");
+CCModule* oscmodule = CCCreateModule("osc", "toucher", "Toucher");
 // create a socket to receive messages
-CCSocket* socket = CCSocketCreate("udp", "receive", 7001);
+CCSocket* socket = CCCreateSocket("udp", "receive", 7001);
 
-// set a callback function to receive values
-CCSubscribe("osc/controls", receiveFunction);
-CCConnect(true, oscmodule, socket);
+// set a callback function to receive control property changes
+CCSubscribeFPtr(oscmodule, "controls", receiveFunction);
+CCConnect(oscmodule, socket);
 
 void receiveFunction(CCModule* module, std::string path, std::string * key, SCCPropertyValue* value)
 {
