@@ -13,7 +13,7 @@
     "properties": {
         "type": {
             "type": "string",
-		"enum": ["model", "surface", "array"],
+		"enum": ["model", "surface", "array", "osc"],
             "description": "The module type defines its role and behaviors. A model stores all properties and broadcasts any property changes to one or more adapters. A surface broadcasts property changes to a single adapter and displays property changes received from that adapter."
         },
         "identifier": {
@@ -22,7 +22,7 @@
         },
         "name": {
             "type": "string",
-            "description": "A readable name such as 'Adobe Premier Pro' or 'Mixer.' It can be localized and change freely."
+            "description": "A readable name such as 'Adobe Premiere Pro' or 'Mixer.' It can be localized and change freely."
         },
         "path": {
             "type": "string",
@@ -43,7 +43,7 @@
 			"*": { "$ref": "https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/control.json" }
 		},
             "uniqueItems": true
-        }
+        },
 	"meters": {
 		"description":"Meters are similar to controls, but a model only broadcasts the values and a surface only displays the values."
             "type": "object",
@@ -51,7 +51,7 @@
 			"*": { "$ref": "https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/meter.json" }
 		},
             "uniqueItems": true
-        }
+        },
         "category": { "type": "string" },
         "icon": { "type": "string", "format": "uri"},
         "host": { "type": "string"},
