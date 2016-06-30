@@ -15,7 +15,7 @@ Core Control uses the CC message protocol which was inspired by the simplicity o
 
 ###### Core Control Modules
 
-A Core Control "module" is a thing that sends and receives CC messages. Core Control modules have properties that describe the module. An important module property is the 'controls' property which describes a module's controls that can be used for realtime control. A control has properties that can be sent to other modules and control property changes can be received from other modules. Two important control properties are the 'valueFloat' and 'valueString' properties that can be sent in a message over a wire very fast using very little bandwidth. A module has a 'role' that defines its behavior when it receives messages so that controllers and data models can behave properly. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how a module is structured. JSON pointers are used to reference the data within a module. You do not need to understand JSON to use Core Control, but it can be helpful. 
+A Core Control "module" is a thing that sends and receives CC messages. Core Control modules have properties that describe the module. An important module property is the 'controls' property which describes a module's controls that can be used for realtime control. A control has properties that can be sent to other modules and control property changes can be received from other modules. Two important control properties are the 'valueFloat' and 'valueString' properties that can be sent in a message over a wire very fast using very little bandwidth. A module has a 'role' that defines its behavior when it receives messages so that controllers and data models can behave properly. Modules are 'modular' and provide useful features including hierarchy, meters, metadata, discovery, and more. A module is represented using JSON which is a standard way to represent structured data. JSON schemas are used to define how a module is structured. JSON pointers are used to reference the data within a module. You do not need to understand JSON to use Core Control, but it can be helpful.
 ```
 * JSON Data Interchange Format - https://tools.ietf.org/html/rfc7159
 * JSON Schema - json-schema.org
@@ -38,7 +38,7 @@ unsigned char blobdata[100];
 CCModule* module = CCCreateModule("osc", "widget1", "Widget 1");
 
 // create a socket to send messages
-CCSocket* oscSendSocket = CCCreateSocket("udp", "192.168.100.1:7000", "send");
+CCSocket* oscSendSocket = CCCreateSocket("udp", "send", 7000, "192.168.100.1");
 
 // connect the OSC module to the socket
 CCConnect(module, oscSendSocket);
@@ -120,12 +120,12 @@ Please note that the OSC message received has the addresss '/volume' and could h
 As you can see Core Control provides basic OSC messaging using its software API. As you will see below, Core Control provides additional features with CC messaging that make it a powerful, extensible system.  
 
 
-###### CC Modules
+###### CC vs OSC
 
 The OSC message format is very good, but it has many limitations.
 
 * The message address inefficently uses a text value that can be any length which limits scalability.
-* There is no system for describing OSC programs on a network.
+* There is no system for describing OSC modules and OSC controls on a network.
 * Two OSC programs exchanging messages must be using the same message addresses and data types.
 * OSC programs are not modular. All controls are organized into a single flat space.
 * OSC does not provide for more more than one OSC program to be controlling another program.
@@ -159,17 +159,16 @@ bool CoffeeBotDataModel::make = false;
 void CoffeeBotDataModel::Setup()
 {
   // create a CC module with role = model
-  CCModule* module = CCModuleCreate("cc", "coffeebot", "Coffee Bot", "model");
+  CCModule* module = CCCreateModule("model", "coffeebot", "Coffee Bot");
   
   // add controls to the module that reperesent the data model
-  CCModuleAddControl(module, "type", "Type", "string");
-  CCModuleAddControl(module, "progress", "Progress", "float");
-  CCModuleAddControl(module, "shots", "Shots", "integer");
-  CCModuleAddControl(module, "start", "Start", "integer");
+  CCAddControl(module, "type", "Type", "string");
+  CCAddControl(module, "progress", "Progress", "float");
+  CCAddControl(module, "shots", "Shots", "integer");
+  CCAddControl(module, "start", "Start", "integer");
   
   // provide a callback for CoreControl to receive control changes
-  CCModuleAddControlObserver(module, CoffeeBotDataModel::ReceiveControlValueNumber);
-  CCModuleAddControlObserver(module, CoffeeBotDataModel::ReceiveControlValueString);
+  CCSubscribe(module, CoffeeBotDataModel::ReceiveProperty);
 
   // initialize the module control values 
   CCModuleSetValue("type", CoffeeBotDataModel::type);
@@ -178,14 +177,14 @@ void CoffeeBotDataModel::Setup()
   CCModuleSetValue("start", CoffeeBotDataModel::start);
   
   // create a socket to send and receive messages to a core control websocket server
-  CCSocket* socket = CCSocketCreate("tcp", "ws://192.168:100.1:8080/models");
+  CCSocket* socket = CCCreateSocket("tcp", "ws://192.168:100.1:8080/models");
 
   // connect the module to the server
-  CCConnect(true, module, socket);
+  CCConnect(module, socket);
 }
 
 // this function is called by CoreControl to inform the data model of requested changes from a remote control surface
-void CoffeeBotDataModel::ReceiveControlValueNumber(std::string controlName, double controlValue, void* context)
+void CoffeeBotDataModel::ReceiveProperty(std::string controlName, double controlValue, void* context)
 {
   if (controlName.compare("make")==0)
   {
