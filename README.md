@@ -3,14 +3,14 @@
 
 Copyright 2015, Neyrinck LLC
 
-#### Quickstart
+#### Like OSC On Steroids
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a coffee machine can make coffee when you say "I want a latte with two shots" to a smartphone. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol or the legacy OSC protocol. Core Control supports messaging using TCP or UDP protocols. Core Control uses web sockets for TCP messaging which is compatible with web browsers and the internet.  Core Control is designed to be very flexible and powerful so that anything can control anything.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol. The CC protocol is like OSC on steroids. Core Control is designed to be very flexible and powerful so that anything can control anything.
 
 
 ###### CC Protocol
 
-Core Control modules send and receive CC messages. CC messages can be binary or text and can be sent over a wire using any transport layer. Typical transport layers are UDP, TCP, and MIDI Sysex. The CC protocol is inspired by OSC (Open Sound Control) and is designed so any CC software can send and receive OSC messages. CC provides other message types that allow  scalable systems not possible with OSC.
+Core Control uses the CC message protocol which was inspired by the simplicity of the OSC (Open Sound Control) protocol, but designed to solve the limitations of OSC. Core Control modules send and receive CC messages. CC messages can be binary or text and can be sent over a wire using any transport layer such as UDP, TCP, and MIDI Sysex. One type of CC message is an OSC message which makes it super-easy to connect Core Control modules to legacy OSC systems. The CC protocol provides other message types that let you build systems easily that can go way beyond what OSC is capable of. Core Control supports messaging using TCP or UDP protocols. Core Control uses web sockets for TCP messaging which is compatible with web browsers and the internet. 
 
 
 ###### Core Control Modules
@@ -27,7 +27,7 @@ Every module has a "type" property that specifies the kind of module it is. Exam
 
 ###### Legacy OSC And MIDI Modules
 
-Open Sound Control (OSC) is popular for control messaging on a network because it is simple. Core Control fully supports OSC messaging using OSC modules. MIDI is a popular protocol for messaging music performance and control  messsages. Core Control might support MIDI messaging using MIDI modules.
+Open Sound Control (OSC) is popular for control messaging on a network because it is simple. Core Control fully supports OSC messaging using OSC modules. MIDI is a popular protocol for messaging music performance and control  messsages. Core Control can be extended to support MIDI messaging using MIDI modules.
 
 Here is a simple C++ example to send OSC messages with Core Control:
 ```
