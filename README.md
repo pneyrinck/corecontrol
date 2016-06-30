@@ -399,8 +399,8 @@ All 1024 track modules are identical. But they are submodules of the array modul
 ###### The Controls Object And Meters Object
 The Core Control module schema has an object named "controls" and an object named "meters." The "controls" object contains control objects as key/value pairs where the key is the control name. This comes in really handy because we can construct JSON pointers that are simple and readable. Here are some example JSON pointers that point to key/value pairs in control objects:
 ```
-/cooldaw/transport/play/valueNumber
-/cooldaw/tracks/0/track/fader/valueString
+/cooldaw/transport/controls/play/valueNumber
+/cooldaw/tracks/0/track/controls/fader/valueString
 ```
 
 The "meters" object is very similar.
@@ -413,7 +413,7 @@ Core Control provides a low-level module API and a high-level module API built o
 
 The low-level API is implemented in C and Javascript at this time.
 ```
-struct CoreControlModule* CC_API CCModuleCreate(const char* type, const char * identifier, const char * name, struct CoreControlModule *parent);
+struct CoreControlModule*  CCModuleCreate(const char* type, const char * identifier, const char * name, struct CoreControlModule *parent);
 
 void CC_API CCModuleDestroy(struct CoreControlModule *module);
 
