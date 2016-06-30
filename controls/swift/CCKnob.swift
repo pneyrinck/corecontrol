@@ -17,11 +17,7 @@ enum EEncoderMode: Int {
 }
 
 
-class CCKnob: UIControl {
-//    var encoder: UIImage?
-//    var encoder_overlay: UIImage?
-//    var encoderon: UIImage?
-    
+class CCKnob: UIControl {    
     var position: Float = 0
     var lastpoint = CGPoint(x:0, y:0)
     var firsthandle: Bool?
