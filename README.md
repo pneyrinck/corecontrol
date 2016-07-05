@@ -80,11 +80,10 @@ A Core Control "module" is a thing that sends and receives CC messages. Core Con
 * JSON Patch - https://tools.ietf.org/html/rfc6901
 ```
 
-The JSON representation for the OSC module in the first code example above is:
+The JSON representation for the surface module in the first code example above is:
 ```
 {
-  songcontrol:{
-    type:'osc',
+    type:'surface',
     identifier:'songcontrol',
     name:'Song Control',
     controls: {
@@ -98,13 +97,12 @@ The JSON representation for the OSC module in the first code example above is:
       valueString:'Doe'
     }
   }
-  }
 }
 ```
 
 An important module property is the 'controls' property which describes a module's controls that can be used for realtime control. A control has properties that can be sent to other modules and control property changes can be received from other modules. Two important control properties are the 'valueFloat' and 'valueString' properties that can be sent in a message over a wire very fast using very little bandwidth. A module has a 'role' that defines its behavior when it receives messages so that controllers and data models can behave properly. Modules are 'modular' and provide useful features including hierarchical modules, meters, metadata, discovery, and more. 
 
-Every module has a "type" property that specifies the kind of module it is. Current types are "surface", "model", and "osc". "midi" might be a future type. The first two types are core types that let you build extensible, powerful, scalable systems. The second, "osc", provides support for legacy systems using OSC messaging.
+Every module has a "type" property that specifies the kind of module it is. Current types are "surface" and "model". "midi" might be a future type. The first two types are core types that let you build extensible, powerful, scalable systems that are backwards compatible with OSC message sending and receiving.
 
 
 ###### Core Control Module Roles
