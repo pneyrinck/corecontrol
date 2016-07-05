@@ -263,7 +263,7 @@ Core Control is implemented with a code library that provides an API to make it 
 
 C++ Projects
 
-To use CoreControl in your C++ project, add these files:
+To use CoreControl in your C++/C project, add these files:
 * /includes/corecontrol.h
 * /module/corecontrol_interface.cpp
 * /module/corecontrol_library.c
