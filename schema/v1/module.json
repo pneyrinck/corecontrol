@@ -34,7 +34,7 @@
         },
         "readablePath": {
             "type": "string",
-            "description": "This identifies the where a module is located in a hierarchy of modules."
+            "description": "This identifies the module path is located in a hierarchy of modules. It is localizable and can change freely."
         },
 	"controls": {
 		"description":"Controls are objects with a control value property that the adapter maps between model modules and surface modules. A model exposes its controls so they can be broadcast to one or more adapters and be changed by those adapters. A surface exposes its controls to be changed by a single adapter and broadcast to a single adapter."
