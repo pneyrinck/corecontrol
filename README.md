@@ -24,10 +24,10 @@ CCConnect(songControlModule, sendSocket);
 CCSetControlValueFloat(songControlModule, "volume", 0.7, "osc");
 
 // send a string value message with OSC address /name/first.
-CCSetControlValueString(songControlModule, "song/artist", "Federico", "osc");
+CCSetControlValueString(songControlModule, "song/artist", "The Hypocrites", "osc");
 
 // send a string value message with OSC address /name/last.
-CCSetControlValueString(songControlModule, "song/name", "Fellini", "osc");
+CCSetControlValueString(songControlModule, "song/name", "I Hate Complainers", "osc");
 
 ```
 The OSC messages sent have the OSC addresses '/volume', '/song/artist', 'song/name' and can be sent to any application that is programmed to receive OSC messages.
