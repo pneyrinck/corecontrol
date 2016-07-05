@@ -9,11 +9,11 @@
 	},
     "description": "A Core Control(CC) module. Core Control is a model-view-adapter pattern-based system that lets control 'surfaces' display and adjust remote data models. For example, an audio software plug-in can be controlled remotely from a device with knobs and buttons.  A CoreControl 'module' is either a surface or a data model. This schema is for CoreControl modules.",
     "type": "object",
-    "required": [ "type", "identifier", "name", "path", "guid" ],
+    "required": [ "type", "identifier", "name", "path"],
     "properties": {
         "type": {
             "type": "string",
-		"enum": ["model", "surface", "array", "osc"],
+		"enum": ["model", "surface", "array", "midi"],
             "description": "The module type defines its role and behaviors. A model stores all properties and broadcasts any property changes to one or more adapters. A surface broadcasts property changes to a single adapter and displays property changes received from that adapter."
         },
         "identifier": {
@@ -53,9 +53,9 @@
             "uniqueItems": true
         },
         "category": { "type": "string" },
-        "icon": { "type": "string", "format": "uri"},
+        "iconUri": { "type": "string", "format": "uri"},
         "host": { "type": "string"},
-		"hostLocation": { "$ref": "https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/location.json" }
+		"location": { "$ref": "https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/location.json" }
 	},
 	"color": {
 		"type": "string"
