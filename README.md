@@ -62,7 +62,7 @@ void receiveFunction(CCModule* module, std::string path, std::string * key, SCCP
   }
 }
 ```
-As you can see above, Core Control provides basic OSC messaging using its software API. As you will see below, Core Control provides additional features with CC messaging that make it a powerful, extensible system.  
+As you can see above, Core Control provides OSC messaging using its software API. As you will see below, Core Control provides additional features using CC messaging that make it a powerful, extensible system while also being backwards compatible with OSC messaging.  
 
 
 ###### CC Protocol
