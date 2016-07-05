@@ -125,6 +125,7 @@ Here is example C++ code for a coffee-making robot model:
 std::string CoffeeBot2000TM::type = "cappuccino";
 int CoffeeBot2000TM::shots = 2;
 float CoffeeBot2000TM::progress = 0.0;
+bool CoffeeBot2000TM::start = false;
 
 // setup core control
 void CoffeeBot2000TM::Setup()
@@ -134,8 +135,9 @@ void CoffeeBot2000TM::Setup()
   
   // add controls to the module that represent the data model
   CCAddControl(coffeeBotModule, "type", "Type", "string");
-  CCAddControl(coffeeBotModule, "shots", "Shots", "integer");
-  CCAddControl(coffeeBotModule, "start", "Start", "bool");
+  CCAddControl(coffeeBotModule, "shots", "Shots", "indexed");
+  CCAddControl(coffeeBotModule, "start", "Start", "continuous");
+  CCAddMeter(coffeeBotModule, "progress", "Progress", "continuous");
   
   // add a meter
   CCAddMeter(coffeeBotModule, "progress", "Progress", "float");
@@ -188,22 +190,22 @@ void CoffeeBot2000TM::ReceiveProperty(CCModule* module, std::string path, std::s
 void CoffeeBot2000TM::MakeCoffeeThread()
 {
   // broadcast info to surface(s)
-  CCModuleSetValueInt(module, "start", 1);
+  CCSetControlValueFloat(module, "start", 1);
   float progress = 0.0;
   bool coffeeMaking = true;
   while (coffeeMaking)
   {
 ...
-  CCModuleSetMeterValueFloat(module, "progress", progress);
+  CCSetMeterValueFloat(module, "progress", progress);
 ...
   }
-  CCModuleSetValueInt(module, "start", 0);
-  CCModuleSetMeterValueFloat(module, "progress", 1.0);
+  CCSetControlValueFloat(module, "start", 0);
+  CCSetMeterValueFloat(module, "progress", 1.0);
 }
 
 
 ```
-CoffeeBot2000TM is a data model that describes its controls and connects to Core Control. Any Core Control application connected can observe that there is a module connected named "Coffee Bot 2000", that its role is a model, and info about its controls. It can receive CC protocol messages or OSC protocol messages requesting it to change a value.
+CoffeeBot2000TM is a data model that describes its controls and meters and connects to Core Control. Any Core Control application connected can observe that there is a module connected named "Coffee Bot 2000", that its role is a model, and info about its controls. It can receive CC or OSC protocol messages requesting it to change a value.
 
 Because its role is a model, if any model values are changed, the model must call CCSetControlValueXXX(..) and Core Control will send the values to any surfaces it is connected to. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical modules, meters, metadata, discovery, and more.
 
