@@ -91,10 +91,10 @@ The JSON representation for the surface module in the first code example above i
       valueFloat:0.7
     },
     'artist/song':{
-      valueString:'John'
+      valueString:'The Hypocrites'
     },
     'artist/name':{
-      valueString:'Doe'
+      valueString:'I Hate Complainers'
     }
   }
 }
