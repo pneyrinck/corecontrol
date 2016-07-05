@@ -21,13 +21,13 @@ CCSocket* sendSocket = CCCreateSocket("udp", "send", 7000, "192.168.100.1");
 CCConnect(songControlModule, sendSocket);
 
 // send a float value message with OSC address /volume.
-CCSetControlValueFloat(songControlModule, "volume", 0.7, "osc");
+CCSetControlValueFloatOSC(songControlModule, "volume", 0.7);
 
 // send a string value message with OSC address /name/first.
-CCSetControlValueString(songControlModule, "song/artist", "The Hypocrites", "osc");
+CCSetControlValueStringOSC(songControlModule, "song/artist", "The Hypocrites");
 
 // send a string value message with OSC address /name/last.
-CCSetControlValueString(songControlModule, "song/name", "I Hate Complainers", "osc");
+CCSetControlValueStringOSC(songControlModule, "song/name", "I Hate Complainers");
 
 ```
 The OSC messages sent have the OSC addresses '/volume', '/song/artist', 'song/name' and can be sent to any application that is programmed to receive OSC messages.
