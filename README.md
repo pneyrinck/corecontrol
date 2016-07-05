@@ -5,29 +5,29 @@ Copyright 2015, Neyrinck LLC
 
 #### Like OSC On Steroids
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol while also supporting OSC (open Sound Control) protocol. The Core Control system and the new CC protocol are like OSC on steroids. Core Control is flexible and powerful so that anything can control anything. The Core Control open source code makes it easy to implement modules that communicate CC protocol and OSC protocol.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol that is backwards compatibile with OSC (open Sound Control) protocol. The Core Control system and the new CC protocol are like OSC on steroids. Core Control is flexible and powerful so that anything can control anything. The Core Control open source code makes it easy to implement modules that communicate CC protocol and OSC protocol.
 
 Here is a some example C code to send OSC messages with Core Control:
 ```
 #include "corecontrol.h"
 
-// create an OSC module (type, identifier, name)
-CCModule* oscmodule = CCCreateModule("osc", "songcontrol", "Song Control");//
+// create a 'surface' module (type, identifier, name)
+CCModule* songControlModule = CCCreateModule("surface", "songcontrol", "Song Control");//
 
 // create a socket to send messages (transport, type, port, address)
-CCSocket* oscSendSocket = CCCreateSocket("udp", "send", 7000, "192.168.100.1");
+CCSocket* sendSocket = CCCreateSocket("udp", "send", 7000, "192.168.100.1");
 
-// connect the OSC module to the socket
-CCConnect(oscmodule, oscSendSocket);
+// connect the module to the socket
+CCConnect(songControlModule, sendSocket);
 
 // send a float value message with OSC address /volume.
-CCSetControlValueFloat(oscmodule, "volume", 0.7);
+CCSetControlValueFloat(songControlModule, "volume", 0.7, "osc");
 
 // send a string value message with OSC address /name/first.
-CCSetControlValueString(oscmodule, "song/artist", "Federico");
+CCSetControlValueString(songControlModule, "song/artist", "Federico", "osc");
 
 // send a string value message with OSC address /name/last.
-CCSetControlValueString(oscmodule, "song/name", "Fellini");
+CCSetControlValueString(songControlModule, "song/name", "Fellini", "osc");
 
 ```
 The OSC messages sent have the OSC addresses '/volume', '/song/artist', 'song/name' and can be sent to any application that is programmed to receive OSC messages.
@@ -36,17 +36,17 @@ Here is a simple C example to receive OSC messages with Core Control:
 ```
 #include "corecontrol.h"
 
-// create an OSC module
-CCModule* oscmodule = CCCreateModule("osc", "songplayer", "Song Player");
+// create a 'model' module
+CCModule* songPlayerModule = CCCreateModule("model", "songplayer", "Song Player");
 
 // create a socket to receive messages
-CCSocket* oscReceiveSocket = CCCreateSocket("udp", "receive", 7000, "");
+CCSocket* receiveSocket = CCCreateSocket("udp", "receive", 7000, "");
 
 // set a callback function to receive control property changes
-CCSubscribeFPtr(oscmodule, "controls", receiveFunction);
+CCSubscribeFPtr(songPlayerModule, "controls", receiveFunction);
 
-// connect the OSC module to the socket
-CCConnect(oscmodule, oscReceiveSocket);
+// connect the module to the socket
+CCConnect(songPlayerModule, receiveSocket);
 
 void receiveFunction(CCModule* module, std::string path, std::string * key, SCCPropertyValue* value, void* context)
 {
