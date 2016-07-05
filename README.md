@@ -122,70 +122,70 @@ Here is example C++ code for a coffee-making robot model:
 #include "corecontrol.h"
 
 // data model
-std::string CoffeeBotDataModel::type = "cappuccino";
-int CoffeeBotDataModel::shots = 2;
-float CoffeeBotDataModel::progress = 0.0;
+std::string CoffeeBot2000TM::type = "cappuccino";
+int CoffeeBot2000TM::shots = 2;
+float CoffeeBot2000TM::progress = 0.0;
 
 // setup core control
-void CoffeeBotDataModel::Setup()
+void CoffeeBot2000TM::Setup()
 {
   // create a CC module with role = model
-  CCModule* module = CCCreateModule("model", "coffeebot", "Coffee Bot");
+  CCModule* coffeeBotModule = CCCreateModule("model", "coffeebot", "Coffee Bot 2000");
   
   // add controls to the module that represent the data model
-  CCAddControl(module, "type", "Type", "string");
-  CCAddControl(module, "shots", "Shots", "integer");
-  CCAddControl(module, "start", "Start", "bool");
+  CCAddControl(coffeeBotModule, "type", "Type", "string");
+  CCAddControl(coffeeBotModule, "shots", "Shots", "integer");
+  CCAddControl(coffeeBotModule, "start", "Start", "bool");
   
   // add a meter
-  CCAddMeter(module, "progress", "Progress", "float");
+  CCAddMeter(coffeeBotModule, "progress", "Progress", "float");
 
   // provide a callback for CoreControl to receive control changes
-  CCSubscribe(module, CoffeeBotDataModel::ReceiveProperty);
+  CCSubscribe(coffeeBotModule, CoffeeBot2000TM::ReceiveProperty);
 
   // initialize the module control values 
-  CCModuleSetValue("type", CoffeeBotDataModel::type);
-  CCModuleSetValue("progress", CoffeeBotDataModel::progress);
-  CCModuleSetValue("shots", CoffeeBotDataModel::shots);
-  CCModuleSetValue("start", CoffeeBotDataModel::start);
+  CCSetControlValueString(coffeeBotModule, "type", CoffeeBotDataModel::type);
+  CCSetControlValueFloat(coffeeBotModule, "progress", CoffeeBotDataModel::progress);
+  CCSetControlValueFloat(coffeeBotModule, "shots", CoffeeBotDataModel::shots);
+  CCSetControlValueFloat(coffeeBotModule, "start", CoffeeBotDataModel::start);
 
   CCSocket* receiveSocket = CCCreateSocket("udp", "receive", 7000, "");
   CCSocket* sendSocket = CCCreateSocket("udp", "send", 7001, "192.186.100.1");
 
   // connect the module to the outside world
-  CCConnect(module, receiveSocket);
-  CCConnect(module, sendSocket);
+  CCConnect(coffeeBotModule, receiveSocket);
+  CCConnect(coffeeBotModule, sendSocket);
 
   // tell the world about the module
-  CCPublish(module);
+  CCPublish(coffeeBotModule);
 }
 
 // this function is called by CoreControl to inform the data model of requested changes from a surface
-void CoffeeBotDataModel::ReceiveProperty(CCModule* module, std::string path, std::string * key, SCCPropertyValue* value, void* context)
+void CoffeeBot2000TM::ReceiveProperty(CCModule* module, std::string path, std::string * key, SCCPropertyValue* value, void* context)
 {
   if ((path.compare("controls/start")==0) && (key.compare("valueNumber"))
   {
-    // start making coffe if value is affirmative
+    // start making coffee if value is affirmative
     if (value->valueInteger > 0)
-      CoffeeBotDataModel::RunMakeCoffeeThread();
+      CoffeeBot2000TM::RunMakeCoffeeThread();
   }
   else if ((path.compare("controls/shots")==0) && (key.compare("valueNumber"))
   {
     // update data model
-    MyWidgetDataModel::shots = value->valueNumber;
+    CoffeeBot2000TM::shots = value->valueNumber;
   // broadcast info to surface(s)
-    CCModuleSetValueInt("shots", value->valueNumber);
+    CCSetControlValueFloat(coffeeBotModule, "shots", value->valueNumber);
   }
   else if ((path.compare("controls/type")==0) && (key.compare("valueString"))
   {
     // update data model
-    MyWidgetDataModel::type = value->valueString;
+    CoffeeBot2000TM::type = value->valueString;
   // broadcast info to surface(s)
-    CCModuleSetValueString("type", MyWidgetDataModel::type);
+    CCSetControlValueString(coffeeBotModule, "type", CoffeeBot2000TM::type);
   }
 }
 
-void CoffeeBotDataModel::MakeCoffeThread()
+void CoffeeBot2000TM::MakeCoffeeThread()
 {
   // broadcast info to surface(s)
   CCModuleSetValueInt(module, "start", 1);
@@ -203,13 +203,13 @@ void CoffeeBotDataModel::MakeCoffeThread()
 
 
 ```
-CoffeeBotDataModel describes its controls and connects to Core Control. Any Core Control application connected can observe that there is a module connected named "Coffee Bot", that its role is a model, and info about its controls. 
+CoffeeBot2000TM is a data model that describes its controls and connects to Core Control. Any Core Control application connected can observe that there is a module connected named "Coffee Bot 2000", that its role is a model, and info about its controls. It can receive CC protocol messages or OSC protocol messages requesting it to change a value.
 
-Because its role is a model, if any model values are changed, the model must call CCModuleSetValue(..) and Core Control will send the values to any surfaces it is connected to. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical modules, meters, metadata, discovery, and more.
+Because its role is a model, if any model values are changed, the model must call CCSetControlValueXXX(..) and Core Control will send the values to any surfaces it is connected to. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical modules, meters, metadata, discovery, and more.
 
 ###### Surfaces
 
-Core Control surfaces are user interfaces used to remotely control a model. A surface has controls just like a model does, but differs in its behavior. It sends value changes when a user adjusts a control. And when it receives changes to values from CoreControl, it updates the user interface to display the values. To connect a surface to Core Control, just write some code like this C++ example:
+Core Control surfaces are user interfaces used to remotely control a model. A surface has controls with properties just like a model does, but differs in its behavior. It sends control property changes when a user adjusts a control. And when it receives changes to properties from CoreControl, it updates the user interface to display the values. To connect a surface to Core Control, just write some code like this C++ example:
 
 ```
 #include "corecontrol.h"
@@ -228,10 +228,10 @@ void MyCuteController::Setup()
 // this is called when the knob turns or a button is pushed
 void MyCuteController::DoControlChange(const char* identifier, int value)
 {
-  CCSetControlValueInt(module, identifier, value);
+  CCSetControlValueFloat(module, identifier, value);
 }
 
-void MyCuteController::ReceiveProperty(module, std::string path, SCCPropertyValue* value, void* context)
+void MyCuteController::ReceiveProperty(module, std::string path, std::string key, SCCPropertyValue* value, void* context)
 {
   if path.compare("controls/display")
   {
@@ -241,7 +241,7 @@ void MyCuteController::ReceiveProperty(module, std::string path, SCCPropertyValu
 ```
 
 
-###### CC vs OSC
+###### CC Protocol vs OSC Protocol
 
 The OSC message format is very good, but it has many limitations.
 
@@ -250,8 +250,9 @@ The OSC message format is very good, but it has many limitations.
 * Two OSC programs exchanging messages must be using the same message addresses and data types.
 * OSC programs are not modular. All controls are organized into a single flat space.
 * OSC does not provide for more more than one OSC program to be controlling another program.
+* OSC does not provide for control properties other than a numeric or string value.
 
-The CC message format is designed to solve these limitations. CC control messages are tiny no matter how large the system is and no matter what the control addresses are. CC lets modules describe themselves with rich metadata. CC provides hierarchical sub-modules for modular and organized control. CC allows any number of control surfaces to be controlling a single data model. 
+The CC message format is designed to solve these limitations. CC control value messages are tiny no matter how large the system is and no matter what the control addresses are. CC lets modules and control describe themselves with rich metadata. CC provides hierarchical sub-modules for modular and organized control. CC allows any number of control surfaces to be controlling a single data model. 
 
 
 ###### Core Control API
@@ -277,7 +278,6 @@ This provides a deeper look at modules which are the heart and soul of Core Cont
 Here is a partial JSON representation of the MyWidgetDataModel module example from above:
 ```
 {
-coffeebot:{
   type:'model',
   identifier:'coffeebot',
   name:'Coffee Bot',
@@ -286,15 +286,14 @@ coffeebot:{
     type:{...},
     shots:{
       index:2,
-      type:'integer',
+      type:'indexed',
       name:'Shots',
-      valueInteger:2,
+      valueFloat:2.0,
     },
   meters:{
     progress:{...},
     }
   }
-}
 }
 ```
 
@@ -316,13 +315,14 @@ The JSON schema for a Core Control module can be seen here:
 
 https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/module.json
 
-Note that a module's JSON has a key/value object named "controls." The "controls" object provides info about the module's controls. Because it follows a schema, other applications can look at the JSON and know what a module's controls are.
+Note that a module's JSON schema requires an object named "controls." The "controls" object provides info about the module's controls. Because it follows a schema, other applications can look at the JSON and know what a module's controls are.
 
 ###### Core Control Controls
 
-Controls are a fundamental part of Core Control. For a model, a control is a piece of the data model exposed so it can be changed for some useful purpose. For a surface, a control is a piece of the user interface that a user interacts with. An adapter can implement a mapping so that as a user changes a surface control, a model control changes. Core Control uses a JSON schema for controls. Here is a partial JSON representation of an audio volume control:
+Controls are a fundamental part of Core Control. For a model, a control is a piece of the data model exposed so it can be changed for some useful purpose. For a surface, a control is a piece of the user interface that a user interacts with. An adapter can implement a mapping so that as a user changes a surface control, a model control changes. Core Control uses a JSON schema for controls. Here is a partial JSON representation of an audio volume control with a rich set of properties:
 ```
 {
+  identifier:'volume',
   index:2,
   type:'continuous',
   feedbackType:'continuous',
@@ -338,10 +338,11 @@ Controls are a fundamental part of Core Control. For a model, a control is a pie
 }
 ```
 The JSON schema for a control requires it to have these key/value pairs:
+* identifier
 * index
 * type
 
-With knowledge of these two key/value pairs, a Core Control program send values to this module and control it. Additional key/value pairs enhance a program's ability to provide a great user experience. In the example above, it provides onfo about the fader taper which lets a controlling application draw line marks in a user interface. Because Core Control uses JSON schema, a wide variety of control schemas can be defined.
+With knowledge of these key/value pairs, a Core Control program send values to this module and control it. Additional key/value pairs enhance a program's ability to provide a great user experience. In the example above, it provides onfo about the fader taper which lets a controlling application draw line marks in a user interface. Because Core Control uses JSON schema, a wide variety of control schemas can be defined.
 
 You can see the schema for a control here:
 https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/control.json
@@ -349,12 +350,12 @@ https://github.com/pneyrinck/corecontrol/blob/master/schema/v1/control.json
 
 ###### Core Control Adapters
 
-An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Anything With Anything." An adapter is not needed if a model and a surface have knowledge of each other's controls and can adapt themselves to it. But that is a very self-limiting way to build a system. Rather a model should be able to be built with no knowledge of what surface will control it. And it should be controllable by a variety of controllers. Core Control is designed so that any model and any surface can potentially be connected via an adapter. An adapter relies on the JSON representation of modules to know how to map control values between them. A popular Core Control adapter system that is available for Mac and PC is V-Control Pro (vcontrolpro.com). 
+An adapter implements a mapping between a model and a surface. Adapters are the powerful glue that lets users "Control Anything With Anything." An adapter is not needed if a model and a surface have knowledge of each other's controls and can adapt themselves to each other. But that is a very self-limiting way to build a system. Rather a model should be able to be built with no knowledge of what surface will control it. And it should be controllable by a variety of controllers. Core Control is designed so that any model and any surface can potentially be connected via an adapter. An adapter relies on the JSON representation of modules to know how to map control values between them. A popular Core Control adapter system that is available for Mac and PC is V-Control Pro(vcontrolpro.com). 
 
 
 ###### Core Control SubModules / Array Modules
 
-A powerful feature of Core Control is submodules. By using submodules you can connect models and surfaces that are organized as multiple modules using parent/child relationships. Array modules are a special type of module that lets you organize a set of submodules that are ordered and indexed. Here is JSON example of a module using submodules and array modules.
+A powerful feature of Core Control is submodules. By using submodules you can create models and surfaces that are organized as multiple modules using parent/child relationships. Array modules are a special type of module that lets you organize a set of submodules that are ordered and indexed. The CoolDAW module below is a an example of a module using submodules and array modules.
 
 
 ###### CoolDAW Module Example
@@ -367,7 +368,6 @@ The first module we will create is the top-level parent:
   type:'model',
   identifier:'cooldaw',
   name:'Cool DAW',
-  controls: {}
 }
 ```
 Note that it has no controls. The controls will be in sub-modules.
@@ -385,12 +385,22 @@ The next module we create is for the transport section:
   }
 }
 ```
-And finally we create 1024 track modules:
+The next modules we create are a mixer module and an array module for the mixer's :
+```
+{
+  type:'model',
+  identifier:'mixer',
+  name:'Mixer',
+  tracks:[....]
+}
+
+```
+And finally we create several track modules, one for each track:
 ```
 {
   type:'model',
   identifier:'track',
-  name:'Track',
+  name:'Lead Vocals',
   controls: {
     'fader':{...},
     'pan':{...}
@@ -403,11 +413,9 @@ Here is a partial JSON representation of the Cool Daw module:
 
 ```
 {
-cooldaw:{
   type:'model',
   identifier:'cooldaw',
   name:'Cool DAW',
-  controls: {},
   transport:{
     identifier:'transport',
     name:'Transport',
@@ -420,32 +428,28 @@ cooldaw:{
   mixer:{
     identifier:'mixer',
     name:'Mixer',
-    controls: {},
     tracks:[
-      {
-        track1:{
+        {
           identifier:'track',
           name:'Track 1',
           controls: {
             'fader':{...},
             'pan':{...}
-          },
-        track2: {
+        },
+        {
           identifier:'track',
           name:'Track 2',
           controls: {
             'fader':{...},
             'pan':{...}
-          },
+        },
         ....
-      },
     ]
   }
 }
-}
 ```
 
-Why organize modules using sub-modules and arrays? For one thing, it lets us write code that is object oriented, structured, modular and reusable. Another thing is that we can use JSON path and JSON patch standard technologies to reference data. A JSON path lets us refer to any property. For example: /cooldaw/mixer/tracks/0/track/controls/fader/valueNumber. Looks a lot like an OSC control address, huh? Yes it does. Just like OSC we have readable paths for control addresses. Unlike OSC though, CC messages do not have to send the address as a long string in the message. A CC message can be very tiny so that fast realtime systems can operate with thousands of controls changing at the same time.
+Why organize modules using sub-modules and arrays? For one thing, it lets us write code that is object oriented, structured, modular and reusable. Another thing is that we can use JSON path and JSON patch standard technologies to reference data. A JSON path lets us refer to any property. For example: /mixer/tracks/4/track/controls/fader/valueNumber. It looks a lot like an OSC control address, right? Yes it does! Just like OSC we have readable paths for control addresses. Unlike OSC though, CC messages do not have to send the address as a long string in the message. A CC message can be very tiny so that fast realtime systems can operate with thousands of controls changing at the same time. Core Control translates CC paths and OSC addresses to provide backwards compatibility. In this example, the CC path '/mixer/tracks/4/track/controls/fader/valueNumber' maps to an OSC address '/mixer/tracks/4/track/fader' and floating point OSC value.
 
 
 ###### The Controls Object And Meters Object
