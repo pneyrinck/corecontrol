@@ -7,9 +7,9 @@
 		"version": "0-0-1",
 		"copyright": "2015 Neyrinck LLC"
 	},
-    "description": "A Core Control control is an object in a Core Control module. Modules expose these controls so an adapter can map them between a model and a surface. The valueNumber and valueString are special properties intended for fast realtime mapping. The other properties are metadata that adapters use to implement the mapping.",
+    "description": "A Core Control control is an object in a Core Control module. Modules expose these controls that CC messages can be sent and received to communicate changes to a control property. The valueNumber and valueString are special properties intended for fast realtime messaging.",
     "type": "object",
-    "required": [ "sendType", "name", "index" ],
+    "required": [ "type", "name", "index"],
     "properties": {
 		"valueNumber": {
             		"type": "number",
@@ -19,19 +19,20 @@
 			"default" : ""
 		},
 		"index": {
-        		 "type": "integer",
+        		"type": "integer",
             		"minimum": 0,
-            		"maximum": 0xFFFF
+            		"maximum": 0xFFFF,
+            		"description": "The index is used to identify a control in the CC protocol for scalable, low bandwidth messaging."
 		},
-        "sendType": {
+        "type": {
             "type": "string",
 			"enum": ["continuous", "indexed", "bool", "delta", "momentary", "string", "blob"],
-            "description": "The type of control messages that are broadcast by this control to adapters. This helps and adapter map it to a different module."
+            "description": "The type of control messages that are broadcast by this control. This helps message receivers understand messages and helps adapters know how to map messages netween modules."
         },
         "receiveType": {
             "type": "string",
 		"enum": ["continuous", "indexed", "bool", "delta", "momentary", "string", "blob"],
-            "description": "The type of control message it will receive. This helps and adapter map it to a different module. Typically, a model modules receives the same type that is sent. Often, a surface module uses a different type. For example, a surface may send delta values with a rotery encoder but receive continuous values for display."
+            "description": "The type of control message it will receive, if different than the send type. This helps and adapter map it to a different module. Typically, model modules receive the same type that is sent. Often, a surface module uses a different type. For example, a surface may send delta values with a rotery encoder but receive continuous values for display."
         },
         "name": {
             "type": "string",
