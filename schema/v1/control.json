@@ -7,9 +7,9 @@
 		"version": "0-0-1",
 		"copyright": "2015 Neyrinck LLC"
 	},
-    "description": "A Core Control control is an object in a Core Control module. Modules expose these controls that CC messages can be sent and received to communicate changes to a control property. The valueNumber and valueString are special properties intended for fast realtime messaging.",
+    "description": "A Core Control control is an object in a Core Control module. Modules expose controls so that CC messages can communicate changes to control properties. The valueNumber and valueString are special properties used for fast realtime messaging.",
     "type": "object",
-    "required": [ "type", "name", "index"],
+    "required": [ "type", "identifier", "index"],
     "properties": {
 		"valueNumber": {
             		"type": "number",
@@ -26,7 +26,7 @@
 		},
         "type": {
             "type": "string",
-			"enum": ["continuous", "indexed", "bool", "delta", "momentary", "string", "blob"],
+		"enum": ["continuous", "indexed", "bool", "delta", "momentary", "string", "blob"],
             "description": "The type of control messages that are broadcast by this control. This helps message receivers understand messages and helps adapters know how to map messages netween modules."
         },
         "receiveType": {
@@ -34,9 +34,9 @@
 		"enum": ["continuous", "indexed", "bool", "delta", "momentary", "string", "blob"],
             "description": "The type of control message it will receive, if different than the send type. This helps and adapter map it to a different module. Typically, model modules receive the same type that is sent. Often, a surface module uses a different type. For example, a surface may send delta values with a rotery encoder but receive continuous values for display."
         },
-        "name": {
+        "identifier": {
             "type": "string",
-            "description": "A readable name such as 'Fader.' It can be localized and change freely."
+            "description": ""
         },
 	"numSteps": {
 		"type": "integer",
@@ -44,7 +44,7 @@
             "minimum": 0,
             "maximum": 0xFFFFFFFF,
             "description": ""
-		},
+	},
 	"default": {
             "description": "The default value of the control"
 		},
@@ -59,14 +59,10 @@
 		"type": "string"
 		"description": "The string displayed after a numerical value such as 'dB' or 'kHz.'"
 		},
-		"color": {
-			"type": "string"
-			"default" : "none",
-			"description": "A CSS color value for application specific use."
-		},
-		"displayMode": {
-			"type": "array"
-			"description": "An array of keywords that can be used to represent the control in a useful manner."
+	"color": {
+		"type": "string"
+		"default" : "none",
+		"description": "A CSS color value for application specific use."
 		},
     }
 }
