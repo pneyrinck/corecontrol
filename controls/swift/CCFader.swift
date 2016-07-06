@@ -20,7 +20,7 @@ struct CCTaperMark
    
 };
 
-class CCFader: UIControl {
+class CCFader: UIControl{
 
     var capButton: CCFaderCap!
     var groove: CCButton!
@@ -66,7 +66,7 @@ class CCFader: UIControl {
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
-    
+
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
@@ -76,6 +76,12 @@ class CCFader: UIControl {
         hasLabelFontSize = 12
         self.updateSettings()
     }
+   
+    override func layoutSubviews() {
+        self.updateSettings()
+    }
+    
+
     
     func updateSettings() {
 		if (capButton != nil)
@@ -86,8 +92,8 @@ class CCFader: UIControl {
 		{
 			groove.removeFromSuperview()
 		}
-
-        let viewSize: CGSize = self.bounds.size
+        
+         let viewSize: CGSize = self.bounds.size
         
         // decide if fader should be displayed vertically or horizontally
         if (viewSize.height > viewSize.width) {
@@ -121,6 +127,7 @@ class CCFader: UIControl {
         capButton.gradientIsLeftToRight = true;
         
         // draw groove
+
         let h = CGFloat(6.0)
         let y = self.frame.height/2 - h/2
         let w = viewSize.width - capRect.size.width
@@ -137,11 +144,12 @@ class CCFader: UIControl {
     }
     
     func drawVerticalFader(viewSize: CGSize){
+        
         // we vertically stretch the groove pict to fit exactly inside the view height
         grooveTop = Float(self.bounds.origin.y)
         grooveBottom = Float(self.bounds.origin.y) + Float(viewSize.height)
         
-        let capRect: CGRect = CGRectMake(0.0,0.0,self.frame.width,78.0)
+        let capRect: CGRect = CGRectMake(0.0,0.0,self.bounds.width, CGFloat(capHeight))
         capButton = CCFaderCap(frame: capRect)
         if (faderCapState != nil)
         {
@@ -170,8 +178,10 @@ class CCFader: UIControl {
         self.insertSubview(capButton, aboveSubview: groove)
         
         self.setNeedsDisplay()
+  
         // force redraw of labels and groove
         self.updateCapPosition()
+        
         
     }
     
