@@ -8,9 +8,9 @@ Copyright 2015, Neyrinck LLC
 The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol that is backwards compatibile with OSC (open Sound Control) protocol. The Core Control system and the new CC protocol are like OSC on steroids. Core Control is flexible and powerful so that anything can control anything. The Core Control open source code makes it easy to implement modules that communicate CC protocol and OSC protocol.
 
 
-###### CC Protocol
+#### CC Protocol
 
-While Core Control supports OSC protocol, it provides the new CC message protocol which solves limitations of OSC. CC protocol messages for realtime control can be very small no matter how complex of a system is built. CC messages can be binary or text and can be sent over a wire using any transport layer such as UDP, TCP, Websockets, and MIDI Sysex. CC messages support modularity so you can build systems in pieces that can be re-used and shared. CC messages provide for  control metadata for dynamic remote control user interfaces. CC messages describe control properties so that control messages can be adapted to other protocols at runtime.
+While Core Control supports OSC protocol, it provides the new CC message protocol which solves limitations of OSC. CC protocol messages for realtime control can be very small no matter how complex of a system is built. CC messages can be binary or text and can be sent over a wire using any transport layer such as UDP, TCP, Websockets, and MIDI Sysex. CC messages support modularity so you can build systems in pieces that can be re-used and shared. CC messages provide for  control metadata for dynamic remote control user interfaces. CC messages describe control properties so that control messages can be adapted to other data models and protocols at runtime.
 
 
 To help illustrate Core Control, we will start with OSC messaging because you might be familiar with OSC already. Here is a some example C code to send OSC messages with Core Control:
@@ -71,7 +71,7 @@ void receiveFunction(CCModule* module, std::string path, std::string * key, SCCP
 As you can see above, Core Control modules can send and receive OSC messages. As you will see below, Core Control provides additional features using CC messaging that make it a powerful, extensible system while also being backwards compatible with OSC messaging.  
 
 
-###### Core Control Modules
+#### Core Control Modules
 
 A Core Control "module" is a thing that sends and receives CC messages. Core Control modules have properties that describe the module. A module is represented using JSON (Javascript Object Notation) which is a standard way to represent structured data. JSON schemas are used to define how a module is structured. JSON pointers are used to reference the data within a module. You do not need to understand JSON to use Core Control, but it can be helpful.
 ```
@@ -106,7 +106,7 @@ An important module property is the 'controls' property which describes a module
 Every module has a "type" property that specifies the kind of module it is. Current types are "surface" and "model". "midi" might be a future type. The first two types are core types that let you build extensible, powerful, scalable systems that are backwards compatible with OSC message sending and receiving.
 
 
-###### Core Control Module Roles
+#### Core Control Module Roles
 
 A Core Control module's behavior depends on whether it is a 'model' or a 'surface' which is very simple distinction, but incredibly important. Core Control uses the software design pattern known as 'model-view-adapter' which is described here: https://en.wikipedia.org/wiki/Model–view–adapter. Core Control modules must implement a behavior appropriate to its role. There are two roles at this time: "model" and "surface". The "surface" role is equivalent to the "view" role in the 'model-view-adapter' pattern. A data "model" is remotely controlled by one or more "surfaces." An optional "adapter" implements a mapping between a model and surface so that almost anything can control almost anything.It is helpful to understand these things about model and surface roles:
 
@@ -210,7 +210,7 @@ CoffeeBot2000TM is a data model that describes its controls and meters and conne
 
 Because its role is a model, if any model values are changed, the model must call CCSetControlValueXXX(..) and Core Control will send the values to any surfaces it is connected to. Core Control provides other powerful, optional features that you can read more about further down. These features include hierarchical modules, meters, metadata, discovery, and more.
 
-###### Surfaces
+#### Surfaces
 
 Core Control surfaces are user interfaces used to remotely control a model. A surface has controls with properties just like a model does, but differs in its behavior. It sends control property changes when a user adjusts a control. And when it receives changes to properties from CoreControl, it updates the user interface to display the values. To connect a surface to Core Control, just write some code like this C++ example:
 
@@ -244,7 +244,7 @@ void MyCuteController::ReceiveProperty(module, std::string path, std::string key
 ```
 
 
-###### CC Protocol vs OSC Protocol
+#### CC Protocol vs OSC Protocol
 
 The OSC message format is very good, but it has many limitations.
 
@@ -274,7 +274,7 @@ To use CoreControl in your javascript project, add this file:
 
 ### Going Deeper - Core Control Documentation
 
-###### Core Control Modules
+#### Core Control Modules
 
 This provides a deeper look at modules which are the heart and soul of Core Control. Modules are a structured data representation of an application / widget that is using Core Control. JSON is used to represent modules. The layout of the JSON must follow a defined schema.
 
