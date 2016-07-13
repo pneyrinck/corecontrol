@@ -7,18 +7,18 @@ Copyright 2015, Neyrinck LLC
 
 The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol that is backwards compatibile with OSC (open Sound Control) protocol. The Core Control system and the new CC protocol are like OSC on steroids. Core Control is flexible and powerful so that anything can control anything. The Core Control open source code makes it easy to implement modules that communicate CC protocol and OSC protocol.
 
-Here is a some example C code to send OSC messages with Core Control:
+To help illustrate Core Control, we will start with OSC messaging because you might be familiar with OSC already. Here is a some example C code to send OSC messages with Core Control:
 ```
 #include "corecontrol.h"
 
 // create a 'surface' module (type, identifier, name)
 CCModule* songControlModule = CCCreateModule("surface", "songcontrol", "Song Control");//
 
-// create a socket to send messages (transport, type, port, address)
-CCSocket* sendSocket = CCCreateSocket("udp", "send", 7000, "192.168.100.1");
+// create a service to send messages (service, type, port, address)
+CCService* sendService = CCCreateService("._udp", "send", 7000, "192.168.100.1");
 
-// connect the module to the socket
-CCConnect(songControlModule, sendSocket);
+// connect the module to the service
+CCConnect(songControlModule, sendService);
 
 // send a float value message with OSC address /volume.
 CCSetControlValueFloatOSC(songControlModule, "volume", 0.7);
@@ -39,14 +39,14 @@ Here is a simple C example to receive OSC messages with Core Control:
 // create a 'model' module
 CCModule* songPlayerModule = CCCreateModule("model", "songplayer", "Song Player");
 
-// create a socket to receive messages
-CCSocket* receiveSocket = CCCreateSocket("udp", "receive", 7000, "");
+// create a service to receive messages
+CCService* receiveService = CCCreateService("._udp", "receive", 7000, "");
 
 // set a callback function to receive control property changes
 CCSubscribeFPtr(songPlayerModule, "controls", receiveFunction);
 
-// connect the module to the socket
-CCConnect(songPlayerModule, receiveSocket);
+// connect the module to the service
+CCConnect(songPlayerModule, receiveService);
 
 void receiveFunction(CCModule* module, std::string path, std::string * key, SCCPropertyValue* value, void* context)
 {
@@ -67,7 +67,7 @@ As you can see above, Core Control provides OSC messaging using its software API
 
 ###### CC Protocol
 
-While Core Control supports OSC protocol, it provides the new CC message protocol which solves limitations of OSC. CC protocol messages for realtime control are very small no matter how complex of a system is built. CC messages can be binary or text and can be sent over a wire using any transport layer such as UDP, TCP, and MIDI Sysex. One type of CC message is an OSC message which makes it  very easy to connect Core Control modules to legacy OSC systems. The CC protocol provides other message types that let you build systems easily that can go way beyond what OSC is capable of. Core Control uses web sockets for TCP messaging which makes it easy to use in web browsers, servers, and the internet. 
+While Core Control supports OSC protocol, it provides the new CC message protocol which solves limitations of OSC. CC protocol messages for realtime control can be very small no matter how complex of a system is built. CC messages can be binary or text and can be sent over a wire using any transport layer such as UDP, TCP, and MIDI Sysex. One type of CC message is an OSC message which makes itvery easy to connect Core Control modules to legacy OSC systems. The CC protocol provides other message types that let you build systems easily that can go way beyond what OSC is capable of. Core Control uses web sockets for TCP messaging which makes it easy to use in web browsers, servers, and the internet. 
 
 
 ###### Core Control Modules
@@ -151,12 +151,12 @@ void CoffeeBot2000TM::Setup()
   CCSetControlValueFloat(coffeeBotModule, "shots", CoffeeBotDataModel::shots);
   CCSetControlValueFloat(coffeeBotModule, "start", CoffeeBotDataModel::start);
 
-  CCSocket* receiveSocket = CCCreateSocket("udp", "receive", 7000, "");
-  CCSocket* sendSocket = CCCreateSocket("udp", "send", 7001, "192.186.100.1");
+  CCService* receiveService = CCCreateService("udp", "receive", 7000, "");
+  CCService* sendService = CCCreateService("udp", "send", 7001, "192.186.100.1");
 
   // connect the module to the outside world
-  CCConnect(coffeeBotModule, receiveSocket);
-  CCConnect(coffeeBotModule, sendSocket);
+  CCConnect(coffeeBotModule, receiveService);
+  CCConnect(coffeeBotModule, sendService);
 
   // tell the world about the module
   CCPublish(coffeeBotModule);
@@ -224,7 +224,7 @@ void MyCuteController::Setup()
   CCModuleAddControl(module, "down", "Next", "momentary");  // momentary push button
   CCModuleAddControl(module, "display", "Value", "text");		// LCD text display
   CCSubscribe(module, "controls", MyCuteController::ReceiveProperty);
-  CCModuleConnect(module, socket);
+  CCModuleConnect(module, service);
 }
 
 // this is called when the knob turns or a button is pushed
