@@ -5,7 +5,7 @@ Copyright 2015, Neyrinck LLC
 
 #### Like OSC On Steroids
 
-The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol that is backwards compatibile with OSC (open Sound Control) protocol. The Core Control system and the new CC protocol are like OSC on steroids. Core Control is flexible and powerful so that anything can control anything. The Core Control open source code makes it easy to implement modules that communicate CC protocol and OSC protocol.
+The Core Control system connects things to be controlled by other things over a network. For example, audio mixer software can be adjusted by a hardware control surface with knobs and sliders. Or a virtual reality glove can control a surgical instrument. Core Control provides simple, flexible, fast messaging with the new CC protocol that is backwards compatibile with OSC (open Sound Control) protocol. The Core Control system and the new CC protocol are like OSC on steroids. Core Control is flexible and powerful so that anything can control anything. The Core Control open source code makes it easy to implement modules that communicate CC protocol and OSC protocol. For more information about Core Control, please visit the [Core Control Site](http://www.corecontrol.io).
 
 
 #### CC Protocol
