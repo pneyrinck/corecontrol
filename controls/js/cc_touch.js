@@ -1,5 +1,5 @@
 (function ( angular ) {	
-	corecontrolDirectives.directive('ccTouch', function() {
+	angular.module('ui.corecontrol').directive('ccTouch', function() {
 		return function ccTouchDirective(scope, el, attr){
 	    var element = el["0"];
 	    function touchStart (x, y) {

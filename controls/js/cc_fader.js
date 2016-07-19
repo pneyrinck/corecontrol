@@ -1,5 +1,5 @@
 (function ( angular ) {	
-	corecontrolDirectives.directive('ccFader', 
+	angular.module('ui.corecontrol').directive('ccFader', 
 	['$timeout', 'coreControl',function($timeout, coreControl) {
 	return function ccFaderDirective(scope, element, attr) 
 	{
@@ -88,7 +88,6 @@
 		  coreControl.touchControl(scope.id, 1.0);
 		}
 		scope.move = function(event) {
-			console.log("moved");
 			if (!scope.enabled) return;
 		  	if (trackLength == 0)return;
 			var x = event.clientX;
@@ -118,6 +117,11 @@
 		coreControl.setControlValue(scope.id, controlValue);
 	}
 	}]);
+
+
+	angular.module('ui.corecontrol').controller('ccFaderCtrl', ccFaderController);
+	function ccFaderController($scope) {
+	}
 })( angular );
 
 

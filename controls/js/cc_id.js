@@ -1,5 +1,5 @@
 (function ( angular ) {	
-	corecontrolDirectives.directive('ccId', ['coreControl', function(coreControl) {
+	angular.module('ui.corecontrol').directive('ccId', ['coreControl', function(coreControl) {
 	return function ccIdDirective(scope, element, attr){
 	    // bind to vcontrol
 	    scope.id = attr['ccId'];
