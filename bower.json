@@ -6,7 +6,13 @@
     "Neyrinck"
   ],
   "description": "A Core Control control is an object in a Core Control module. Modules expose these controls so an adapter can map them between a model",
-  "main": "js/corecontrol.js",
+ 
+  "main": [
+    "js/corecontrol.js",
+    "js/angular-corecontrol.js",
+    "controls/css/corecontrol.css"
+  ],
+
   "ignore": [
     "schema",
     "node_modules",
