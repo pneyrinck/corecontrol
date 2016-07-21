@@ -1,7 +1,5 @@
 (function(window, angular) {
-	var ngCoreControl = angular.module('ngCoreControl', ['ui.corecontrol']);
-	var ngUICoreControl = angular.module('ui.corecontrol',[]);
-
+	var ngCoreControl = angular.module('ngCoreControl', ['ngUICoreControl']);
 	ngCoreControl.service('coreControl', ['$timeout',
 	function coreControlService($timeout){
 		var self = this;

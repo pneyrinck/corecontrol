@@ -1,4 +1,5 @@
 (function ( angular ) {	
+	var ngUICoreControl = angular.module('ngUICoreControl',[]);
 
 	/*
 	*******************************************************
@@ -6,7 +7,7 @@
 	********************************************************
 	*/
 
-	angular.module('ui.corecontrol').directive('ccFader', 
+	angular.module('ngUICoreControl').directive('ccFader', 
 	['$timeout', 'coreControl',function($timeout, coreControl) {
 	return function ccFaderDirective(scope, element, attr) 
 	{
@@ -121,7 +122,7 @@
 	}
 	}]);
 
-	angular.module('ui.corecontrol').controller('ccFaderCtrl', ccFaderController);
+	angular.module('ngUICoreControl').controller('ccFaderCtrl', ccFaderController);
 	function ccFaderController($scope) {
 	}
 
@@ -131,7 +132,7 @@
 		Knob
 	********************************************************
 	*/
-	angular.module('ui.corecontrol').directive('ccKnob', function() {return ccKnobDirective;});
+	angular.module('ngUICoreControl').directive('ccKnob', function() {return ccKnobDirective;});
   	function ccKnobDirective(scope, element, attr){
 	    var knobs={};
 	    knobs.protools = {
@@ -188,7 +189,7 @@
 	  	}
 	}
 
-	angular.module('ui.corecontrol').controller('ccKnobCtrl', ['$scope', 'coreControl',
+	angular.module('ngUICoreControl').controller('ccKnobCtrl', ['$scope', 'coreControl',
 	function ccKnobController($scope, coreControl) {
 		var touchParams = {moved:0, touched:0};
 		var width=0
@@ -361,7 +362,7 @@
 		}
 	}]);
 
-	angular.module('ui.corecontrol').directive('ccKnobDraw', ['coreControl', function(coreControl) {
+	angular.module('ngUICoreControl').directive('ccKnobDraw', ['coreControl', function(coreControl) {
 		return function ccKnobDrawDirective(scope, element, attr) 
 		{
 			var knobs={};
@@ -548,7 +549,7 @@
 		return path;
 	}
 
-	angular.module('ui.corecontrol').directive('ccKnob2', ['coreControl', function(coreControl) {
+	angular.module('ngUICoreControl').directive('ccKnob2', ['coreControl', function(coreControl) {
 	return function ccKnob2Directive(scope, element, attr) {
 		var id="";
 		if (attr['vcId'])
@@ -638,7 +639,7 @@
 		Id
 	********************************************************
 	*/
-	angular.module('ui.corecontrol').directive('ccId', ['coreControl', function(coreControl) {
+	angular.module('ngUICoreControl').directive('ccId', ['coreControl', function(coreControl) {
 	return function ccIdDirective(scope, element, attr){
 	    // bind to vcontrol
 	    scope.id = attr['ccId'];
@@ -664,7 +665,7 @@
 		Touch
 	********************************************************
 	*/
-	angular.module('ui.corecontrol').directive('ccTouch', function() {
+	angular.module('ngUICoreControl').directive('ccTouch', function() {
 		return function ccTouchDirective(scope, el, attr){
 	    var element = el["0"];
 	    function touchStart (x, y) {
@@ -745,7 +746,7 @@
 	********************************************************
 	*/
 
-	angular.module('ui.corecontrol').directive('ccBtnTouch', ['coreControl', function(coreControl) {
+	angular.module('ngUICoreControl').directive('ccBtnTouch', ['coreControl', function(coreControl) {
 	return function ccButtonTouchDirective(scope, el, attr)
 	{
 		var latchMode = (attr['ccLatch'] != undefined)?true:false;
@@ -832,7 +833,7 @@
 	********************************************************
 	*/
 
-	angular.module('ui.corecontrol').directive('ccSprite', ['coreControl', function(coreControl) {
+	angular.module('ngUICoreControl').directive('ccSprite', ['coreControl', function(coreControl) {
 		return function ccSpriteDirective(scope, el, attr){
 		    var id = attr['vcId'];
 		    var numSteps = coreControl.getNumControlSteps(id);
@@ -843,7 +844,7 @@
 		}
 	}]);
 
-	angular.module('ui.corecontrol').controller('ccBtnSpCtrl', ['$scope','coreControl',
+	angular.module('ngUICoreControl').controller('ccBtnSpCtrl', ['$scope','coreControl',
 	function ccButtonSpriteController($scope, coreControl)
 	{
 	    $scope.enabled = true;
