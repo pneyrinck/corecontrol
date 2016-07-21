@@ -1,16 +1,17 @@
 {
   "name": "corecontrol",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "homepage": "https://github.com/pneyrinck/corecontrol",
   "authors": [
     "Neyrinck"
   ],
-  "description": "A Core Control control is an object in a Core Control module. Modules expose these controls so an adapter can map them between a model",
+  "description": "Core Control is a simple system for remote control.",
  
   "main": [
     "js/corecontrol.js",
     "js/angular-corecontrol.js",
-    "controls/css/corecontrol.css"
+    "js/angular-ui-corecontrol.js",
+    "css/corecontrol.css"
   ],
 
   "ignore": [
@@ -19,6 +20,6 @@
     "bower_components",
     "test",
     "tests",
-    "controls/swift"
+    "controls/*"
   ]
 }
