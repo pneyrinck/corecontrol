@@ -122,9 +122,8 @@
 	}
 	}]);
 
-	angular.module('ngUICoreControl').controller('ccFaderCtrl', ccFaderController);
-	function ccFaderController($scope) {
-	}
+	angular.module('ngUICoreControl').controller('ccFaderCtrl', function(){
+	});
 
 
 	/*
