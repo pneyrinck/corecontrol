@@ -17,7 +17,7 @@
 		var controlPropertyUpdates = [];
 		var propertyUpdates = [];
 		var updatesPending = false
-		var vc = VCONTROL.getInstance();
+		var vc = CORECONTROL.getInstance();
 
 
 		this.requestAllControls = function(){
