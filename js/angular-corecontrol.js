@@ -246,55 +246,55 @@
 				}
 	    }
 	    const kVendor = "Neyrinck"
-			function updateValues()
+		function updateValues()
+		{
+			updatesPending = false
+			var count = valueUpdates.length
+			while (count--)
 			{
-				updatesPending = false
-				var count = valueUpdates.length
-				while (count--)
-				{
-					var update = valueUpdates.shift()
-					updateControlValue(update.id, update.value);
-				}
-				count = controlPropertyUpdates.length
-				while (count--)
-				{
-					var update = controlPropertyUpdates.shift()
-					updateControlProperty(update.id, update.key, update.value);
-				}
-				count = propertyUpdates.length
-				while (count--)
-				{
-					var update = propertyUpdates.shift()
-					updateModuleProperty(update.key, update.value);
-				}
+				var update = valueUpdates.shift()
+				updateControlValue(update.id, update.value);
 			}
-			function addValueUpdate(id, value)
+			count = controlPropertyUpdates.length
+			while (count--)
 			{
-				valueUpdates.push({id:id,value:value})
-				if (updatesPending==false)
-				{
-					$timeout(updateValues, 20)
-					updatesPending = true
-				}
+				var update = controlPropertyUpdates.shift()
+				updateControlProperty(update.id, update.key, update.value);
 			}
-			function addControlPropertyUpdate(id, key, value)
+			count = propertyUpdates.length
+			while (count--)
 			{
-				controlPropertyUpdates.push({id:id,key:key,value:value})
-				if (updatesPending==false)
-				{
-					$timeout(updateValues, 20)
-					updatesPending = true
-				}
+				var update = propertyUpdates.shift()
+				updateModuleProperty(update.key, update.value);
 			}
-			function addPropertyUpdate(key, value)
+		}
+		function addValueUpdate(id, value)
+		{
+			valueUpdates.push({id:id,value:value})
+			if (updatesPending==false)
 			{
-				propertyUpdates.push({key:key,value:value})
-				if (updatesPending==false)
-				{
-					$timeout(updateValues, 20)
-					updatesPending = true
-				}
+				$timeout(updateValues, 20)
+				updatesPending = true
 			}
+		}
+		function addControlPropertyUpdate(id, key, value)
+		{
+			controlPropertyUpdates.push({id:id,key:key,value:value})
+			if (updatesPending==false)
+			{
+				$timeout(updateValues, 20)
+				updatesPending = true
+			}
+		}
+		function addPropertyUpdate(key, value)
+		{
+			propertyUpdates.push({key:key,value:value})
+			if (updatesPending==false)
+			{
+				$timeout(updateValues, 20)
+				updatesPending = true
+			}
+		}
 
 	    // this is a helper object for more complex surfaces
 	    var Module = function(parent, ngId){
@@ -344,32 +344,12 @@
 						addPropertyUpdate(key, value)
 	        }
 	    }
-	    var ContainerModule = function(category, identifier, name, parent){
-	        this.inheritsFrom = Module;
-	        this.inheritsFrom(parent);
-	        this.setup = function(){
-	        }
-	        this.module = vc.SurfaceCreate(identifier, name, parent);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Vendor, kVendor);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Category, category);
-					vc.SurfaceSetPropertyCallback(this.module, this.setPropertyCallback);
-	        vc.SurfaceSetControlPropertyCallback(this.module, this.setControlPropertyCallback);
-					vc.SurfaceSetControlCallback(this.module, this.setControlValueCallback, 0);
-	    }
-	    var ArrayModule = function(identifier, name, parent){
-	        this.inheritsFrom = Module;
-	        this.inheritsFrom(parent);
-	        this.setup = function(){
-	        }
-	        this.module = vc.SurfaceArrayCreate(identifier, name, parent);
-	    }
-	    var DAWModule = function(){
+	   
+	    var ExampleModule = function(){
 	        var self = this;
 	        this.inheritsFrom = Module;
 	        this.inheritsFrom(0);
 	        this.setup = function(){
-	        }
-	        function setDawMode(identifier){
 	        }
 			this.module = vc.SurfaceCreate("example", "Example", 0);
 	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Vendor, kVendor);
@@ -378,7 +358,7 @@
 	        vc.SurfaceSetControlPropertyCallback(this.module, this.setControlPropertyCallback);
 	    }
 
-	    var DAWTrackModule = function(parent, number)
+	    var TrackModule = function(parent, number)
 	    {
 	        var self = this;
 	        this.inheritsFrom = Module;
@@ -404,57 +384,16 @@
 	        vc.SurfaceSetControlPropertyCallback(this.module, this.setControlPropertyCallback, 0);
 	    }
 
-		var PannerModule = function(parent, number)
-	    {
-	        var self = this;
-	        this.inheritsFrom = Module;
-	        this.inheritsFrom(parent);
-	        var values = [];
-	        var controls = [];
-
-	        this.setup = function(){
-						self.addControl("leftright", "Pan Left-Right", kVControlParameterTypeContinuous);
-						values.push(0);
-						self.addControl("frontrear", "Pan Front-Rear", kVControlParameterTypeContinuous);
-						values.push(0);
-						self.addControl("updown", "Pan Up-Down", kVControlParameterTypeContinuous);
-						values.push(0);
-						self.addControl("previoustrack", "Previous Track", kVControlParameterTypeMomentary);
-						values.push(0);
-						self.addControl("nexttrack", "Next Track", kVControlParameterTypeMomentary);
-						values.push(0);
-						self.addControl("targetup", "Target Up", kVControlParameterTypeMomentary);
-						values.push(0);
-						self.addControl("targetdown", "Target Down", kVControlParameterTypeMomentary);
-						values.push(0);
-						self.addControl("setrightpanner", "Set Right Panner", kVControlParameterTypeMomentary);
-						values.push(0);
-						self.addControl("togglewindow", "Toggle Window", kVControlParameterTypeMomentary);
-						values.push(0);
-	        }
-	        this.module = vc.SurfaceCreate("panner"+(number), "Surround Panner "+(number), parent);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Vendor, kVendor);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Category, kVControlCategory_Panner);
-	        vc.SurfaceSetControlCallback(this.module, this.setControlValueCallback, 0);
-	        vc.SurfaceSetControlPropertyCallback(this.module, this.setControlPropertyCallback, 0);
-	    }
-
 	    function setupModule()
 	    {
-			var daw = new DAWModule();
+			var daw = new ExampleModule();
 			modules.push(daw);
-			var url = "http://vcontrolpro.com/apps/vpanner/icons/Icon-60@3x.png";
-			vc.SurfaceUpdatePropertyValue(daw.getModule(), kVControlProperty_Icon, url);
-			url = "http://vcontrolpro.com/apps/vpanner/guide";
-			vc.SurfaceUpdatePropertyValue(daw.getModule(), kVControlProperty_Help, url);
-
-			for (var i=0; i<8; i++){
-				var dawsubmodule = new DAWTrackModule(daw.getModule(), i);
-				modules.push(dawsubmodule);
-		    	dawsubmodule.setup();
-			}
-			
-					
+			var tracks = 8;
+			for (var i=0; i<tracks; i++){
+				var trackmodule = new TrackModule(daw.getModule(), i);
+				modules.push(trackmodule);
+		    	trackmodule.setup();
+			}					
 	    }
 	    setupModule();
 	}]);
