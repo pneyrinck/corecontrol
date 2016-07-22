@@ -8,7 +8,7 @@
 	*/
 	var ccTouchHandler = ngUICoreControl.service('ccTouchHandler', [
 		function ccTouchHandlerService(){
-		    this.installTouchHandler = function(element, handler, allowDefault) {
+		    this.install = function(element, handler, allowDefault) {
 		        
 		        if (!element) return;
 		        var elRect = element.getBoundingClientRect();
@@ -755,7 +755,7 @@
 	        if (scope && scope.release)
 	            scope.release({clientX:x, clientY:y});
 	    }
-	    ccTouchHandler.installTouchHandler(el["0"], {touchStart:touchStart, touchMove:touchMove, touchEnd:touchEnd});
+	    ccTouchHandler.install(el["0"], {touchStart:touchStart, touchMove:touchMove, touchEnd:touchEnd});
 	  }
 	}]);
 
@@ -787,7 +787,7 @@
 			if (latchMode) return;
 		  	coreControl.setControlValue(attrId, 0.0);
 		}
-		ccTouchHandler.installTouchHandler(el["0"], {touchStart:touchStart, touchMove:0, touchEnd:touchEnd});
+		ccTouchHandler.install(el["0"], {touchStart:touchStart, touchMove:0, touchEnd:touchEnd});
 	}
   	}]);
 
