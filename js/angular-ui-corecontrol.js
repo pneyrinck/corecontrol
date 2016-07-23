@@ -8,8 +8,8 @@
 	*/
 	var ccTouchHandler = ngUICoreControl.service('ccTouchHandler', [
 		function ccTouchHandlerService(){
+			
 		    this.install = function(element, handler, allowDefault) {
-		        
 		        if (!element) return;
 		        var elRect = element.getBoundingClientRect();
 
@@ -23,7 +23,8 @@
 		        }
 
 		        function mousedown(event) {
-		            var elRect = element.getBoundingClientRect();
+
+		            if(!elRect) elRect = element.getBoundingClientRect();
 		            if (event.button === 2) return; // ignore right clicks
 		            if (!allowDefault) event.preventDefault();
 		    		      event.stopPropagation();
@@ -40,7 +41,7 @@
 		              handler.touchMove(event.pageX-elRect.left, event.pageY-elRect.top, element);
 		        }
 		        function mouseup(event) {
-		            if (handler.touchEnd)
+		        	if (!elRect) elRect = element.getBoundingClientRect();
 		              handler.touchEnd(event.pageX-elRect.left, event.pageY-elRect.top, element);
 		            if (handler.touchMove) document.body.removeEventListener("mousemove", mousemove);
 		            if (handler.touchEnd) document.body.removeEventListener("mouseup", mouseup);
