@@ -20,81 +20,81 @@
  ==============================================================================*/
 // copyright Neyrinck LLC 2016
 
-const kVCModulePropertySet_Module =         "module"
-const kVCModulePropertySet_Control =         "control"
-const kVCModulePropertySet_Meter   =         "meter"
-const kVCModulePropertySet_Preset  =         "preset"
-const kVCModulePropertySet_Submodules  =   "submodules"
-const kVCModulePropertySet_Custom  =         "custom"
+const kCCModulePropertySet_Module =         "module"
+const kCCModulePropertySet_Control =         "control"
+const kCCModulePropertySet_Meter   =         "meter"
+const kCCModulePropertySet_Preset  =         "preset"
+const kCCModulePropertySet_Submodules  =   "submodules"
+const kCCModulePropertySet_Custom  =         "custom"
 
-const kVControlProperty_Id         =         "id"            // int value
-const kVControlProperty_ParentId	=		"parentId"
-const kVControlProperty_Identifier =         "identifier"    // stringValue
-const kVControlProperty_GUID =         "guid"			// stringValue
-const kVControlProperty_Type       =         "type"			// stringValue
-const kVControlProperty_FeedbackType   =   "feedbackType"  // stringValue
-const kVControlProperty_Name =         "name"			// stringValue
-const kVControlProperty_Index =         "index"			// int value
+const kCControlProperty_Id         =         "id"            // int value
+const kCControlProperty_ParentId	=		"parentId"
+const kCControlProperty_Identifier =         "identifier"    // stringValue
+const kCControlProperty_GUID =         "guid"			// stringValue
+const kCControlProperty_Type       =         "type"			// stringValue
+const kCControlProperty_FeedbackType   =   "feedbackType"  // stringValue
+const kCControlProperty_Name =         "name"			// stringValue
+const kCControlProperty_Index =         "index"			// int value
 
-const kVControlProperty_Vendor	=		"vendor"		// stringValue
-const kVControlProperty_VendorType =         "vendorType"    // stringValue
-const kVControlProperty_Label      =         "label"             // string
-const kVControlProperty_NumberOfSteps  =   "numSteps"          // int
-const kVControlProperty_DefaultValue   =   "default"           // string
-const kVControlProperty_AutomationMode =   "auto"              // string
-const kVControlProperty_ValueString   =    "valueString"       // string
-const kVControlProperty_ValueNumber   =    "valueNumber"       // double
-const kVControlProperty_MeterValue =         "meterVal"          // string
-const kVControlProperty_ControlSuffix =    "controlSuffix"     // string
-const kVControlProperty_MeterSuffix   =    "meterSuffix"       // string
-const kVControlProperty_VendorSubType  =   "vendorSubType"     // string
-const kVControlProperty_HostWindowID   =   "windowId"          // intValue
-const kVControlProperty_HostWindowStatus=  "window"            // int
-const kVControlProperty_BypassedState	=	"bypass"			// int
-const kVControlProperty_ModifiedState   =  "modified"          // int
-const kVControlProperty_NumberOfControls	="numControls"		// int
-const kVControlProperty_NumberOfMeters=	"numMeters"         // int
-const kVControlProperty_Enabled    =         "enabled"           // int
-const kVControlProperty_NumberOfPresets=	"numPresets"		// int
-const kVControlProperty_PresetName =         "presetName"        // string
-const kVControlProperty_Preset     =         "preset"            // int
-const kVControlProperty_Child      =         "child"             // string
-const kVControlProperty_Parent     =         "parent"            // string
-const kVControlProperty_TrackIndex =         "trackIndex"        // int
-const kVCModuleProperty_InsertIndex     =  "insertIndex"       // int
-const kVControlProperty_Category   =         "category"          // string
-const kVControlProperty_Color      =         "color"             // string
-const kVControlProperty_Path       =         "path"
-const kVControlProperty_ReadablePath     = "readable_path"
-const kVControlProperty_ClientId	=		"clientId"			// string or array of strings
-const kVControlProperty_DisplayMode =		"displayMode"
+const kCControlProperty_Vendor	=		"vendor"		// stringValue
+const kCControlProperty_VendorType =         "vendorType"    // stringValue
+const kCControlProperty_Label      =         "label"             // string
+const kCControlProperty_NumberOfSteps  =   "numSteps"          // int
+const kCControlProperty_DefaultValue   =   "default"           // string
+const kCControlProperty_AutomationMode =   "auto"              // string
+const kCControlProperty_ValueString   =    "valueString"       // string
+const kCControlProperty_ValueNumber   =    "valueNumber"       // double
+const kCControlProperty_MeterValue =         "meterVal"          // string
+const kCControlProperty_ControlSuffix =    "controlSuffix"     // string
+const kCControlProperty_MeterSuffix   =    "meterSuffix"       // string
+const kCControlProperty_VendorSubType  =   "vendorSubType"     // string
+const kCControlProperty_HostWindowID   =   "windowId"          // intValue
+const kCControlProperty_HostWindowStatus=  "window"            // int
+const kCControlProperty_BypassedState	=	"bypass"			// int
+const kCControlProperty_ModifiedState   =  "modified"          // int
+const kCControlProperty_NumberOfControls	="numControls"		// int
+const kCControlProperty_NumberOfMeters=	"numMeters"         // int
+const kCControlProperty_Enabled    =         "enabled"           // int
+const kCControlProperty_NumberOfPresets=	"numPresets"		// int
+const kCControlProperty_PresetName =         "presetName"        // string
+const kCControlProperty_Preset     =         "preset"            // int
+const kCControlProperty_Child      =         "child"             // string
+const kCControlProperty_Parent     =         "parent"            // string
+const kCControlProperty_TrackIndex =         "trackIndex"        // int
+const kCCModuleProperty_InsertIndex     =  "insertIndex"       // int
+const kCControlProperty_Category   =         "category"          // string
+const kCControlProperty_Color      =         "color"             // string
+const kCControlProperty_Path       =         "path"
+const kCControlProperty_ReadablePath     = "readable_path"
+const kCControlProperty_ClientId	=		"clientId"			// string or array of strings
+const kCControlProperty_DisplayMode =		"displayMode"
 
 
-const kVControlProperty_Icon		=		"icon"
-const kVControlProperty_IconSet		=		"iconset"
-const kVControlProperty_Images		=		"images"
-const kVControlProperty_Size		=		"size"
-const kVControlProperty_FileName	=		"filename"
-const kVControlProperty_URL			=		"url"
-const kVControlProperty_Pointer		=		"pointer"
-const kVControlProperty_Help		=		"help"
+const kCControlProperty_Icon		=		"icon"
+const kCControlProperty_IconSet		=		"iconset"
+const kCControlProperty_Images		=		"images"
+const kCControlProperty_Size		=		"size"
+const kCControlProperty_FileName	=		"filename"
+const kCControlProperty_URL			=		"url"
+const kCControlProperty_Pointer		=		"pointer"
+const kCControlProperty_Help		=		"help"
 
-const kVControlParameterTypeContinuous    ="continuous"        // values between 0.0 and 1.0
-const kVControlParameterTypeIndexed      = "indexed"           // values of 0, 1, 2, ...
-const kVControlParameterTypeBoolean      = "bool"              // values of 0 or 1
-const kVControlParameterTypeDelta  =       "delta"             // increment or decrement such as scrub/shuttle
-const kVControlParameterTypeMomentary    = "momentary"         // set to 1 to initiate an action, any other set value does nothing
-const kVControlParameterTypeText   =         "text"
-const kVControlParameterTypeTimeText  =		"timeText"
-const kVControlParameterTypeBlob = "blob";
-const kVControlParameterTypeObject = "object";
+const kCControlParameterTypeContinuous    ="continuous"        // values between 0.0 and 1.0
+const kCControlParameterTypeIndexed      = "indexed"           // values of 0, 1, 2, ...
+const kCControlParameterTypeBoolean      = "bool"              // values of 0 or 1
+const kCControlParameterTypeDelta  =       "delta"             // increment or decrement such as scrub/shuttle
+const kCControlParameterTypeMomentary    = "momentary"         // set to 1 to initiate an action, any other set value does nothing
+const kCControlParameterTypeText   =         "text"
+const kCControlParameterTypeTimeText  =		"timeText"
+const kCControlParameterTypeBlob = "blob";
+const kCControlParameterTypeObject = "object";
 
-const kVCAppType_Application     =  "application"
-const kVCAppType_Plugin     =         "plugin"
+const kCCAppType_Application     =  "application"
+const kCCAppType_Plugin     =         "plugin"
 
 //                enum VControlMeterType {
-const eVControlMeterTypeAudio=0
-const eVControlMeterTypeGain=1
+const eControlControlMeterTypeAudio=0
+const eControlControlMeterTypeGain=1
 
 const cVControlPropertyType_NULL=0
 const cVControlPropertyType_Number=1
@@ -102,139 +102,139 @@ const cVControlPropertyType_String=2
 const cVControlPropertyType_Array= 3
 const cVControlPropertyType_Blob=4
 
-const kVControlCategory_AudioMixer   ="audiomixer"
-const kVControlCategory_AudioStrip   ="audiostrip"
-const kVControlCategory_Transport    ="transport"
-const kVControlCategory_Editor       ="editor"
-const kVControlCategory_Commands     ="commands"
-const kVControlCategory_Globals      ="globals"
-const kVControlCategory_Markers      ="markers"
-const kVControlCategory_Keyboard      ="keyboard"
-const kVControlCategory_Automation	 ="automation"
-const kVControlCategory_StereoPanner ="stereopanner"
-const kVControlCategory_SurroundPanner="surroundpanner"
-const kVControlCategory_Monitor      ="monitor"
-const kVControlProperty_Container    ="container"
-const kVControlProperty_Array        ="array"
+const kCControlCategory_AudioMixer   ="audiomixer"
+const kCControlCategory_AudioStrip   ="audiostrip"
+const kCControlCategory_Transport    ="transport"
+const kCControlCategory_Editor       ="editor"
+const kCControlCategory_Commands     ="commands"
+const kCControlCategory_Globals      ="globals"
+const kCControlCategory_Markers      ="markers"
+const kCControlCategory_Keyboard      ="keyboard"
+const kCControlCategory_Automation	 ="automation"
+const kCControlCategory_StereoPanner ="stereopanner"
+const kCControlCategory_SurroundPanner="surroundpanner"
+const kCControlCategory_Monitor      ="monitor"
+const kCControlProperty_Container    ="container"
+const kCControlProperty_Array        ="array"
 
-const kVControlCategory_AVWorkstation="avworkstation" //audio/video workstation
-const kVControlCategory_Filter       ="filter"
-const kVControlCategory_EQ           ="eq"
-const kVControlCategory_EQParametric ="parametriceq"
-const kVControlCategory_EQGraphic    ="graphiceq"
-const kVControlCategory_Dynamics     ="dynamics"
-const kVControlCategory_DynCompressor="compressor"
-const kVControlCategory_DynExpander  ="expander"
-const kVControlCategory_DynGate      ="gate"
-const kVControlCategory_Reverb       ="reverb"
-const kVControlCategory_Chorus       ="chorus"
-const kVControlCategory_Flanger      ="flanger"
-const kVControlCategory_Delay        ="delay"
-const kVControlCategory_Pitch        ="pitch"
-const kVControlCategory_Tone         ="tone" //amplifiers, pedals, warmth
-const kVControlCategory_Distortion   ="distortion" //bitcrushers
-const kVControlCategory_Generator    ="generator"
-const kVControlCategory_Instrument   ="instrument"
-const kVControlCategory_Mixer        ="mixer"
-const kVControlCategory_Panner       ="panner"
-const kVControlCategory_SoundField   ="soundfield"
-const kVControlCategory_Color        ="color"
-const kVControlCategory_PlugIn		   ="plugin"
+const kCControlCategory_AVWorkstation="avworkstation" //audio/video workstation
+const kCControlCategory_Filter       ="filter"
+const kCControlCategory_EQ           ="eq"
+const kCControlCategory_EQParametric ="parametriceq"
+const kCControlCategory_EQGraphic    ="graphiceq"
+const kCControlCategory_Dynamics     ="dynamics"
+const kCControlCategory_DynCompressor="compressor"
+const kCControlCategory_DynExpander  ="expander"
+const kCControlCategory_DynGate      ="gate"
+const kCControlCategory_Reverb       ="reverb"
+const kCControlCategory_Chorus       ="chorus"
+const kCControlCategory_Flanger      ="flanger"
+const kCControlCategory_Delay        ="delay"
+const kCControlCategory_Pitch        ="pitch"
+const kCControlCategory_Tone         ="tone" //amplifiers, pedals, warmth
+const kCControlCategory_Distortion   ="distortion" //bitcrushers
+const kCControlCategory_Generator    ="generator"
+const kCControlCategory_Instrument   ="instrument"
+const kCControlCategory_Mixer        ="mixer"
+const kCControlCategory_Panner       ="panner"
+const kCControlCategory_SoundField   ="soundfield"
+const kCControlCategory_Color        ="color"
+const kCControlCategory_PlugIn		   ="plugin"
 
-const kVControlCategory_Phase ="phase"
-const kVControlCategory_Trim  ="trim"
+const kCControlCategory_Phase ="phase"
+const kCControlCategory_Trim  ="trim"
 
-const kVControlCategory_Red="red"
-const kVControlCategory_Green="green"
-const kVControlCategory_Blue="blue"
-const kVControlCategory_RGBA="0xhexvaluegoeshere" //32 bit rgba value in hex
+const kCControlCategory_Red="red"
+const kCControlCategory_Green="green"
+const kCControlCategory_Blue="blue"
+const kCControlCategory_RGBA="0xhexvaluegoeshere" //32 bit rgba value in hex
 
-const kVControlCategory_Track    ="track"
-const kVControlCategory_Audio    ="audio"
-const kVControlCategory_MIDI     ="midi"
-const kVControlCategory_Aux      ="aux"
-const kVControlCategory_Master   ="master"
+const kCControlCategory_Track    ="track"
+const kCControlCategory_Audio    ="audio"
+const kCControlCategory_MIDI     ="midi"
+const kCControlCategory_Aux      ="aux"
+const kCControlCategory_Master   ="master"
 
-const kVControlCategory_Send="send"
-const kVControlCategory_Volume="volume"
-const kVControlCategory_Mute  ="mute"
-const kVControlCategory_Solo  ="solo"
-const kVControlCategory_Record="record"
-const kVControlCategory_InputMonitor  ="monitor"
-const kVControlCategory_AutomationMode   ="automode"
+const kCControlCategory_Send="send"
+const kCControlCategory_Volume="volume"
+const kCControlCategory_Mute  ="mute"
+const kCControlCategory_Solo  ="solo"
+const kCControlCategory_Record="record"
+const kCControlCategory_InputMonitor  ="monitor"
+const kCControlCategory_AutomationMode   ="automode"
 
-const kVControlCategory_PanLeftRight ="panleftright"
-const kVControlCategory_PanFrontBack ="panfrontback"
-const kVControlCategory_PanBottomTop ="pantopbottom"
-const kVControlCategory_PanFrontDivergence   ="divergencefront"
-const kVControlCategory_PanRearDivergence    ="divergencerear"
+const kCControlCategory_PanLeftRight ="panleftright"
+const kCControlCategory_PanFrontBack ="panfrontback"
+const kCControlCategory_PanBottomTop ="pantopbottom"
+const kCControlCategory_PanFrontDivergence   ="divergencefront"
+const kCControlCategory_PanRearDivergence    ="divergencerear"
 
 //bus selects?		eVCCategory_Bus,
 
-const kVControlCategory_SendVolume   ="sendvolume"
-const kVControlCategory_SendMute     ="sendmute"
-const kVControlCategory_SendPan      ="sendpan"
-const kVControlCategory_SendPrePost  ="sendprepost"
+const kCControlCategory_SendVolume   ="sendvolume"
+const kCControlCategory_SendMute     ="sendmute"
+const kCControlCategory_SendPan      ="sendpan"
+const kCControlCategory_SendPrePost  ="sendprepost"
 
-const kVControlCategory_FilterBoostCut   ="boostcut"
-const kVControlCategory_FilterFrequency  ="frequency"
-const kVControlCategory_FilterQ          ="q"
-const kVControlCategory_FilterBandwidth  ="bandwidth"
-const kVControlCategory_FilterResonance  ="resonance"
-const kVControlCategory_Threshold        ="threshold"
-const kVControlCategory_Ratio            ="ratio"
-const kVControlCategory_Depth            ="depth"
-const kVControlCategory_DelayTime        ="delay"
-const kVControlCategory_Feedback         ="feedback"
-const kVControlCategory_Decay            ="decay"
+const kCControlCategory_FilterBoostCut   ="boostcut"
+const kCControlCategory_FilterFrequency  ="frequency"
+const kCControlCategory_FilterQ          ="q"
+const kCControlCategory_FilterBandwidth  ="bandwidth"
+const kCControlCategory_FilterResonance  ="resonance"
+const kCControlCategory_Threshold        ="threshold"
+const kCControlCategory_Ratio            ="ratio"
+const kCControlCategory_Depth            ="depth"
+const kCControlCategory_DelayTime        ="delay"
+const kCControlCategory_Feedback         ="feedback"
+const kCControlCategory_Decay            ="decay"
 
-const kVControlCategory_Modulation       ="modulation"
-const kVControlCategory_Waveform         ="waveform"
+const kCControlCategory_Modulation       ="modulation"
+const kCControlCategory_Waveform         ="waveform"
 
-const kVControlCategory_ChannelLeft  ="left"
-const kVControlCategory_ChannelRight ="right"
-const kVControlCategory_ChannelCenter="center"
-const kVControlCategory_ChannelLFE   ="lfe"
-const kVControlCategory_ChannelLs    ="leftsurround"
-const kVControlCategory_ChannelRs    ="rightsurround"
-const kVControlCategory_ChannelLss   ="leftsidesurround"
-const kVControlCategory_ChannelRss   ="rightsidesurround"
-const kVControlCategory_ChannelCs    ="centersurround"
+const kCControlCategory_ChannelLeft  ="left"
+const kCControlCategory_ChannelRight ="right"
+const kCControlCategory_ChannelCenter="center"
+const kCControlCategory_ChannelLFE   ="lfe"
+const kCControlCategory_ChannelLs    ="leftsurround"
+const kCControlCategory_ChannelRs    ="rightsurround"
+const kCControlCategory_ChannelLss   ="leftsidesurround"
+const kCControlCategory_ChannelRss   ="rightsidesurround"
+const kCControlCategory_ChannelCs    ="centersurround"
 
-const kVControlDisplayMode_Point	=	"point"
-const kVControlDisplayMode_BoostCut	= "boostcut"
-const kVControlDisplayMode_Wrap		= "wrap"
-const kVControlDisplayMode_Spread	=	"spread"
-const kVControlDisplayMode_Text		= "text"
-
-
-const eVControlNoMessageId = 0;
-const eVControlHostMessageId = 1;
-const eVControlModuleMessageId = 2;
-const eVControlHostMessageStringId = "host";
-const eVControlModuleMessageStringId = "module";
-
-const eVControlMessageModuleNone = 0;
-const eVControlMessageRequestModuleList = 10;
-const eVControlMessageModuleAdded = 11;
-const eVControlMessageModuleRemoved = 12;
-const eVControlMessageModulePatch = 13;
-const eVControlMessageModuleProperty = 14;
-
-const eVControlMessageModuleRequestAllControls = 20;
-const eVControlMessageModuleTouchControl = 21;
-const eVControlMessageModuleSetControl = 22;
-const eVControlMessageModuleSetControlText = 23;
-const eVControlMessageModuleSetControlDefault = 24;
-const eVControlMessageModuleUpdateControlTextSlice=25;
-const eVControlMessageModuleControlProperty=26;
-const eVControlMessageModuleControlBlob=27;
+const kCControlDisplayMode_Point	=	"point"
+const kCControlDisplayMode_BoostCut	= "boostcut"
+const kCControlDisplayMode_Wrap		= "wrap"
+const kCControlDisplayMode_Spread	=	"spread"
+const kCControlDisplayMode_Text		= "text"
 
 
-const eVControlMessageHostInfo = 1;
-const eVControlMessageHostPing = 2;
-const eVControlMessageHostPong = 3;
-const eVControlMessageHostInfoString = "info";
+const eControlControlNoMessageId = 0;
+const eControlControlHostMessageId = 1;
+const eControlControlModuleMessageId = 2;
+const eControlControlHostMessageStringId = "host";
+const eControlControlModuleMessageStringId = "module";
+
+const eControlControlMessageModuleNone = 0;
+const eControlControlMessageRequestModuleList = 10;
+const eControlControlMessageModuleAdded = 11;
+const eControlControlMessageModuleRemoved = 12;
+const eControlControlMessageModulePatch = 13;
+const eControlControlMessageModuleProperty = 14;
+
+const eControlControlMessageModuleRequestAllControls = 20;
+const eControlControlMessageModuleTouchControl = 21;
+const eControlControlMessageModuleSetControl = 22;
+const eControlControlMessageModuleSetControlText = 23;
+const eControlControlMessageModuleSetControlDefault = 24;
+const eControlControlMessageModuleUpdateControlTextSlice=25;
+const eControlControlMessageModuleControlProperty=26;
+const eControlControlMessageModuleControlBlob=27;
+
+
+const eControlControlMessageHostInfo = 1;
+const eControlControlMessageHostPing = 2;
+const eControlControlMessageHostPong = 3;
+const eControlControlMessageHostInfoString = "info";
 
 
 
@@ -257,8 +257,8 @@ var CORECONTROL = (function () {
         {
             surface.published = true;
             if (surface && surface.surfaceID) {
-                var message = new VControlModuleMessage();
-                message.type = eVControlMessageModuleAdded;
+                var message = new CoreControlModuleMessage();
+                message.type = eControlControlMessageModuleAdded;
                 message.surfaceID = surface.surfaceID;
                 message.textValue = surface.JSONDescriptor();
                 node.send(message.packet());
@@ -278,14 +278,14 @@ var CORECONTROL = (function () {
         {
         }
         this.filterNode = function(packet){
-            if (isVControlModuleMessage(packet))
+            if (isCoreControlModuleMessage(packet))
                 handleMessageFromServer(packet);
             else if (isVControlHostMessage(packet))
                 handleHostMessageFromServer(packet);
         }
         function handleMessageFromServer(packet)
         {
-            var message = new VControlModuleMessage();
+            var message = new CoreControlModuleMessage();
             message.initWithPacket(packet);
             if (message.surfaceID == 0) {
                 console.log("moduleID should not be 0");
@@ -297,23 +297,23 @@ var CORECONTROL = (function () {
                 return;
             }
             switch (message.type) {
-                case eVControlMessageModuleSetControl:
+                case eControlControlMessageModuleSetControl:
                     surface.updateControlValue(message.index, message.floatValue);
                     break;
-                case eVControlMessageModuleSetControlText:
-				case eVControlMessageModuleUpdateControlTextSlice:
+                case eControlControlMessageModuleSetControlText:
+				case eControlControlMessageModuleUpdateControlTextSlice:
                     surface.updateControlValue(message.index, message.textValue);
                     break;
-                case eVControlMessageModuleProperty:
+                case eControlControlMessageModuleProperty:
                     surface.setProperty(JSON.parse(message.textValue));
                     break;
-                case eVControlMessageModuleProperty:
+                case eControlControlMessageModuleProperty:
                     surface.setProperty(JSON.parse(message.textValue));
                     break;
-				case eVControlMessageModuleControlProperty:
+				case eControlControlMessageModuleControlProperty:
                     surface.setControlProperty(message.index, JSON.parse(message.textValue));
                     break;
-                case eVControlMessageModuleControlBlob:
+                case eControlControlMessageModuleControlBlob:
                   surface.updateControlValue(message.index, message.dataValue);
 
                 default:
@@ -325,11 +325,11 @@ var CORECONTROL = (function () {
             var message = new VControlHostMessage();
             message.initWithPacket(packet);
             switch (message.type) {
-              case eVControlMessageHostPing:
+              case eControlControlMessageHostPing:
                   if (message.time > 0)
                   {
                       var responseMsg = new VControlHostMessage();
-                      responseMsg.type = eVControlMessageHostPong;
+                      responseMsg.type = eControlControlMessageHostPong;
                       responseMsg.time = message.time;
                       node.send(responseMsg.packet());
                   }
@@ -457,48 +457,48 @@ var CORECONTROL = (function () {
 		}
 		var surface = new Object();
 		if (parent) parent.addChild(self);
-		surface[kVControlProperty_Type] = type;
-		surface[kVControlProperty_Id] = id;
-		surface[kVControlProperty_ParentId] = parent.surfaceID;
-		surface[kVControlProperty_Identifier] = identifier;
-		surface[kVControlProperty_Name] = name;
-		surface[kVControlProperty_Id] = id;
+		surface[kCControlProperty_Type] = type;
+		surface[kCControlProperty_Id] = id;
+		surface[kCControlProperty_ParentId] = parent.surfaceID;
+		surface[kCControlProperty_Identifier] = identifier;
+		surface[kCControlProperty_Name] = name;
+		surface[kCControlProperty_Id] = id;
 		surface["controls"] = controls;
 		surface["meters"] = meters;
 		var path = getSurfacePath(this);
-		surface[kVControlProperty_Path] = path;
+		surface[kCControlProperty_Path] = path;
 		path = getReadableSurfacePath(this);
-		surface[kVControlProperty_ReadablePath] = path;
+		surface[kCControlProperty_ReadablePath] = path;
 
 		this.addControl = function(index, identifier, name, type){
 			var control = new Object();
-			control[kVControlProperty_Identifier] = identifier;
-			control[kVControlProperty_Name] = name;
-			control[kVControlProperty_Type] = type;
+			control[kCControlProperty_Identifier] = identifier;
+			control[kCControlProperty_Name] = name;
+			control[kCControlProperty_Type] = type;
 			switch (type){
-				case kVControlParameterTypeText:
-				case kVControlParameterTypeTimeText:
-        case kVControlParameterTypeIndexed:
-        case kVControlParameterTypeBlob:
-					control[kVControlProperty_FeedbackType] = type;
-					control[kVControlProperty_NumberOfSteps] = 100;
+				case kCControlParameterTypeText:
+				case kCControlParameterTypeTimeText:
+        case kCControlParameterTypeIndexed:
+        case kCControlParameterTypeBlob:
+					control[kCControlProperty_FeedbackType] = type;
+					control[kCControlProperty_NumberOfSteps] = 100;
 					break;
-				case kVControlParameterTypeIndexed:
-				case kVControlParameterTypeBoolean:
-					control[kVControlProperty_NumberOfSteps] = 2;
+				case kCControlParameterTypeIndexed:
+				case kCControlParameterTypeBoolean:
+					control[kCControlProperty_NumberOfSteps] = 2;
 					break;
 				default:
 					// assumes surface can display feedback with great accuracy
-					control[kVControlProperty_FeedbackType] = kVControlParameterTypeContinuous;
-					control[kVControlProperty_NumberOfSteps] = 100;
+					control[kCControlProperty_FeedbackType] = kCControlParameterTypeContinuous;
+					control[kCControlProperty_NumberOfSteps] = 100;
 					break;
 			}
 			controls.push(control);
 		}
 		this.addMeter = function(index, identifier, name){
 			var control = new Object();
-			control[kVControlProperty_Identifier] = identifier;
-			control[kVControlProperty_Name] = name;
+			control[kCControlProperty_Identifier] = identifier;
+			control[kCControlProperty_Name] = name;
 			meters.push(control);
 		}
 		this.addChild = function(child){
@@ -532,7 +532,7 @@ var CORECONTROL = (function () {
 		this.updateControlValue = function(index, value){
 			var control = controls[index];
 			if (control && self.controlCallback){
-				self.controlCallback(self, index, control[kVControlProperty_Identifier], value);
+				self.controlCallback(self, index, control[kCControlProperty_Identifier], value);
 			}
 		}
 		this.setControlProperty = function(index, properties){
@@ -542,7 +542,7 @@ var CORECONTROL = (function () {
 				for (var i = 0; i < keys.length; i++) {
 					var value = properties[keys[i]];
 					control[keys[i]] = value;
-					self.controlPropertyCallback(self, index, control[kVControlProperty_Identifier], keys[i], value);
+					self.controlPropertyCallback(self, index, control[kCControlProperty_Identifier], keys[i], value);
 				}
 			}
 		}
@@ -615,14 +615,14 @@ var CORECONTROL = (function () {
 			return path;
 		}
 	}
-    function isVControlModuleMessage(vcpacket){
-        return vcpacket.id == eVControlModuleMessageId;
+    function isCoreControlModuleMessage(vcpacket){
+        return vcpacket.id == eControlControlModuleMessageId;
     }
     function isVControlHostMessage(vcpacket){
-        return vcpacket.id == eVControlHostMessageId;
+        return vcpacket.id == eControlControlHostMessageId;
     }
 
-    function VControlModuleMessage(){
+    function CoreControlModuleMessage(){
         var self = this;
         this.surfaceID = 0;
         this.textValue;
@@ -632,9 +632,9 @@ var CORECONTROL = (function () {
         this.index = 0;
         this.packet = function(){
             var packet = new SVControlPacket();
-            packet.id = eVControlModuleMessageId;
+            packet.id = eControlControlModuleMessageId;
             switch (this.type){
-                case eVControlMessageModuleAdded:
+                case eControlControlMessageModuleAdded:
                     var length = 3+this.textValue.length;
                     packet.payload = new ArrayBuffer(length);
                     var view = new DataView(packet.payload);
@@ -646,8 +646,8 @@ var CORECONTROL = (function () {
                         view.setUint8(3+i, this.textValue.charCodeAt(i))
                     }
                    break;
-                   case eVControlMessageModuleSetControl:
-                   case eVControlMessageModuleTouchControl:
+                   case eControlControlMessageModuleSetControl:
+                   case eControlControlMessageModuleTouchControl:
                        var length = 4+4;
                        packet.payload = new ArrayBuffer(length);
                        var view = new DataView(packet.payload);
@@ -657,7 +657,7 @@ var CORECONTROL = (function () {
                        view.setUint8(3, self.index, true);
                        view.setFloat32(4, self.floatValue, true);
                        break;
-                   case eVControlMessageModuleSetControlText:
+                   case eControlControlMessageModuleSetControlText:
                        var length = 4+this.textValue.length;
                        packet.payload = new ArrayBuffer(length);
                        var view = new DataView(packet.payload);
@@ -670,7 +670,7 @@ var CORECONTROL = (function () {
                            view.setUint8(4+i, this.textValue.charCodeAt(i))
                        }
                        break;
-				case eVControlMessageModuleRequestAllControls:
+				case eControlControlMessageModuleRequestAllControls:
                     var length = 3;
                     packet.payload = new ArrayBuffer(length);
                     var view = new DataView(packet.payload);
@@ -684,40 +684,40 @@ var CORECONTROL = (function () {
             return packet;
         }
         this.initWithPacket = function(vcpacket){
-            if (!isVControlModuleMessage(vcpacket)) return;
+            if (!isCoreControlModuleMessage(vcpacket)) return;
             var dataview = new DataView(vcpacket.payload);
             self.type = dataview.getUint8(0, true);
             self.surfaceID = dataview.getUint8(1, true);
             switch (this.type){
-                case eVControlMessageModuleSetControl:
+                case eControlControlMessageModuleSetControl:
                     self.index = dataview.getUint8(2, true);
                     self.floatValue = dataview.getFloat32(3, true);
                     break;
-				        case eVControlMessageModuleControlProperty:
+				        case eControlControlMessageModuleControlProperty:
                     self.index = dataview.getUint8(2, true);
                     self.textValue = "";
 					for (var i = 3; i < vcpacket.payload.byteLength; i++) {
                         self.textValue += String.fromCharCode(dataview.getUint8(i));
                     }
                     break;
-                case eVControlMessageModuleSetControlText:
+                case eControlControlMessageModuleSetControlText:
                     self.index = dataview.getUint8(2, true);
                     self.textValue = "";
 					for (var i = 3; i < vcpacket.payload.byteLength; i++) {
                         self.textValue += String.fromCharCode(dataview.getUint8(i));
                     }
                     break;
-                case eVControlMessageModuleProperty:
+                case eControlControlMessageModuleProperty:
                     self.textValue = "";
 					for (var i = 2; i < vcpacket.payload.byteLength; i++) {
                         self.textValue += String.fromCharCode(dataview.getUint8(i));
                     }
                     break;
-                case eVControlMessageModuleControlBlob:
+                case eControlControlMessageModuleControlBlob:
                   self.index = dataview.getUint8(2, true);
                   self.dataValue = vcpacket.payload.slice(3);
                   break;
-                case eVControlMessageModuleUpdateControlTextSlice:
+                case eControlControlMessageModuleUpdateControlTextSlice:
                 self.index = dataview.getUint8(2, true);
           			self.sliceStart = dataview.getUint8(3, true);
                 self.textValue = "";
@@ -744,8 +744,8 @@ var CORECONTROL = (function () {
         var dataview = new DataView(packet.payload);
         self.type = dataview.getUint8(0, true);
         switch (this.type){
-          case eVControlMessageHostPing:
-          case eVControlMessageHostPong:
+          case eControlControlMessageHostPing:
+          case eControlControlMessageHostPong:
                 self.time = dataview.getFloat64(1, true);
                 break;
           }
@@ -754,15 +754,15 @@ var CORECONTROL = (function () {
 			payload = packet.payload;
 			if (payload.type == "info")
 			{
-				type = eVControlMessageHostInfo;
+				type = eControlControlMessageHostInfo;
 				name = payload.name;
 			}
 		}
 		this.packet = function(){
       var packet = new SVControlPacket();
-      packet.id = eVControlHostMessageId;
-      if (this.type == eVControlMessageHostPing ||
-          this.type == eVControlMessageHostPong)
+      packet.id = eControlControlHostMessageId;
+      if (this.type == eControlControlMessageHostPing ||
+          this.type == eControlControlMessageHostPong)
       {
           packet.binary = 1;
           var length = 10;
@@ -774,9 +774,9 @@ var CORECONTROL = (function () {
       }
       else {
         packet.binary = 0;
-  			message.id = eVControlHostMessageStringId;
+  			message.id = eControlControlHostMessageStringId;
   			message.payload = {};
-        message.payload.type = eVControlMessageHostInfoString;
+        message.payload.type = eControlControlMessageHostInfoString;
         message.payload.deviceType = this.deviceType;
   			message.payload.name = this.name;
   			packet.payload = message;
@@ -787,7 +787,7 @@ var CORECONTROL = (function () {
     const eVCMessageId_None = 0;
     function SVControlPacket(){
         var self = this;
-        this.id = eVControlNoMessageId;
+        this.id = eControlControlNoMessageId;
         this.payload = 0;
         this.rawData = 0;
 		    this.binary = 1;
@@ -822,9 +822,9 @@ var CORECONTROL = (function () {
 		},
 		SurfaceDestroy: function(surface){
             if (surface.surfaceID != 0) {
-                var message = new VControlModuleMessage();
+                var message = new CoreControlModuleMessage();
                 message.surfaceID = surface.surfaceID;
-                message.type = eVControlMessageModuleRemoved;
+                message.type = eControlControlMessageModuleRemoved;
                 node.send(message.packet());
             }
             var index = surfaces.indexOf(surface);
@@ -850,26 +850,26 @@ var CORECONTROL = (function () {
 		},
 		SurfaceSetControlValue: function(surface, index, value){
             surface.setControlValue(index, value);
-            var message = new VControlModuleMessage();
+            var message = new CoreControlModuleMessage();
             message.surfaceID = surface.surfaceID;
             message.index = index;
             switch (typeof value)
             {
               case "string":
-                message.type = eVControlMessageModuleSetControlText;
+                message.type = eControlControlMessageModuleSetControlText;
                 message.textValue = value;
                 break;
               default:
-                message.type = eVControlMessageModuleSetControl;
+                message.type = eControlControlMessageModuleSetControl;
                 message.floatValue = value;
                 break;
             }
             node.send(message.packet());
 		},
 		SurfaceSetControlTouch: function(surface, index, value){
-            var message = new VControlModuleMessage();
+            var message = new CoreControlModuleMessage();
             message.surfaceID = surface.surfaceID;
-            message.type = eVControlMessageModuleTouchControl;
+            message.type = eControlControlMessageModuleTouchControl;
             message.index = index;
             message.floatValue = value;
             node.send(message.packet());
@@ -895,9 +895,9 @@ var CORECONTROL = (function () {
 			return surface.getControlPropertyValue(index, key);
 		},
 		SurfaceRequestAllControls: function(surface){
-            var message = new VControlModuleMessage();
+            var message = new CoreControlModuleMessage();
             message.surfaceID = surface.surfaceID;
-            message.type = eVControlMessageModuleRequestAllControls;
+            message.type = eControlControlMessageModuleRequestAllControls;
             node.send(message.packet());
 		},
 		DeviceSetName: function(name){

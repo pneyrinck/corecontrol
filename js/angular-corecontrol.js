@@ -83,7 +83,7 @@
 			var fullId = ""+id;
 			var ctlInfo = controlInfo[fullId];
 			if (ctlInfo){
-				return vc.SurfaceGetControlPropertyValue(ctlInfo.module, ctlInfo.index, kVControlProperty_NumberOfSteps)
+				return vc.SurfaceGetControlPropertyValue(ctlInfo.module, ctlInfo.index, kCControlProperty_NumberOfSteps)
 			}
 			return 2;
 		}
@@ -235,7 +235,7 @@
 	    
 	    function updateModuleProperty(key, value)
 		{
-				if (key == kVControlProperty_ClientId){
+				if (key == kCControlProperty_ClientId){
 					if (typeof value != 'string') return;
 
 					// *** update vpanner navigation
@@ -312,9 +312,9 @@
 	        this.addControl = function(identifier, name, type, numSteps, feedbackType){
 	            vc.SurfaceAddControl(this.module, indexCounter++, identifier, name, type);
 							if (numSteps)
-								vc.SurfaceSetControlPropertyValue(this.module, indexCounter-1, kVControlProperty_NumberOfSteps, numSteps);
+								vc.SurfaceSetControlPropertyValue(this.module, indexCounter-1, kCControlProperty_NumberOfSteps, numSteps);
 							if (feedbackType)
-									vc.SurfaceSetControlPropertyValue(this.module, indexCounter-1, kVControlProperty_FeedbackType, feedbackType);
+									vc.SurfaceSetControlPropertyValue(this.module, indexCounter-1, kCControlProperty_FeedbackType, feedbackType);
 				var id = getPath()+"/"+identifier;
 	            controlInfo[id] = {'module':self.module, 'index':indexCounter-1, 'value':0.0};
 	        }

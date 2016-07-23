@@ -129,7 +129,7 @@
 		}
 		function updateControlProperty(key, value)
 		{
-			if (key == kVControlProperty_Enabled)
+			if (key == kCControlProperty_Enabled)
 			{
 		  		scope.enabled = (value != 0);
 		  		draw()
@@ -283,7 +283,7 @@
 		$scope.el = 0;
 		var displayBackPath='';
 		var hammer;
-		var displayMode = kVControlDisplayMode_Point;
+		var displayMode = kCControlDisplayMode_Point;
 		$scope.enabled = true;
 
 		$scope.updateWidth = function(newValue){
@@ -338,12 +338,12 @@
 		}
 		$scope.updateControlProperty = function(key, value)
 		{
-			if (key == kVControlProperty_DisplayMode){
+			if (key == kCControlProperty_DisplayMode){
 				displayMode = value;
 				updateMagicNumbers();
 				draw();
 			}
-			if (key == kVControlProperty_Enabled){
+			if (key == kCControlProperty_Enabled){
 				$scope.enabled = (value != 0);
 				draw();
 			}
@@ -360,11 +360,11 @@
 			var dotdistance = 1.0 / numdots;
 			switch (displayMode)
 			{
-				case kVControlDisplayMode_Point:  //dot mode
+				case kCControlDisplayMode_Point:  //dot mode
 				  start = (1.0-rawposition)*(numdots-1)/numdots;
 				  arcdistance = 1.0 / numdots;
 				  break;
-				case kVControlDisplayMode_BoostCut: //boost cut mode
+				case kCControlDisplayMode_BoostCut: //boost cut mode
 				  if (rawposition <= 0.5) {
 				      start = 0.5;// - 0.5 / ((float)numdots);
 				      end = 1.0-rawposition + 1.0 / numdots;
@@ -380,12 +380,12 @@
 				      arcdistance = end - start;
 				  }
 				  break;
-				case kVControlDisplayMode_Wrap: //wrap mode
+				case kCControlDisplayMode_Wrap: //wrap mode
 				  end = 1.0; // + 0.5 / ((float)numdots);
 				  start = (1.0-rawposition)*(numdots-1)/numdots;
 				  arcdistance = end - start;
 				  break;
-				case kVControlDisplayMode_Spread: //spread mode
+				case kCControlDisplayMode_Spread: //spread mode
 				  start = 0.5 - rawposition * 0.5;
 				  end = 1.0 - start;
 				  arcdistance = end - start;
@@ -504,7 +504,7 @@
 		    var endangle_degrees=35;
 		    var gestureInProgress = false
 		    var displayBackPath='';
-		    var displayMode = kVControlDisplayMode_Point;
+		    var displayMode = kCControlDisplayMode_Point;
 		    var enabled = true;
 		    var knobData = knobs[attr.vcKnobDraw];
 		    updateMagicNumbers();
@@ -527,11 +527,11 @@
 		        var dotdistance = 1.0 / numdots;
 		        switch (displayMode)
 		        {
-		            case kVControlDisplayMode_Point:  //dot mode
+		            case kCControlDisplayMode_Point:  //dot mode
 		                start = (1.0-rawposition)*(numdots-1)/numdots;
 		                arcdistance = 1.0 / numdots;
 		                break;
-		            case kVControlDisplayMode_BoostCut: //boost cut mode
+		            case kCControlDisplayMode_BoostCut: //boost cut mode
 		                if (rawposition <= 0.5) {
 		                    start = 0.5;// - 0.5 / ((float)numdots);
 		                    end = 1.0-rawposition + 1.0 / numdots;
@@ -547,12 +547,12 @@
 		                    arcdistance = end - start;
 		                }
 		                break;
-		            case kVControlDisplayMode_Wrap: //wrap mode
+		            case kCControlDisplayMode_Wrap: //wrap mode
 		                end = 1.0; // + 0.5 / ((float)numdots);
 		                start = (1.0-rawposition)*(numdots-1)/numdots;
 		                arcdistance = end - start;
 		                break;
-		            case kVControlDisplayMode_Spread: //spread mode
+		            case kCControlDisplayMode_Spread: //spread mode
 		                start = 0.5 - rawposition * 0.5;
 		                end = 1.0 - start;
 		                arcdistance = end - start;
@@ -582,12 +582,12 @@
 		    }
 		    function updateControlProperty(key, value)
 		    {
-		      if (key == kVControlProperty_DisplayMode){
+		      if (key == kCControlProperty_DisplayMode){
 		        displayMode = value;
 		        updateMagicNumbers();
 		        draw();
 		      }
-		      if (key == kVControlProperty_Enabled){
+		      if (key == kCControlProperty_Enabled){
 		        $scope.enabled = (value != 0);
 		        draw();
 		      }
@@ -853,7 +853,7 @@
 	    }
 	    $scope.updateControlProperty = function(key, value)
 	    {
-	    if (key == kVControlProperty_Enabled){
+	    if (key == kCControlProperty_Enabled){
 	      $scope.enabled = (value != 0);
 	      draw();
 	    }
