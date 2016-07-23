@@ -18,6 +18,7 @@
 		var propertyUpdates = [];
 		var updatesPending = false
 		var vc = CORECONTROL.getInstance();
+		this.cc = vc;
 
 
 		this.requestAllControls = function(){
@@ -245,7 +246,7 @@
 					
 				}
 	    }
-	    const kVendor = "Neyrinck"
+
 		function updateValues()
 		{
 			updatesPending = false
@@ -344,57 +345,8 @@
 						addPropertyUpdate(key, value)
 	        }
 	    }
-	   
-	    var ExampleModule = function(){
-	        var self = this;
-	        this.inheritsFrom = Module;
-	        this.inheritsFrom(0);
-	        this.setup = function(){
-	        }
-			this.module = vc.SurfaceCreate("example", "Example", 0);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Vendor, kVendor);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Category, kVControlCategory_AVWorkstation);
-	        vc.SurfaceSetPropertyCallback(this.module, this.setPropertyCallback);
-	        vc.SurfaceSetControlPropertyCallback(this.module, this.setControlPropertyCallback);
-	    }
 
-	    var TrackModule = function(parent, number)
-	    {
-	        var self = this;
-	        this.inheritsFrom = Module;
-	        this.inheritsFrom(parent, "track"+number);
-	        var values = [];
-
-	        this.setup = function(){
-	            self.addControl("fader", "Fader", kVControlParameterTypeContinuous);
-	            values.push(0);
-
-	            self.addControl("mute", "Mute", kVControlParameterTypeMomentary);
-	            values.push(0);
-
-	            self.addControl("knob", "Knob", kVControlParameterTypeDelta);
-	            values.push(0);
-
-	 
-	        }
-	        this.module = vc.SurfaceCreate("track"+(number+1), "Track "+(number+1), parent);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Vendor, kVendor);
-	        vc.SurfaceUpdatePropertyValue(this.module, kVControlProperty_Category, kVControlCategory_AudioStrip);
-	        vc.SurfaceSetControlCallback(this.module, this.setControlValueCallback, 0);
-	        vc.SurfaceSetControlPropertyCallback(this.module, this.setControlPropertyCallback, 0);
-	    }
-
-	    function setupModule()
-	    {
-			var daw = new ExampleModule();
-			modules.push(daw);
-			var tracks = 8;
-			for (var i=0; i<tracks; i++){
-				var trackmodule = new TrackModule(daw.getModule(), i);
-				modules.push(trackmodule);
-		    	trackmodule.setup();
-			}					
-	    }
-	    setupModule();
+	    this.Module = Module;
+	  
 	}]);
 })(window, window.angular);
