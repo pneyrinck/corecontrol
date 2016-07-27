@@ -1,6 +1,6 @@
 {
   "name": "corecontrol",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "homepage": "https://github.com/pneyrinck/corecontrol",
   "authors": [
     "Neyrinck"
@@ -8,18 +8,13 @@
   "description": "Core Control is a simple system for remote control.",
  
   "main": [
-    "js/corecontrol.js",
-    "js/angular-corecontrol.js",
-    "js/angular-ui-corecontrol.js",
-    "css/corecontrol.css"
+    "js/corecontrol.js"
   ],
 
   "ignore": [
     "schema",
     "node_modules",
     "bower_components",
-    "test",
-    "tests",
-    "controls/*"
+    "controls"
   ]
 }
