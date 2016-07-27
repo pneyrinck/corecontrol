@@ -977,6 +977,10 @@ var CORECONTROL = (function () {
 
 var CC = (function(){
 
+    var controlInfo = {};
+    var modules = [];
+    var corecontrol = CORECONTROL.getInstance();
+
     this.SubscribeFPtr = function(identifier, callback, param){
 
     }
@@ -994,6 +998,8 @@ var CC = (function(){
     }
 
     this.RequestAllControls = function(module){
+        for (var i=0; i<modules.length; i++)
+                corecontrol.SurfaceRequestAllControls(modules[i].getModule());
 
     }
 
@@ -1034,6 +1040,11 @@ var CC = (function(){
     }
 
     this.TouchControl = function(identifier, value){
+        var fullId = identifier;
+        var ctlInfo = controlInfo[fullId];
+        if (ctlInfo){
+            corecontrol.SurfaceSetControlTouch(ctlInfo.module, ctlInfo.index, value);
+        }
 
     }
 
@@ -1082,7 +1093,7 @@ var CC = (function(){
     }
 
     this.SetMeter = function(module, identifier, value){
-        
+
     }
     
 })();
