@@ -977,7 +977,112 @@ var CORECONTROL = (function () {
 
 var CC = (function(){
 
-    // CCModuleCreate
+    this.SubscribeFPtr = function(identifier, callback, param){
 
+    }
 
+    this.Unsubscribe = function(identifier, registeredUid){
+
+    }
+
+    this.ModuleCreate = function(type, identifier, name, parent, isArray){
+
+    }
+
+    this.ModuleDestroy = function(module){
+
+    }
+
+    this.RequestAllControls = function(module){
+
+    }
+
+    this.SetProperty = function(path, key, value){
+
+    }
+
+    this.GetProperty= function(identifier, key, ccValue){
+
+    }
+
+    this.SetModuleProperty = function(module, key, value){
+
+    }
+
+    this.SetControlProperty = function(module, identifier, key, value){
+
+    }
+
+    this.SetMeterProperty = function(module, identifier, key, value){
+
+    }
+
+    this.AddControl = function(module, identifier, type){
+
+    }
+
+    this.GetModuleProperty = function(module, identifier, key, ccValue){
+
+    }
+
+    this.GetControlProperty = function(module, identifier, key, ccValue){
+
+    }
+
+    this.GetMeterProperty = function(module, identifier, key, ccValue){
+
+    }
+
+    this.TouchControl = function(identifier, value){
+
+    }
+
+    this.SetModuleVendor = function(module, vendor){
+
+    }
+
+    this.SetModuleCategory = function(module, category){
+
+    }
+
+    this.SetModuleIconUrl = function(module, url){
+
+    }
+
+    this.SetModuleHelpUrl = function(module, url){
+
+    }
+
+    this.SetModuleAutorelease = function(module, autorelease){
+
+    }
+
+    this.SetControl = function(){
+
+    }
+
+    this.SetSurfaceDeviceInfo = function(name, type){
+
+    }
+
+    this.Publish = function(mdoule){
+
+    }
+
+    this.Connect = function(mdoule, socket){
+
+    }
+
+    this.DestroyConnection = function(socket){
+
+    } 
+
+    this.GetModulePath = function(module){
+
+    }
+
+    this.SetMeter = function(module, identifier, value){
+        
+    }
+    
 })();
