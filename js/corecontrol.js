@@ -353,7 +353,7 @@ var CORECONTROL = (function () {
     		this.getHostName = function(){
     			return hostName;
     		}
-    		this.setHost = function(host){
+    		this.setHost = function(host, path){
     			if (connection) connection.close();
     			if (!host){
     				hostName = "";
@@ -363,7 +363,9 @@ var CORECONTROL = (function () {
     			var ipaddress = host.local_address;
     			handshake_received = false;
     			var url = "ws://"+ipaddress;
-    			url += "/surfaces";
+    			if(!path) url += "/surfaces";
+                    else url += path;
+                console.log(url);
     			connection = new WebSocket(url);
     			connection.binaryType = "arraybuffer";
     			connection.onclose = onclose;
@@ -939,7 +941,7 @@ var CORECONTROL = (function () {
                     }
                 }
     		},
-    		Connect: function(host, name, path){
+    		Connect: function(host, path){
                 // uncomment for tunnel testing
                 // host.local_address = "127.0.0.1:9020";
                 node.setHost(host, path);
