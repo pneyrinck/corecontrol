@@ -295,8 +295,11 @@ var CORECONTROL = (function () {
                 console.log("surface not found");
                 return;
             }
+
+            
             switch (message.type) {
                 case eControlControlMessageModuleSetControl:
+                    console.log(message);
                     surface.updateControlValue(message.index, message.floatValue);
                     break;
                 case eControlControlMessageModuleSetControlText:
@@ -306,11 +309,9 @@ var CORECONTROL = (function () {
                 case eControlControlMessageModuleProperty:
                     surface.setProperty(JSON.parse(message.textValue));
                     break;
-                case eControlControlMessageModuleProperty:
-                    surface.setProperty(JSON.parse(message.textValue));
-                    break;
     			case eControlControlMessageModuleControlProperty:
-                    surface.setControlProperty(message.index, JSON.parse(message.textValue));
+                    console.log(message);
+                    surface.setControlProperty(message.index, message.label);
                     break;
                 case eControlControlMessageModuleControlBlob:
                   surface.updateControlValue(message.index, message.dataValue);
@@ -365,7 +366,6 @@ var CORECONTROL = (function () {
     			var url = "ws://"+ipaddress;
     			if(!path) url += "/surfaces";
                     else url += path;
-                console.log(url);
     			connection = new WebSocket(url);
     			connection.binaryType = "arraybuffer";
     			connection.onclose = onclose;
@@ -394,12 +394,13 @@ var CORECONTROL = (function () {
                 console.log('Connection closed');
     		}
     		function onerror(error){
-    			console.log('WebSocket Error ' + error);
+    			console.log('WebSocket Error ' + JSON.stringify(error));
     		}
     		function versionTest(){
     			return true;
     		}
     		function onmessage(e){
+                console.log(e);
     			if (typeof e.data === "string"){
     				var message = JSON.parse(e.data);
     				if (message["type"]&&message["version"]&&message["id"])
@@ -415,6 +416,7 @@ var CORECONTROL = (function () {
     			}
     			if (!handshake_received) return;
     			var packet = new SVControlPacket();
+                console.log("message received ");
     			packet.initWithArrayBuffer(e.data);
     			for (var i=0; i<filters.length; i++){
     				filters[i].filterNode(packet);
@@ -430,7 +432,7 @@ var CORECONTROL = (function () {
     			if (packet.binary > 0)
     				connection.send(packet.payload);
     			else if (packet.binary == 0)
-    				connection.send(JSON.stringify(packet.payload));
+    				connection.send(JSON.stringify(packet.payload));           
     		}
     		this.addFilter = function(filter){
     			filters.push(filter);
@@ -479,8 +481,8 @@ var CORECONTROL = (function () {
     			switch (type){
     				case kCControlParameterTypeText:
     				case kCControlParameterTypeTimeText:
-            case kCControlParameterTypeIndexed:
-            case kCControlParameterTypeBlob:
+                    case kCControlParameterTypeIndexed:
+                    case kCControlParameterTypeBlob:
     					control[kCControlProperty_FeedbackType] = type;
     					control[kCControlProperty_NumberOfSteps] = 100;
     					break;
@@ -518,7 +520,8 @@ var CORECONTROL = (function () {
     		this.getPropertyValue = function(name){
     			return surface[name];
     		}
-    		this.setControlPropertyValue = function(index, key, value){
+
+    		this.updateControlProperty = function(index, key, value){
     			var control = controls[index];
     			if (!control) return;
     			control[key] = value;
@@ -531,22 +534,22 @@ var CORECONTROL = (function () {
     		this.publish = function(){
     		}
     		this.updateControlValue = function(index, value){
+                console.log("updateControlValue");
     			var control = controls[index];
     			if (control && self.controlCallback){
     				self.controlCallback(self, index, control[kCControlProperty_Identifier], value);
     			}
     		}
-    		this.setControlProperty = function(index, properties){
+
+            ////  NEW ADDED : REVIEW WITH PAUL
+    		this.setControlProperty = function(index, key, value){
     			var control = controls[index];
     			if (control && self.controlPropertyCallback){
-    				var keys = Object.keys(properties);
-    				for (var i = 0; i < keys.length; i++) {
-    					var value = properties[keys[i]];
-    					control[keys[i]] = value;
-    					self.controlPropertyCallback(self, index, control[kCControlProperty_Identifier], keys[i], value);
-    				}
+                    control[key] = value;
+                    self.controlPropertyCallback(self, index, control[kCControlProperty_Identifier], key, value);
     			}
     		}
+
     		this.setProperty = function(properties){
     			if (self.propertyCallback){
     				var keys = Object.keys(properties);
@@ -631,6 +634,7 @@ var CORECONTROL = (function () {
             this.type = eVCMessageId_None;
             this.floatValue = 0;
             this.index = 0;
+            this.properties;
             this.packet = function(){
                 var packet = new SVControlPacket();
                 packet.id = eControlControlModuleMessageId;
@@ -679,12 +683,35 @@ var CORECONTROL = (function () {
                         view.setUint8(1, this.type, true);
                         view.setUint8(2, this.surfaceID, true);
                        break;
+                    //////// NEW ADDED : TO REVIEW WITH PAUL
+                    case eControlControlMessageModuleControlProperty:
+                        
+                        
+                        var propString = JSON.stringify(this.properties);
+                        var length = 4 + propString.length;
+            
+                        packet.payload = new ArrayBuffer(length);
+                        var view = new DataView(packet.payload);
+                        view.setUint8(0, packet.id, true);
+                        view.setUint8(1, self.type, true);
+                        view.setUint8(2, self.surfaceID, true);
+                        view.setUint8(3, self.index, true);
+            
+                        // view.setUint8(3, self.index, true);
+                       // console.log(JSON.stringify(self.properties));
+                        // view.setUint8(4, JSON.stringify(self.properties), true);
+
+                        for (var i=0; i<propString.length; i++){
+                            view.setUint8(4+i, propString.charCodeAt(i), true);
+                        }
+                        break;
                     default:
                         break;
                  }
                 return packet;
             }
             this.initWithPacket = function(vcpacket){
+               
                 if (!isCoreControlModuleMessage(vcpacket)) return;
                 var dataview = new DataView(vcpacket.payload);
                 self.type = dataview.getUint8(0, true);
@@ -694,11 +721,11 @@ var CORECONTROL = (function () {
                         self.index = dataview.getUint8(2, true);
                         self.floatValue = dataview.getFloat32(3, true);
                         break;
-    				        case eControlControlMessageModuleControlProperty:
-                        self.index = dataview.getUint8(2, true);
-                        self.textValue = "";
-    					for (var i = 3; i < vcpacket.payload.byteLength; i++) {
-                            self.textValue += String.fromCharCode(dataview.getUint8(i));
+                        ////////
+    				case eControlControlMessageModuleControlProperty:
+                        self.properties = "";
+    					for (var i = 4; i < vcpacket.payload.byteLength; i++) {
+                            self.properties += String.fromCharCode(dataview.getUint8(i));
                         }
                         break;
                     case eControlControlMessageModuleSetControlText:
@@ -719,13 +746,14 @@ var CORECONTROL = (function () {
                       self.dataValue = vcpacket.payload.slice(3);
                       break;
                     case eControlControlMessageModuleUpdateControlTextSlice:
-                    self.index = dataview.getUint8(2, true);
+                        self.index = dataview.getUint8(2, true);
               			self.sliceStart = dataview.getUint8(3, true);
-                    self.textValue = "";
-                    for (var i = 4; i < vcpacket.payload.byteLength; i++) {
+                        self.textValue = "";
+                        for (var i = 4; i < vcpacket.payload.byteLength; i++) {
                                   self.textValue += String.fromCharCode(dataview.getUint8(i));
-                              }
-              				break;
+                        }
+              			break;
+                    
                 }
             }
         }
@@ -791,7 +819,7 @@ var CORECONTROL = (function () {
             this.id = eControlControlNoMessageId;
             this.payload = 0;
             this.rawData = 0;
-    		    this.binary = 1;
+    		this.binary = 1;
             this.initWithArrayBuffer = function(arraybuffer){
                 var dataview = new DataView(arraybuffer);
                 this.id = dataview.getUint8(0, true);
@@ -868,6 +896,17 @@ var CORECONTROL = (function () {
                 }
                 node.send(message.packet());
     		},
+            //////////////// ADDED NEW : TO REVIEW WITH PAUL
+            SurfaceSetControlProperty: function(surface, index, key, value){
+                surface.updateControlProperty(index, key, value);
+                var message = new CoreControlModuleMessage();
+                message.surfaceID = surface.surfaceID;
+                message.index = index;
+                message.type = eControlControlMessageModuleControlProperty;
+                if (!message.properties) message.properties = {};
+                message.properties[key] = value; 
+                node.send(message.packet());           
+            },
     		SurfaceSetControlTouch: function(surface, index, value){
                 var message = new CoreControlModuleMessage();
                 message.surfaceID = surface.surfaceID;
@@ -880,6 +919,7 @@ var CORECONTROL = (function () {
                 surface.setPropertyValue(name, value);
     		},
     		SurfaceUpdateControlPropertyValue: function(surface, index, name, value){
+
                 var control = controls[index];
                 control[name] = value;
     		},
@@ -890,8 +930,8 @@ var CORECONTROL = (function () {
     		SurfaceGetPropertyValue: function(surface, name){
     			return surface.getPropertyValue(name);
     		},
-    		SurfaceSetControlPropertyValue: function(surface, index, key, value){
-    			return surface.setControlPropertyValue(index, key, value);
+    		SurfaceUpdateControlProperty: function(surface, index, key, value){
+                return surface.updateControlProperty(index, key, value);
     		},
     		SurfaceGetControlPropertyValue: function(surface, index, key){
     			return surface.getControlPropertyValue(index, key);
