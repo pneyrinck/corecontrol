@@ -310,8 +310,13 @@ var CORECONTROL = (function () {
                     surface.setProperty(JSON.parse(message.textValue));
                     break;
     			case eControlControlMessageModuleControlProperty:
-                    console.log(message);
-                    surface.setControlProperty(message.index, message.label);
+                    var keys = Object.keys(message.properties);
+                    for (var i=0; i<keys.length; i++){
+                        var key = keys[i];
+                        var value = message.properties[key]; 
+                        surface.setControlProperty(message.index, key, value);
+                    }
+                    
                     break;
                 case eControlControlMessageModuleControlBlob:
                   surface.updateControlValue(message.index, message.dataValue);
@@ -400,7 +405,6 @@ var CORECONTROL = (function () {
     			return true;
     		}
     		function onmessage(e){
-                console.log(e);
     			if (typeof e.data === "string"){
     				var message = JSON.parse(e.data);
     				if (message["type"]&&message["version"]&&message["id"])
@@ -543,9 +547,13 @@ var CORECONTROL = (function () {
 
             ////  NEW ADDED : REVIEW WITH PAUL
     		this.setControlProperty = function(index, key, value){
+                console.log("index :"+index);
+                console.log("key :"+key);
+                console.log("value :"+value);;
     			var control = controls[index];
     			if (control && self.controlPropertyCallback){
                     control[key] = value;
+                    console.log(control);
                     self.controlPropertyCallback(self, index, control[kCControlProperty_Identifier], key, value);
     			}
     		}
@@ -703,6 +711,7 @@ var CORECONTROL = (function () {
 
                         for (var i=0; i<propString.length; i++){
                             view.setUint8(4+i, propString.charCodeAt(i), true);
+
                         }
                         break;
                     default:
@@ -723,10 +732,13 @@ var CORECONTROL = (function () {
                         break;
                         ////////
     				case eControlControlMessageModuleControlProperty:
-                        self.properties = "";
-    					for (var i = 4; i < vcpacket.payload.byteLength; i++) {
-                            self.properties += String.fromCharCode(dataview.getUint8(i));
+                        self.index = dataview.getUint8(2, true);
+                        self.properties = {};
+                        var strings = "";
+    					for (var i = 3; i < vcpacket.payload.byteLength; i++) {
+                            strings += String.fromCharCode(dataview.getUint8(i));
                         }
+                        self.properties = JSON.parse(strings);
                         break;
                     case eControlControlMessageModuleSetControlText:
                         self.index = dataview.getUint8(2, true);
@@ -898,7 +910,8 @@ var CORECONTROL = (function () {
     		},
             //////////////// ADDED NEW : TO REVIEW WITH PAUL
             SurfaceSetControlProperty: function(surface, index, key, value){
-                surface.updateControlProperty(index, key, value);
+
+                surface.setControlProperty(index, key, value);
                 var message = new CoreControlModuleMessage();
                 message.surfaceID = surface.surfaceID;
                 message.index = index;
