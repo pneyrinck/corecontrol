@@ -299,7 +299,6 @@ var CORECONTROL = (function () {
             
             switch (message.type) {
                 case eControlControlMessageModuleSetControl:
-                    console.log(message);
                     surface.updateControlValue(message.index, message.floatValue);
                     break;
                 case eControlControlMessageModuleSetControlText:
@@ -420,7 +419,6 @@ var CORECONTROL = (function () {
     			}
     			if (!handshake_received) return;
     			var packet = new SVControlPacket();
-                console.log("message received ");
     			packet.initWithArrayBuffer(e.data);
     			for (var i=0; i<filters.length; i++){
     				filters[i].filterNode(packet);
@@ -538,22 +536,16 @@ var CORECONTROL = (function () {
     		this.publish = function(){
     		}
     		this.updateControlValue = function(index, value){
-                console.log("updateControlValue");
     			var control = controls[index];
     			if (control && self.controlCallback){
     				self.controlCallback(self, index, control[kCControlProperty_Identifier], value);
     			}
     		}
 
-            ////  NEW ADDED : REVIEW WITH PAUL
     		this.setControlProperty = function(index, key, value){
-                console.log("index :"+index);
-                console.log("key :"+key);
-                console.log("value :"+value);;
     			var control = controls[index];
     			if (control && self.controlPropertyCallback){
                     control[key] = value;
-                    console.log(control);
                     self.controlPropertyCallback(self, index, control[kCControlProperty_Identifier], key, value);
     			}
     		}
