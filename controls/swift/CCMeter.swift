@@ -46,8 +46,12 @@ class CCMeter: UIView {
         clipped = false
         peakheight = 1.0 / 12.0
         clipheight = 1.0 / 12.0
+    }
+    
+    override func layoutSubviews() {
         self.updateSettings()
     }
+
     
     
     func updateSettings(){
