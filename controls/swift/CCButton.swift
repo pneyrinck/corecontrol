@@ -174,7 +174,6 @@ class CCButton: UIButton {
     }
     
     func setCurrentState(newState: Int) {
-        print("newState :\(newState)")
         currentState = newState
         self.setNeedsDisplay()
         let state: CCButtonState = self.stateForIndex(currentState)
