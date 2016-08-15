@@ -212,9 +212,7 @@ class CCFader: UIControl{
         }
         
         animate = true
-        print(capTouched)
-     
-        
+                
         let capSize: CGSize = capButton.frame.size
   
         let w = capSize.width
