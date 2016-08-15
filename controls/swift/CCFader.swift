@@ -41,6 +41,8 @@ class CCFader: UIControl{
     var capVCenterOffset: Float!
     var recordMode: Bool!
     var faderIsVertical: Bool!
+    var grooveWidth : Float?
+    
 	var capHeight:NSNumber = 78 {
         didSet {
             updateSettings()
@@ -127,8 +129,13 @@ class CCFader: UIControl{
         capButton.gradientIsLeftToRight = true;
         
         // draw groove
-
-        let h = CGFloat(6.0)
+        var h:CGFloat!
+        if (grooveWidth != nil) {
+             h = CGFloat(grooveWidth!)
+        } else {
+             h = CGFloat(6.0)
+        }
+        
         let y = self.frame.height/2 - h/2
         let w = viewSize.width - capRect.size.width
         let x = capRect.size.width / 2
@@ -162,9 +169,16 @@ class CCFader: UIControl{
         capButton.layer.shadowOffset = CGSizeMake(0.0, 5.0)
         capButton.clipsToBounds = false
         
+        var w:CGFloat!
+        if (grooveWidth != nil) {
+            w = CGFloat(grooveWidth!)
+        } else {
+            w = CGFloat(6.0)
+        }
+
+        
         let h = viewSize.height - capRect.size.height
         let y = capRect.size.height / 2
-        let w = CGFloat(6.0)
         let x = self.frame.width/2 - w/2
         
         let grooveRect: CGRect = CGRectMake(x,y,w,h)
