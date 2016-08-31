@@ -18,13 +18,12 @@ class CCButton: UIButton {
     var originalColor: UIColor!
     var originalFont: UIFont!
     var gradientIsLeftToRight: Bool = false
-    
-    
+    var highlightColor: UIColor = UIColor.redColor();
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         self.setup()
     }
-    
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
@@ -158,7 +157,15 @@ class CCButton: UIButton {
             CGContextSetFillColorWithColor(ctx, state.backgroundColor.CGColor)
             CGContextFillPath(ctx)
         }
-        
+		
+		// highlight coloring useful for Pro Tools automation modes
+		if (self.highlighted)
+		{
+			CGContextAddPath(ctx, borderPath)
+			CGContextSetFillColorWithColor(ctx, highlightColor.colorWithAlphaComponent(0.3).CGColor)
+			CGContextFillPath(ctx)
+		}
+		
         // Draw border
         if (state.borderWidth > 0) {
             CGContextAddPath(ctx, borderPath)

@@ -42,7 +42,17 @@ class CCFader: UIControl{
     var recordMode: Bool!
     var faderIsVertical: Bool!
     var grooveWidth : Float?
-    
+    var highlightColor: UIColor
+	{
+    didSet {
+		capButton.highlightColor = self.highlightColor;
+    }
+}
+override var highlighted: Bool {
+    didSet {
+		capButton.highlighted = self.highlighted;
+    }
+}
 	var capHeight:NSNumber = 78 {
         didSet {
             updateSettings()
@@ -66,11 +76,13 @@ class CCFader: UIControl{
     }
 	
     override init(frame: CGRect) {
+		self.highlightColor = UIColor.clearColor()
         super.init(frame: frame)
     }
 
     
     required init?(coder decoder: NSCoder) {
+		self.highlightColor = UIColor.clearColor()
         super.init(coder: decoder)
         capTouched = false
         position = 0
