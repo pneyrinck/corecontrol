@@ -74,6 +74,11 @@ class CCScaleMarks: UIView {
     }
     
     override func drawRect(rect: CGRect) {
+        
+        for view in self.subviews {
+            view.removeFromSuperview()
+        }
+        
         let context: CGContextRef = UIGraphicsGetCurrentContext()!
 
  
