@@ -46,11 +46,13 @@ class CCFader: UIControl{
 	{
     didSet {
 		capButton.highlightColor = self.highlightColor;
+		capButton.setNeedsDisplay();
     }
 }
 override var highlighted: Bool {
     didSet {
 		capButton.highlighted = self.highlighted;
+		capButton.setNeedsDisplay();
     }
 }
 	var capHeight:NSNumber = 78 {

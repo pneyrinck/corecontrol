@@ -116,7 +116,7 @@ class CCButton: UIButton {
     }
     
     override func drawRect(rect: CGRect) {
-        
+        self.alpha = (self.enabled) ? 1.0:0.5;
         let state: CCButtonState = self.stateForIndex(currentState)
         let ctx: CGContextRef = UIGraphicsGetCurrentContext()!
         let buttonArea: CGRect = CGRectInset(self.bounds, CGFloat(state.borderWidth) / 2.0, CGFloat(state.borderWidth) / 2.0)
@@ -162,7 +162,7 @@ class CCButton: UIButton {
 		if (self.highlighted)
 		{
 			CGContextAddPath(ctx, borderPath)
-			CGContextSetFillColorWithColor(ctx, highlightColor.colorWithAlphaComponent(0.3).CGColor)
+			CGContextSetFillColorWithColor(ctx, highlightColor.colorWithAlphaComponent(0.5).CGColor)
 			CGContextFillPath(ctx)
 		}
 		

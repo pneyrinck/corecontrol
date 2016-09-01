@@ -46,11 +46,11 @@ class CCButtonState: NSObject {
     }
     
     class func colorWithR(r: Int, G g: Int, B b: Int) -> UIColor {
-        return UIColor(red: CGFloat(r / 255), green: CGFloat(g / 255), blue: CGFloat(b / 255), alpha: 1.0)
+        return UIColor(red: CGFloat(Float(r) / 255.0), green: CGFloat(Float(g) / 255.0), blue: CGFloat(Float(b) / 255.0), alpha: 1.0)
     }
     
     class func colorWithR(r: Int, G g: Int, B b: Int, A a: Int) -> UIColor {
-        return UIColor(red: CGFloat(r / 255) , green: CGFloat(g / 255), blue: CGFloat(b / 255), alpha: CGFloat(a / 255))
+        return UIColor(red: CGFloat(Float(r) / 255.0) , green: CGFloat(Float(g) / 255.0), blue: CGFloat(Float(b) / 255.0), alpha: CGFloat(Float(a) / 255.0))
     }
     
     class func grayButton() -> CCButtonState {
