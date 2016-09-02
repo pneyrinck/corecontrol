@@ -209,8 +209,6 @@ override var highlighted: Bool {
   
         // force redraw of labels and groove
         self.updateCapPosition()
-        
-        
     }
     
     func handleDoubleTap() {

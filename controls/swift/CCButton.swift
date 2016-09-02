@@ -19,6 +19,12 @@ class CCButton: UIButton {
     var originalFont: UIFont!
     var gradientIsLeftToRight: Bool = false
     var highlightColor: UIColor = UIColor.redColor();
+	var unused: Bool = false
+	{
+		didSet {
+			self.setNeedsDisplay();
+		}
+	}
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -116,7 +122,7 @@ class CCButton: UIButton {
     }
     
     override func drawRect(rect: CGRect) {
-        self.alpha = (self.enabled) ? 1.0:0.5;
+        self.alpha = (self.unused==false)&&(self.enabled==true) ? 1.0:0.5;
         let state: CCButtonState = self.stateForIndex(currentState)
         let ctx: CGContextRef = UIGraphicsGetCurrentContext()!
         let buttonArea: CGRect = CGRectInset(self.bounds, CGFloat(state.borderWidth) / 2.0, CGFloat(state.borderWidth) / 2.0)
