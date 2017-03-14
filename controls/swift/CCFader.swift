@@ -100,26 +100,35 @@ override var highlighted: Bool {
 
     
     func updateSettings() {
-		if (capButton != nil)
-		{
-			capButton.removeFromSuperview()
-		}
-		if (groove != nil)
-		{
-			groove.removeFromSuperview()
-		}
         
          let viewSize: CGSize = self.bounds.size
+
+        let faderWasVertical = faderIsVertical
         
         // decide if fader should be displayed vertically or horizontally
         if (viewSize.height > viewSize.width) {
             faderIsVertical = true
-            drawVerticalFader(viewSize)
         } else {
             faderIsVertical = false
-            drawHorizontalFader(viewSize)
         }
         
+        if faderIsVertical != faderWasVertical {
+            if capButton != nil {
+                capButton.removeFromSuperview()
+                capButton = nil
+            }
+            
+            if groove != nil {
+                groove.removeFromSuperview()
+                groove = nil
+            }
+        }
+        
+        if faderIsVertical == true {
+            drawVerticalFader(viewSize)
+        } else {
+            drawHorizontalFader(viewSize)
+        }
     }
     
     func drawHorizontalFader(viewSize: CGSize){
@@ -129,9 +138,13 @@ override var highlighted: Bool {
         // draw cap
 
         let capRect: CGRect = CGRectMake(0.0,0.0,44.0, self.frame.height)
-        capButton = CCFaderCap(frame: capRect)
-        if (faderCapState != nil)
-        {
+        if capButton == nil {
+            capButton = CCFaderCap(frame: capRect)
+        } else {
+            capButton.frame.size = capRect.size
+        }
+        
+        if faderCapState != nil {
             capButton.setState(faderCapState, forIndex: 0)
         }
         capButton.layer.masksToBounds = false
@@ -155,9 +168,19 @@ override var highlighted: Bool {
         let x = capRect.size.width / 2
         
         let grooveRect: CGRect = CGRectMake(x,y,w,h)
-        groove = CCButton(frame: grooveRect)
-        self.addSubview(groove)
-        self.insertSubview(capButton, atIndex: 1000)
+        if groove == nil {
+            groove = CCButton(frame: grooveRect)
+        } else {
+            groove.frame = grooveRect
+        }
+        
+        if groove.superview == nil {
+            self.addSubview(groove)
+        }
+        if capButton.superview == nil {
+            self.insertSubview(capButton, aboveSubview: groove)
+        }
+        
         self.setNeedsDisplay()
 
         self.updateCapPosition()
@@ -171,9 +194,13 @@ override var highlighted: Bool {
         grooveBottom = Float(self.bounds.origin.y) + Float(viewSize.height)
         
         let capRect: CGRect = CGRectMake(0.0,0.0,self.bounds.width, CGFloat(capHeight))
-        capButton = CCFaderCap(frame: capRect)
-        if (faderCapState != nil)
-        {
+        if capButton == nil {
+            capButton = CCFaderCap(frame: capRect)
+        } else {
+            capButton.frame.size = capRect.size
+        }
+        
+        if faderCapState != nil {
             capButton.setState(faderCapState, forIndex: 0)
         }
         capButton.layer.masksToBounds = false
@@ -197,13 +224,22 @@ override var highlighted: Bool {
         
         let grooveRect: CGRect = CGRectMake(x,y,w,h)
         
-        groove = CCButton(frame: grooveRect)
-        if (grooveState != nil)
-        {
+        if groove == nil {
+            groove = CCButton(frame: grooveRect)
+        } else {
+            groove.frame = grooveRect
+        }
+        
+        if grooveState != nil {
             groove.setState(grooveState, forIndex: 0)
         }
-        self.addSubview(groove)
-        self.insertSubview(capButton, aboveSubview: groove)
+        
+        if groove.superview == nil {
+            self.addSubview(groove)
+        }
+        if capButton.superview == nil {
+            self.insertSubview(capButton, aboveSubview: groove)
+        }
         
         self.setNeedsDisplay()
   
