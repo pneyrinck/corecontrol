@@ -95,7 +95,7 @@ class CCScaleMarks: UIView {
         {
 			if (!disableLines)
 			{
-				for var i = 0; i < marks.count; i++ {
+				for var i = 0; i < marks.count; i += 1 {
                     
                     var x:CGFloat = 0.0;
                     var y:CGFloat = 0.0;
@@ -138,7 +138,7 @@ class CCScaleMarks: UIView {
             
                 let cTextBoxHeight: Float = 20
                 let cTextBoxHalfHeight: Float = cTextBoxHeight / 2
-                for var i = 0; i < marks.count; i++ {
+                for var i = 0; i < marks.count; i += 1 {
                     
                     var x:CGFloat = 0.0;
                     var y:CGFloat = 0.0;

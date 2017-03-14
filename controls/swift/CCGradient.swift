@@ -40,7 +40,7 @@ class CCGradient: NSObject {
         var locations :[CGFloat] = []
         var components:[CGFloat] = []
         
-        for (var i = 0; i < num_locations; i++) {
+        for (var i = 0; i < num_locations; i += 1) {
             locations.insert(CGFloat(pos[i] as! NSNumber), atIndex: i)
             let rgba_col: UInt32 = UInt32(col[i].unsignedIntegerValue)
             components.insert(CGFloat((rgba_col & 0xFF000000) >> 24) / 255.0, atIndex: (i * 4 + 0))
