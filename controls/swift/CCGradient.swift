@@ -48,7 +48,7 @@ class CCGradient: NSObject {
             components.insert(CGFloat((rgba_col & 0x0000FF00) >> 8) / 255.0, atIndex: (i * 4 + 2))
             components.insert(CGFloat((rgba_col & 0x000000FF) >> 0) / 255.0, atIndex: (i * 4 + 3))
         }
-        colorspace = CGColorSpaceCreateDeviceRGB()!
+        colorspace = CGColorSpaceCreateDeviceRGB()
         gradient = CGGradientCreateWithColorComponents(colorspace, components, locations, num_locations)!
     
         return gradient
