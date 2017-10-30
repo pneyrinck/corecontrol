@@ -378,8 +378,8 @@ class CCKnob: UIControl {
             end = Float(90 - startAngle - arcAngle) * Float(M_PI / 180)
         }
         // Add the Arc to the path
-        CGContextAddArc(context, 0, 0, CGFloat(radius), CGFloat(start), CGFloat(end), 0)
-        CGContextAddArc(context, 0, 0, CGFloat(radius2), CGFloat(end), CGFloat(start), 1)
+        context.addArc(center: CGPoint(x: 0, y: 0), radius: CGFloat(radius), startAngle: CGFloat(start), endAngle: CGFloat(end), clockwise: false)
+        context.addArc(center: CGPoint(x: 0, y: 0), radius: CGFloat(radius2), startAngle: CGFloat(end), endAngle: CGFloat(start), clockwise: true)
         context.restoreGState()
         // Complete the path closing the arc at the focal point
         context.closePath()

@@ -82,7 +82,7 @@ class CCScaleMarks: UIView {
         let context: CGContext = UIGraphicsGetCurrentContext()!
 
  
-        if (master != nil && master.isKind(of: CCFader)){
+        if (master != nil && master.isKind(of: CCFader.self)){
             masterFader = master as! CCFader
             masterIsFader = true
             

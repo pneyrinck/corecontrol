@@ -163,7 +163,7 @@ class CCButton: UIButton {
         if (state.backgroundGradient != nil) {
             ctx.saveGState()
                       
-            let gradient: CGGradient = state.backgroundGradient.CGGradient()
+            let gradient: CGGradient = state.backgroundGradient.getGradient()
             
             ctx.addPath(borderPath)
             ctx.clip()
