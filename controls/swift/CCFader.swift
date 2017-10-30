@@ -49,9 +49,9 @@ class CCFader: UIControl{
 		capButton.setNeedsDisplay();
     }
 }
-override var highlighted: Bool {
+override var isHighlighted: Bool {
     didSet {
-		capButton.highlighted = self.highlighted;
+		capButton.isHighlighted = self.isHighlighted;
 		capButton.setNeedsDisplay();
     }
 }
@@ -78,13 +78,13 @@ override var highlighted: Bool {
     }
 	
     override init(frame: CGRect) {
-		self.highlightColor = UIColor.clearColor()
+		self.highlightColor = UIColor.clear
         super.init(frame: frame)
     }
 
     
     required init?(coder decoder: NSCoder) {
-		self.highlightColor = UIColor.clearColor()
+		self.highlightColor = UIColor.clear
         super.init(coder: decoder)
         capTouched = false
         position = 0
@@ -131,13 +131,13 @@ override var highlighted: Bool {
         }
     }
     
-    func drawHorizontalFader(viewSize: CGSize){
+    func drawHorizontalFader(_ viewSize: CGSize){
         grooveLeft = Float(self.bounds.origin.x)
         grooveRight = Float(self.bounds.origin.x) + Float(viewSize.width)
     
         // draw cap
 
-        let capRect: CGRect = CGRectMake(0.0,0.0,44.0, self.frame.height)
+        let capRect: CGRect = CGRect(x: 0.0,y: 0.0,width: 44.0, height: self.frame.height)
         if capButton == nil {
             capButton = CCFaderCap(frame: capRect)
         } else {
@@ -148,10 +148,10 @@ override var highlighted: Bool {
             capButton.setState(faderCapState, forIndex: 0)
         }
         capButton.layer.masksToBounds = false
-        capButton.layer.shadowColor = UIColor.blackColor().CGColor
+        capButton.layer.shadowColor = UIColor.black.cgColor
         capButton.layer.shadowOpacity = 0.7
         capButton.layer.shadowRadius = 5
-        capButton.layer.shadowOffset = CGSizeMake(0.0, 5.0)
+        capButton.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
         capButton.clipsToBounds = false
         capButton.gradientIsLeftToRight = true;
         
@@ -167,7 +167,7 @@ override var highlighted: Bool {
         let w = viewSize.width - capRect.size.width
         let x = capRect.size.width / 2
         
-        let grooveRect: CGRect = CGRectMake(x,y,w,h)
+        let grooveRect: CGRect = CGRect(x: x,y: y,width: w,height: h)
         if groove == nil {
             groove = CCButton(frame: grooveRect)
         } else {
@@ -187,13 +187,13 @@ override var highlighted: Bool {
         
     }
     
-    func drawVerticalFader(viewSize: CGSize){
+    func drawVerticalFader(_ viewSize: CGSize){
         
         // we vertically stretch the groove pict to fit exactly inside the view height
         grooveTop = Float(self.bounds.origin.y)
         grooveBottom = Float(self.bounds.origin.y) + Float(viewSize.height)
         
-        let capRect: CGRect = CGRectMake(0.0,0.0,self.bounds.width, CGFloat(capHeight))
+        let capRect: CGRect = CGRect(x: 0.0,y: 0.0,width: self.bounds.width, height: CGFloat(capHeight))
         if capButton == nil {
             capButton = CCFaderCap(frame: capRect)
         } else {
@@ -204,10 +204,10 @@ override var highlighted: Bool {
             capButton.setState(faderCapState, forIndex: 0)
         }
         capButton.layer.masksToBounds = false
-        capButton.layer.shadowColor = UIColor.blackColor().CGColor
+        capButton.layer.shadowColor = UIColor.black.cgColor
         capButton.layer.shadowOpacity = 0.7
         capButton.layer.shadowRadius = 5
-        capButton.layer.shadowOffset = CGSizeMake(0.0, 5.0)
+        capButton.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
         capButton.clipsToBounds = false
         
         var w:CGFloat!
@@ -222,7 +222,7 @@ override var highlighted: Bool {
         let y = capRect.size.height / 2
         let x = self.frame.width/2 - w/2
         
-        let grooveRect: CGRect = CGRectMake(x,y,w,h)
+        let grooveRect: CGRect = CGRect(x: x,y: y,width: w,height: h)
         
         if groove == nil {
             groove = CCButton(frame: grooveRect)
@@ -248,7 +248,7 @@ override var highlighted: Bool {
     }
     
     func handleDoubleTap() {
-        NSNotificationCenter.defaultCenter().postNotificationName("FaderViewDoubleTap", object: self)
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "FaderViewDoubleTap"), object: self)
     }
     
     func updateCapPosition(){
@@ -276,13 +276,13 @@ override var highlighted: Bool {
         }
       
         // what is the purpose of logicBarRect and logicBar?
-        var logicBarRect: CGRect = CGRectMake(0,0,0.0,0.0)
+        var logicBarRect: CGRect = CGRect(x: 0,y: 0,width: 0.0,height: 0.0)
         if logicBar != nil {
             logicBarRect = logicBar.frame
             x = x + CGFloat(hashLabelWidth)
         }
         
-        let capRect: CGRect = CGRectMake(x,y,w,h)
+        let capRect: CGRect = CGRect(x: x,y: y,width: w,height: h)
         
         if (faderIsVertical == true){
             logicBarRect.origin.y = CGFloat(grooveTop) + (1 - CGFloat(position)) * (CGFloat(grooveBottom) - CGFloat(grooveTop))
@@ -299,7 +299,7 @@ override var highlighted: Bool {
         if animate == true {
             UIView.beginAnimations(nil, context: nil)
             UIView.setAnimationDuration(0.09)
-            UIView.setAnimationCurve(.EaseInOut)
+            UIView.setAnimationCurve(.easeInOut)
             UIView.setAnimationDelay(0.0)
         }
         capButton.frame = capRect
@@ -313,17 +313,17 @@ override var highlighted: Bool {
         
     }
     
-    func getYPosForFaderValue(value: Float) -> Float {
+    func getYPosForFaderValue(_ value: Float) -> Float {
         return ((1 - value) * (Float(self.bounds.size.height) - Float(capButton.frame.size.height)))
     }
     
-    func getXPosForFaderValue(value: Float) -> Float {
+    func getXPosForFaderValue(_ value: Float) -> Float {
         return (value * (Float(self.bounds.size.width) - Float(capButton.frame.size.width)))
     }
     
     
     
-    func setPosition(to: Float) {
+    func setPosition(_ to: Float) {
         if !capTouched {
             position = to
             self.updateCapPosition()
@@ -334,32 +334,32 @@ override var highlighted: Bool {
         return 0
     }
     
-    func getYPosForScaleValue(value: Float) -> Float {
+    func getYPosForScaleValue(_ value: Float) -> Float {
         return Float(self.getYPosForFaderValue(value)) + Float(capButton.frame.size.height) / 2
     }
     
-    func getFaderValueForYPos(yPos: Float) -> Float {
+    func getFaderValueForYPos(_ yPos: Float) -> Float {
         let capSize: CGSize = capButton.frame.size
         let viewSize: CGSize = self.bounds.size
         let value: Float = 1.0 - ((yPos) / (Float(viewSize.height) - Float(capSize.height)))
         return value
     }
-	    func setValue(to: Float) {
+	    func setValue(_ to: Float) {
         if (capTouched == true){
             position = to
             self.updateCapPosition()
         }
     }
     
-    func setTouchValue(to: Float) {
+    func setTouchValue(_ to: Float) {
         if (capTouched != false) {
             position = to
             self.updateCapPosition()
-            self.sendActionsForControlEvents(.ValueChanged)
+            self.sendActions(for: .valueChanged)
         }
     }
     
-    func setTouchDelta(deltapx: Float) {
+    func setTouchDelta(_ deltapx: Float) {
         if (capTouched != false) {
             var delta: Float;
             if (faderIsVertical == true){
@@ -368,11 +368,11 @@ override var highlighted: Bool {
                 delta = deltapx / (Float(self.bounds.size.width) - Float(capButton.frame.size.width))
             }
             let p = position
-            position = p - delta;
+            position = p! - delta;
             position = (position < 0) ? 0 : position
             position = (position > 1.0) ? 1.0 : position
             self.updateCapPosition()
-            self.sendActionsForControlEvents(.ValueChanged)
+            self.sendActions(for: .valueChanged)
         }
     }
     

@@ -14,9 +14,9 @@ class CCFaderCap: CCButton {
     override init(frame: CGRect) {
         fader = 0
         super.init(frame: frame)
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
         
-        let dtap = UITapGestureRecognizer(target: self, action:Selector("handleDoubleTap:"))
+        let dtap = UITapGestureRecognizer(target: self, action:#selector(CCFaderCap.handleDoubleTap(_:)))
         dtap.numberOfTapsRequired = 2
         self.addGestureRecognizer(dtap)
     }
@@ -25,18 +25,18 @@ class CCFaderCap: CCButton {
     }
     
     
-    func handleDoubleTap(recognizer: UITapGestureRecognizer? = nil) {
+    func handleDoubleTap(_ recognizer: UITapGestureRecognizer? = nil) {
         let faderView: CCFader = self.superview as! CCFader
         faderView.capTouched = false
         faderView.handleDoubleTap()
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let faderView: CCFader = self.superview as! CCFader
         faderView.capTouched = true
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         let faderView: CCFader = (self.superview as! CCFader)
         if (faderView.capTouched == false){
             return
@@ -46,8 +46,8 @@ class CCFaderCap: CCButton {
         let numTouches: Int = t.count
         if numTouches != 1 { return }
         let touch: UITouch = t[0] as! UITouch
-        let nowPoint: CGPoint = touch.locationInView(self.superview)
-        let previousPoint: CGPoint = touch.previousLocationInView(self.superview)
+        let nowPoint: CGPoint = touch.location(in: self.superview)
+        let previousPoint: CGPoint = touch.previousLocation(in: self.superview)
         
         if (faderView.faderIsVertical == true){
             faderView.setTouchDelta(Float(nowPoint.y) - Float(previousPoint.y))
@@ -57,7 +57,7 @@ class CCFaderCap: CCButton {
         
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let faderView: CCFader = (self.superview as! CCFader)
         let t: [AnyObject] = Array(touches)
         let numTouches: Int = t.count

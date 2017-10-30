@@ -37,7 +37,7 @@ class CCKnob: UIControl {
     var numTicks:Int = 0
    
     
-    override var enabled: Bool {
+    override var isEnabled: Bool {
         didSet {
             print("did set ")
         }
@@ -45,16 +45,16 @@ class CCKnob: UIControl {
     
     var knobData: [String : AnyObject?] =
         [
-            "displayBackColor":  UIColor.blackColor(),
-            "displayLightColor": UIColor.greenColor(),
+            "displayBackColor":  UIColor.black,
+            "displayLightColor": UIColor.green,
             "circle1Color": UIColor(red: 0.56, green: 0.56, blue: 0.56, alpha: 1.0),
             "circle2Color": UIColor(red: 0.35, green: 0.35, blue: 0.35, alpha: 1.0),
-            "circle1Radius": 0.78,
-            "circle2Radius": 0.66,
-            "backRadiusInner": 0.78,
-            "backRadiusOuter": 0.96,
-            "lightRadiusInner": 0.78,
-            "lightRadiusOuter": 0.96
+            "circle1Radius": 0.78 as AnyObject,
+            "circle2Radius": 0.66 as AnyObject,
+            "backRadiusInner": 0.78 as AnyObject,
+            "backRadiusOuter": 0.96 as AnyObject,
+            "lightRadiusInner": 0.78 as AnyObject,
+            "lightRadiusOuter": 0.96 as AnyObject
         ]
     
    
@@ -67,33 +67,33 @@ class CCKnob: UIControl {
         numdots = 11
         absoluteMode = false
         lit = true
-        enabled = true
+        isEnabled = true
         
-        self.backgroundColor = UIColor.clearColor()
+        self.backgroundColor = UIColor.clear
         position = 6.0 / 11.0
         updateMagicNumbers()
       
-        let recognizer = UIPanGestureRecognizer(target: self, action:Selector("handlePan:"))
+        let recognizer = UIPanGestureRecognizer(target: self, action:#selector(CCKnob.handlePan(_:)))
         self.addGestureRecognizer(recognizer)
     }
     
     @nonobjc
-    func setEnabled(ienabled: Bool) {
-        enabled = ienabled
+    func setEnabled(_ ienabled: Bool) {
+        isEnabled = ienabled
         self.setNeedsDisplay()
     }
     
     @nonobjc
-    func setMode(imode: Int){
+    func setMode(_ imode: Int){
         mode = imode
         self.setNeedsDisplay()
     }
     
-    override func drawRect(rect: CGRect) {
-        let ctx: CGContextRef = UIGraphicsGetCurrentContext()!
+    override func draw(_ rect: CGRect) {
+        let ctx: CGContext = UIGraphicsGetCurrentContext()!
         
         // Drawing code
-        CGContextSetRGBFillColor(ctx, 0, 0, 0, 1)
+        ctx.setFillColor(red: 0, green: 0, blue: 0, alpha: 1)
         
         var start: Float = 1.0
         var arcdistance: Float = 0.0
@@ -143,7 +143,7 @@ class CCKnob: UIControl {
         }
 
         
-        if enabled == false {
+        if isEnabled == false {
             return
         }
         
@@ -156,18 +156,18 @@ class CCKnob: UIControl {
             let innerRadius = rect.size.width * 0.5 * (1.0 - (knobData["circle2Radius"] as! CGFloat))
 
  
-            var smallerRectangle: CGRect = CGRectInset(rect, outerRadius, outerRadius)
+            var smallerRectangle: CGRect = rect.insetBy(dx: outerRadius, dy: outerRadius)
 
-            CGContextSetFillColorWithColor(ctx, (knobData["circle1Color"] as! UIColor).CGColor)
-            CGContextFillEllipseInRect(ctx, smallerRectangle)
-            smallerRectangle = CGRectInset(rect, innerRadius, innerRadius)
-            CGContextSetFillColorWithColor(ctx, (knobData["circle2Color"] as! UIColor).CGColor)
-            CGContextFillEllipseInRect(ctx, smallerRectangle)
+            ctx.setFillColor((knobData["circle1Color"] as! UIColor).cgColor)
+            ctx.fillEllipse(in: smallerRectangle)
+            smallerRectangle = rect.insetBy(dx: innerRadius, dy: innerRadius)
+            ctx.setFillColor((knobData["circle2Color"] as! UIColor).cgColor)
+            ctx.fillEllipse(in: smallerRectangle)
       
             
-            CGContextSetFillColorWithColor(ctx, (knobData["displayBackColor"] as! UIColor).CGColor)
+            ctx.setFillColor((knobData["displayBackColor"] as! UIColor).cgColor)
             self.strokeArc(ctx, r: rect, startAngle: 45, arcAngle: 270, radius: radiusouter!, radius2: radiusinner!)
-            CGContextSetFillColorWithColor(ctx, (knobData["displayLightColor"] as! UIColor).CGColor)
+            ctx.setFillColor((knobData["displayLightColor"] as! UIColor).cgColor)
            
             
             
@@ -178,7 +178,7 @@ class CCKnob: UIControl {
     }
     
     
-    func setValue(to: Float) {
+    func setValue(_ to: Float) {
         lit = (to > 0)
         self.setNeedsDisplay()
     }
@@ -193,32 +193,32 @@ class CCKnob: UIControl {
     }
 
     
-    func setEncoderValue(to: Float){
+    func setEncoderValue(_ to: Float){
         position = to
         self.updateMagicNumbers()
         self.setNeedsDisplay()
     }
     
     @nonobjc
-    func setDisplayValue(to: String) {
+    func setDisplayValue(_ to: String) {
         if (displayValue != nil){ displayValue!.text = to }
     }
     
     @nonobjc
-    func setDisplayName(to: String) {
+    func setDisplayName(_ to: String) {
         if (displayName != nil){ displayName!.text = to }
     }
     
-    func touchesBegan(touches: NSSet, event: UIEvent){
+    func touchesBegan(_ touches: NSSet, event: UIEvent){
         firsthandle = true
         if absoluteMode {
-            var t: [AnyObject] = touches.allObjects
+            var t: [AnyObject] = touches.allObjects as [AnyObject]
             let numTouches: Int = Int(t.count)
             if numTouches != 1 {
                 return
             }
             let touch: UITouch = t[0] as! UITouch
-            let translation: CGPoint = touch.locationInView(self)
+            let translation: CGPoint = touch.location(in: self)
             var x: Float
             var y: Float
             let ourSize: CGSize = self.frame.size
@@ -230,7 +230,7 @@ class CCKnob: UIControl {
         }
     }
     
-    func XYToPosition(x: Float, y: Float)->Float{
+    func XYToPosition(_ x: Float, y: Float)->Float{
         var angle: Float = atan2(y, x)
         // from -pi to +pi relative to 3 oclock CCW
         if angle < 0 {
@@ -261,17 +261,17 @@ class CCKnob: UIControl {
     }
     
     
-    func touchesEnded(touches : NSSet, event : UIEvent){
+    func touchesEnded(_ touches : NSSet, event : UIEvent){
         isPanning = false
         self.setNeedsDisplay()
     }
     
-    func sendKnobValue(val:Float){
+    func sendKnobValue(_ val:Float){
         
     }
     
-    func handlePan(recognizer: UIPanGestureRecognizer) {
-        let translation: CGPoint = recognizer.locationInView(self)
+    func handlePan(_ recognizer: UIPanGestureRecognizer) {
+        let translation: CGPoint = recognizer.location(in: self)
         var x: CGFloat
         var y: CGFloat
         let ourSize: CGSize = self.frame.size
@@ -280,7 +280,7 @@ class CCKnob: UIControl {
         y = translation.y - center.y
         
         
-        if isnan(x) || isnan(y) {
+        if x.isNaN || y.isNaN {
             return
         }
         
@@ -288,9 +288,9 @@ class CCKnob: UIControl {
         if absoluteMode {
 
             // touch
-            if recognizer.state == .Began {
+            if recognizer.state == .began {
                 
-                self.sendActionsForControlEvents(.EditingDidBegin)
+                self.sendActions(for: .editingDidBegin)
             }
             
             var newPosition: Float = basePosition + (self.XYToPosition(Float((translation.x) - ourSize.width/2), y: Float(ourSize.height / 2 - translation.y)) - initPosition) * 0.5
@@ -301,8 +301,8 @@ class CCKnob: UIControl {
                 newPosition = 0.0
             }
             self.sendKnobValue(newPosition)
-            if recognizer.state == .Ended {
-                self.sendActionsForControlEvents(.EditingDidEnd)
+            if recognizer.state == .ended {
+                self.sendActions(for: .editingDidEnd)
             }
             return
         }
@@ -342,7 +342,7 @@ class CCKnob: UIControl {
                 
             }
             if numTicks != 0 {
-                self.sendActionsForControlEvents(.ValueChanged)
+                self.sendActions(for: .valueChanged)
                 lastpoint = translation
                 startAngle = angle
             }
@@ -352,21 +352,21 @@ class CCKnob: UIControl {
         
     }
     
-    func strokeArc(context:CGContextRef, r:CGRect, startAngle:Int, arcAngle:Int, radius:Float, radius2:Float){
+    func strokeArc(_ context:CGContext, r:CGRect, startAngle:Int, arcAngle:Int, radius:Float, radius2:Float){
         // Signal the start of a path
-        CGContextBeginPath(context)
+        context.beginPath()
         // Set the start of the path to the arcs focal point
-        CGContextMoveToPoint(context, r.origin.x + r.size.width / 2, r.origin.y + r.size.height / 2)
+        context.move(to: CGPoint(x: r.origin.x + r.size.width / 2, y: r.origin.y + r.size.height / 2))
         var start: Float
         var end: Float
         var matrix: CGAffineTransform
-        CGContextSaveGState(context)
+        context.saveGState()
         // Save the context's state because we are going to scale it
         // Create a transform to scale the context so that a radius of 1 maps to the bounds
         // of the rectangle, and transform the origin of the context to the center of
         // the bounding rectangle.
-        matrix = CGAffineTransformMake(r.size.width / 2, 0, 0, r.size.height / 2, r.origin.x + r.size.width / 2, r.origin.y + r.size.height / 2)
-        CGContextConcatCTM(context, matrix)
+        matrix = CGAffineTransform(a: r.size.width / 2, b: 0, c: 0, d: r.size.height / 2, tx: r.origin.x + r.size.width / 2, ty: r.origin.y + r.size.height / 2)
+        context.concatenate(matrix)
         // Apply the transform to the context
         // Calculate the start and ending angles
         if arcAngle > 0 {
@@ -380,11 +380,11 @@ class CCKnob: UIControl {
         // Add the Arc to the path
         CGContextAddArc(context, 0, 0, CGFloat(radius), CGFloat(start), CGFloat(end), 0)
         CGContextAddArc(context, 0, 0, CGFloat(radius2), CGFloat(end), CGFloat(start), 1)
-        CGContextRestoreGState(context)
+        context.restoreGState()
         // Complete the path closing the arc at the focal point
-        CGContextClosePath(context)
+        context.closePath()
         // Fill the path
-        CGContextFillPath(context)
+        context.fillPath()
 
     }
    

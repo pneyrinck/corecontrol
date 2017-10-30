@@ -25,12 +25,12 @@ class CCMeter: UIView {
     var meter_on: UIImage!
     var oldtime: UInt64!
     var lastMeterRxTime: UInt64!
-    var lastUpdateTime: NSTimeInterval!
+    var lastUpdateTime: TimeInterval!
     var stateOn : CCButtonState!
     var stateOff : CCButtonState!
     var meterIsVertical : Bool!
 
-    func setStates(onState: CCButtonState, offState: CCButtonState){
+    func setStates(_ onState: CCButtonState, offState: CCButtonState){
         stateOn = onState
         stateOff = offState
         self.setNeedsDisplay();
@@ -39,7 +39,7 @@ class CCMeter: UIView {
     
     required init?(coder decoder: NSCoder) {
         super.init(coder: decoder)
-        self.userInteractionEnabled = true
+        self.isUserInteractionEnabled = true
         level = 0.0
         decaytolevel = 0.0
         peaklevel = 0.0
@@ -106,7 +106,7 @@ class CCMeter: UIView {
     
    
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         if level < 0.0 {
             level = 0.0
         }
@@ -129,31 +129,31 @@ class CCMeter: UIView {
         return level
     }
     
-    func setValue(to: Float) {
-        lastUpdateTime = NSDate.timeIntervalSinceReferenceDate()
+    func setValue(_ to: Float) {
+        lastUpdateTime = Date.timeIntervalSinceReferenceDate
         if to > level {
-           let invalRect: CGRect = CGRectMake(0, CGFloat(self.bounds.size.height) * CGFloat(1 - to), self.bounds.size.width, CGFloat(self.bounds.size.height) * CGFloat(to - level))
+           let invalRect: CGRect = CGRect(x: 0, y: CGFloat(self.bounds.size.height) * CGFloat(1 - to), width: self.bounds.size.width, height: CGFloat(self.bounds.size.height) * CGFloat(to - level))
             level = to
             decaytolevel = level
-            self.setNeedsDisplayInRect(invalRect)
+            self.setNeedsDisplay(invalRect)
         }
         else if to < level {
-            let invalRect: CGRect = CGRectMake(0, CGFloat(self.bounds.size.height) * CGFloat(1 - level), self.bounds.size.width, CGFloat(self.bounds.size.height) * CGFloat(level - to))
+            let invalRect: CGRect = CGRect(x: 0, y: CGFloat(self.bounds.size.height) * CGFloat(1 - level), width: self.bounds.size.width, height: CGFloat(self.bounds.size.height) * CGFloat(level - to))
             level = to
-            self.setNeedsDisplayInRect(invalRect)
+            self.setNeedsDisplay(invalRect)
         }
         
         lastMeterRxTime = oldtime
     }
     
-    func setPeakValue(to: Float) {
+    func setPeakValue(_ to: Float) {
         if peaklevel != to {
             peaklevel = to
             self.setNeedsDisplay()
         }
     }
     
-    func setClipValue(tof: Float) {
+    func setClipValue(_ tof: Float) {
         let to: Bool = (tof > 0.5)
         if clipped != to {
             clipped = to
@@ -161,7 +161,7 @@ class CCMeter: UIView {
         }
     }
     
-    func lastUpdate() -> NSTimeInterval {
+    func lastUpdate() -> TimeInterval {
         return lastUpdateTime
     }
     

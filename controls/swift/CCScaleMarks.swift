@@ -14,9 +14,9 @@ class CCScaleMarks: UIView {
     var marks:Array<CCTaperMark>!
 	
     var labelFontSize: NSNumber = 15
-    var labelColor: UIColor = UIColor.blackColor()
+    var labelColor: UIColor = UIColor.black
     var labelWidth: NSNumber = 20
-	var lineColor: UIColor = UIColor.blackColor()
+	var lineColor: UIColor = UIColor.black
 	var disableLines: Bool = false
 	var disableLabels: Bool = false
     var scaleIsVertical:Bool!
@@ -42,12 +42,12 @@ class CCScaleMarks: UIView {
     
 
     
-    func setCCScaleMarks(scaleMarks:Array<CCTaperMark>){
+    func setCCScaleMarks(_ scaleMarks:Array<CCTaperMark>){
         marks = scaleMarks
 		self.setNeedsDisplay();
     }
     
-    func getYPosForScaleValue(value: Float) -> Float {
+    func getYPosForScaleValue(_ value: Float) -> Float {
 		if (masterIsFader == true)
 		{
 			return ((1 - value) * (Float(self.bounds.size.height) - masterFader.getCapHeight())) + masterFader.getCapHeight()/2
@@ -55,7 +55,7 @@ class CCScaleMarks: UIView {
 		return (1 - value) * (Float(self.bounds.size.height))
     }
     
-    func getXPosForScaleValue(value: Float) -> Float {
+    func getXPosForScaleValue(_ value: Float) -> Float {
         if (masterIsFader == true)
         {
              return (value * (Float(self.bounds.size.width) - masterFader.getCapWidth())) + masterFader.getCapWidth()/2
@@ -73,16 +73,16 @@ class CCScaleMarks: UIView {
         self.setNeedsDisplay()
     }
     
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         for view in self.subviews {
             view.removeFromSuperview()
         }
         
-        let context: CGContextRef = UIGraphicsGetCurrentContext()!
+        let context: CGContext = UIGraphicsGetCurrentContext()!
 
  
-        if (master != nil && master.isKindOfClass(CCFader)){
+        if (master != nil && master.isKind(of: CCFader)){
             masterFader = master as! CCFader
             masterIsFader = true
             
@@ -95,7 +95,7 @@ class CCScaleMarks: UIView {
         {
 			if (!disableLines)
 			{
-				for var i = 0; i < marks.count; i++ {
+				for i in 0 ..< marks.count {
                     
                     var x:CGFloat = 0.0;
                     var y:CGFloat = 0.0;
@@ -123,12 +123,12 @@ class CCScaleMarks: UIView {
                         x = xPos
                     }
                     
-                    CGContextMoveToPoint(context, xPos, yPos)
-                    CGContextAddLineToPoint(context, x, y)
+                    context.move(to: CGPoint(x: xPos, y: yPos))
+                    context.addLine(to: CGPoint(x: x, y: y))
 					
 				}
-				CGContextSetStrokeColorWithColor(context, lineColor.CGColor);
-				CGContextStrokePath(context)
+				context.setStrokeColor(lineColor.cgColor);
+				context.strokePath()
 			}
             
             
@@ -138,7 +138,7 @@ class CCScaleMarks: UIView {
             
                 let cTextBoxHeight: Float = 20
                 let cTextBoxHalfHeight: Float = cTextBoxHeight / 2
-                for var i = 0; i < marks.count; i++ {
+                for i in 0 ..< marks.count {
                     
                     var x:CGFloat = 0.0;
                     var y:CGFloat = 0.0;
@@ -160,10 +160,10 @@ class CCScaleMarks: UIView {
                     }
                     
                     
-                    let rect: CGRect = CGRectMake(x,y,w,h)
+                    let rect: CGRect = CGRect(x: x,y: y,width: w,height: h)
                     
                     let textStyle = NSMutableParagraphStyle()
-                    textStyle.alignment = .Right
+                    textStyle.alignment = .right
                     let textFontAttributes = [
                         NSFontAttributeName: font,
                         NSParagraphStyleAttributeName: textStyle
@@ -174,9 +174,9 @@ class CCScaleMarks: UIView {
                     label.clipsToBounds = false;
                     label.attributedText = NSAttributedString.init(string: marks[i].name, attributes: textFontAttributes);
                     if (scaleIsVertical == true){
-                        label.textAlignment = .Right;
+                        label.textAlignment = .right;
                     } else {
-                        label.textAlignment = .Center;
+                        label.textAlignment = .center;
                     }
                     
                     self.addSubview(label);

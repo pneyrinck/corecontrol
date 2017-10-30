@@ -27,14 +27,26 @@ class CCButtonState: NSObject {
         super.init()
         self.setBorderRadius(0.0)
         borderWidth = 1.0
-        borderColor = UIColor.blackColor()
+        borderColor = UIColor.black
         textFont = nil
         textColor = nil
-        backgroundColor = UIColor.grayColor()
-        
+        backgroundColor = UIColor.gray
     }
     
-    func setBorderRadius(radius: CGFloat) {
+    init(_ other: CCButtonState) {
+        borderRadiusTL = other.borderRadiusTL
+        borderRadiusTR = other.borderRadiusTR
+        borderRadiusBL = other.borderRadiusBL
+        borderRadiusBR = other.borderRadiusBR
+        borderWidth = other.borderWidth
+        borderColor = other.borderColor
+        textFont = other.textFont
+        textColor = other.textColor
+        backgroundColor = other.backgroundColor
+        backgroundGradient = other.backgroundGradient
+    }
+    
+    func setBorderRadius(_ radius: CGFloat) {
         self.borderRadiusTL = radius
         self.borderRadiusTR = radius
         self.borderRadiusBL = radius
@@ -45,11 +57,11 @@ class CCButtonState: NSObject {
         return borderRadiusTL == borderRadiusTR && borderRadiusTL == borderRadiusBL && borderRadiusTL == borderRadiusBR
     }
     
-    class func colorWithR(r: Int, G g: Int, B b: Int) -> UIColor {
+    class func colorWithR(_ r: Int, G g: Int, B b: Int) -> UIColor {
         return UIColor(red: CGFloat(Float(r) / 255.0), green: CGFloat(Float(g) / 255.0), blue: CGFloat(Float(b) / 255.0), alpha: 1.0)
     }
     
-    class func colorWithR(r: Int, G g: Int, B b: Int, A a: Int) -> UIColor {
+    class func colorWithR(_ r: Int, G g: Int, B b: Int, A a: Int) -> UIColor {
         return UIColor(red: CGFloat(Float(r) / 255.0) , green: CGFloat(Float(g) / 255.0), blue: CGFloat(Float(b) / 255.0), alpha: CGFloat(Float(a) / 255.0))
     }
     
@@ -64,8 +76,8 @@ class CCButtonState: NSObject {
     class func activeGrayButton() -> CCButtonState {
         var state: CCButtonState? = nil
         state = CCButtonState()
-        state!.textColor = UIColor.whiteColor()
-        state!.backgroundColor = UIColor.greenColor()
+        state!.textColor = UIColor.white
+        state!.backgroundColor = UIColor.green
         return state!
     }
 }

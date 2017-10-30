@@ -7,8 +7,32 @@
 //
 
 import UIKit
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
 
-func degToRad (deg:CGFloat) -> CGFloat{
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
+
+func degToRad (_ deg:CGFloat) -> CGFloat{
     return deg / 180.0 * CGFloat(M_PI)
 }
 
@@ -18,7 +42,7 @@ class CCButton: UIButton {
     var originalColor: UIColor!
     var originalFont: UIFont!
     var gradientIsLeftToRight: Bool = false
-    var highlightColor: UIColor = UIColor.redColor();
+    var highlightColor: UIColor = UIColor.red;
 	var unused: Bool = false
 	{
 		didSet {
@@ -36,60 +60,59 @@ class CCButton: UIButton {
         self.setup()
     }
     
-    
     func setup(){
         buttonStates = NSMutableDictionary()
-        originalColor = self.titleColorForState(.Normal)
+        originalColor = self.titleColor(for: UIControlState())
         originalFont = self.titleLabel!.font
         self.setState(CCButtonState.grayButton(), forIndex: 0)
         self.currentState = 0
     }
     
-    func setIcon(icon: FontAwesome){
+    func setIcon(_ icon: FontAwesome){
         let sz: CGFloat = self.titleLabel!.font.pointSize
         originalFont = UIFont.fontAwesomeOfSize(sz)
         self.titleLabel!.font = originalFont
-        self.titleLabel!.textAlignment = .Center
-        self.setTitle(String.fontAwesomeIconWithName(icon), forState: .Normal)
+        self.titleLabel!.textAlignment = .center
+        self.setTitle(String.fontAwesomeIconWithName(icon), for: UIControlState())
     }
     
-    func setIcon(icon: FontAwesome, withSize size: CGFloat){
+    func setIcon(_ icon: FontAwesome, withSize size: CGFloat){
         originalFont = UIFont.fontAwesomeOfSize(size)
         self.titleLabel!.font = originalFont
-        self.titleLabel!.textAlignment = .Center
-        self.setTitle(String.fontAwesomeIconWithName(icon), forState: .Normal)
+        self.titleLabel!.textAlignment = .center
+        self.setTitle(String.fontAwesomeIconWithName(icon), for: UIControlState())
     }
     
-    func setIcon(fa_string : String){
+    func setIcon(_ fa_string : String){
         let sz: CGFloat = self.titleLabel!.font.pointSize
         originalFont = UIFont.fontAwesomeOfSize(sz)
         self.titleLabel!.font = originalFont
-        self.titleLabel!.textAlignment = .Center
-        self.setTitle(String.fontAwesomeIconWithCode(fa_string), forState: .Normal)
+        self.titleLabel!.textAlignment = .center
+        self.setTitle(String.fontAwesomeIconWithCode(fa_string), for: UIControlState())
     }
     
-    func setIcon(fa_string : String, withSize size:CGFloat){
+    func setIcon(_ fa_string : String, withSize size:CGFloat){
         originalFont = UIFont.fontAwesomeOfSize(size)
         self.titleLabel!.font = originalFont
-        self.titleLabel!.textAlignment = .Center
-        self.setTitle(String.fontAwesomeIconWithCode(fa_string), forState: .Normal)
+        self.titleLabel!.textAlignment = .center
+        self.setTitle(String.fontAwesomeIconWithCode(fa_string), for: UIControlState())
     }
 
     
-    func setTwoIcons(icon:String, second icon2: String, withSize sz:CGFloat){
+    func setTwoIcons(_ icon:String, second icon2: String, withSize sz:CGFloat){
         originalFont = UIFont.fontAwesomeOfSize(sz)
         self.titleLabel!.font = originalFont
-        self.titleLabel!.textAlignment = .Center
+        self.titleLabel!.textAlignment = .center
         let i1 = String.fontAwesomeIconWithCode(icon)
         let i2 = String.fontAwesomeIconWithCode(icon2)
-        self.setTitle("\(i1) \(i2)", forState: .Normal)
+        self.setTitle("\(i1) \(i2)", for: UIControlState())
     }
 
-    func setState(state: CCButtonState, forIndex index: Int) {
-        buttonStates[Int(index)] = state
+    func setState(_ state: CCButtonState, forIndex index: Int) {
+        buttonStates[Int(index)] = CCButtonState(state)
     }
     
-    func stateForIndex(index: Int) -> CCButtonState {
+    func stateForIndex(_ index: Int) -> CCButtonState {
         if let res: CCButtonState = buttonStates[Int(index)] as? CCButtonState {
             return res
         } else {
@@ -97,8 +120,8 @@ class CCButton: UIButton {
         }
     }
     
-    func createBorderPath(rc: CGRect, niftyState state: CCButtonState) -> CGPathRef {
-        let p: CGMutablePathRef = CGPathCreateMutable()
+    func createBorderPath(_ rc: CGRect, niftyState state: CCButtonState) -> CGPath {
+        let p: CGMutablePath = CGMutablePath()
         let x: CGFloat = rc.origin.x
         let y: CGFloat = rc.origin.y
         let w: CGFloat = rc.size.width
@@ -108,29 +131,29 @@ class CCButton: UIButton {
         let borderRadiusBR: CGFloat = min(CGFloat(state.borderRadiusBR), min(w, h) / 2.0)
         let borderRadiusBL: CGFloat = min(CGFloat(state.borderRadiusBL), min(w, h) / 2.0)
         
-        CGPathMoveToPoint(p, nil, x + borderRadiusTL, y) // top line start
-        CGPathAddLineToPoint(p, nil, x + w - borderRadiusTR, y) // top line end
-        CGPathAddArc(p, nil, x + w - borderRadiusTR, y + borderRadiusTR, borderRadiusTR, degToRad(270), degToRad(0), false)
-        CGPathAddLineToPoint(p, nil, x + w, y + h - borderRadiusBR) // right line end
-        CGPathAddArc(p, nil, x + w - borderRadiusBR, y + h - borderRadiusBR, borderRadiusBR, degToRad(0), degToRad(90), false)
-        CGPathAddLineToPoint(p, nil, x + borderRadiusBL, y + h) // bottom line end
-        CGPathAddArc(p, nil, x + borderRadiusBL, y + h - borderRadiusBL, borderRadiusBL, degToRad(90), degToRad(180), false)
-        CGPathAddLineToPoint(p, nil, x, y + borderRadiusTL) // left line end
-        CGPathAddArc(p, nil, x + borderRadiusTL, y + borderRadiusTL, borderRadiusTL, degToRad(180), degToRad(270), false)
-        CGPathCloseSubpath(p)
+        p.move(to: CGPoint (x: x + borderRadiusTL, y: y)) // top line start
+        p.addLine(to: CGPoint (x:  x + w - borderRadiusTR, y: y)) // top line end
+        p.addArc(center: CGPoint(x: x + w - borderRadiusTR, y: y + borderRadiusTR), radius: borderRadiusTR, startAngle: degToRad(270), endAngle: degToRad(0), clockwise: false)
+        p.addLine(to: CGPoint (x:  x + w, y: y + h - borderRadiusBR)) // right line end
+        p.addArc(center: CGPoint(x: x + w - borderRadiusBR, y: y + h - borderRadiusBR), radius: borderRadiusBR, startAngle: degToRad(0), endAngle: degToRad(90), clockwise: false)
+        p.addLine(to: CGPoint (x:  x + borderRadiusBL, y: y + h)) // bottom line end
+        p.addArc(center: CGPoint(x: x + borderRadiusBL, y: y + h - borderRadiusBL), radius: borderRadiusBL, startAngle: degToRad(90), endAngle: degToRad(180), clockwise: false)
+        p.addLine(to: CGPoint (x:  x, y: y + borderRadiusTL)) // left line end
+        p.addArc(center: CGPoint(x: x + borderRadiusTL, y: y + borderRadiusTL), radius: borderRadiusTL, startAngle: degToRad(180), endAngle: degToRad(270), clockwise: false)
+        p.closeSubpath()
         return p
     }
     
-    override func drawRect(rect: CGRect) {
-        self.alpha = (self.unused==false)&&(self.enabled==true) ? 1.0:0.5;
+    override func draw(_ rect: CGRect) {
+        self.alpha = (self.unused==false)&&(self.isEnabled==true) ? 1.0:0.5;
         let state: CCButtonState = self.stateForIndex(currentState)
-        let ctx: CGContextRef = UIGraphicsGetCurrentContext()!
-        let buttonArea: CGRect = CGRectInset(self.bounds, CGFloat(state.borderWidth) / 2.0, CGFloat(state.borderWidth) / 2.0)
-        var borderPath: CGPathRef
+        let ctx: CGContext = UIGraphicsGetCurrentContext()!
+        let buttonArea: CGRect = self.bounds.insetBy(dx: CGFloat(state.borderWidth) / 2.0, dy: CGFloat(state.borderWidth) / 2.0)
+        var borderPath: CGPath
         
         if state.equalBorderRadius() {
             let radius: CGFloat = min(CGFloat(state.borderRadiusTL), min(buttonArea.size.width, buttonArea.size.height) / 2.0)
-            borderPath = CGPathCreateWithRoundedRect(buttonArea, radius, radius, nil)
+            borderPath = CGPath(roundedRect: buttonArea, cornerWidth: radius, cornerHeight: radius, transform: nil)
         }
         else {
             borderPath = self.createBorderPath(buttonArea, niftyState: state)
@@ -138,46 +161,46 @@ class CCButton: UIButton {
         
         // Draw background
         if (state.backgroundGradient != nil) {
-            CGContextSaveGState(ctx)
+            ctx.saveGState()
                       
-            let gradient: CGGradientRef = state.backgroundGradient.CGGradient()
+            let gradient: CGGradient = state.backgroundGradient.CGGradient()
             
-            CGContextAddPath(ctx, borderPath)
-            CGContextClip(ctx)
+            ctx.addPath(borderPath)
+            ctx.clip()
             var startPoint: CGPoint!
             var endPoint: CGPoint!
             
             if ( gradientIsLeftToRight == true){
-                startPoint = CGPointMake(0, self.bounds.height)
-                endPoint = CGPointMake(self.bounds.width, self.bounds.height)
+                startPoint = CGPoint(x: 0, y: self.bounds.height)
+                endPoint = CGPoint(x: self.bounds.width, y: self.bounds.height)
             } else {
-                startPoint = CGPointMake(CGRectGetMidX(buttonArea), CGRectGetMinY(buttonArea))
-                endPoint = CGPointMake(CGRectGetMidX(buttonArea), CGRectGetMaxY(buttonArea))
+                startPoint = CGPoint(x: buttonArea.midX, y: buttonArea.minY)
+                endPoint = CGPoint(x: buttonArea.midX, y: buttonArea.maxY)
             }
             
-            CGContextDrawLinearGradient(ctx, gradient, startPoint, endPoint, CGGradientDrawingOptions(rawValue: 0))
-            CGContextRestoreGState(ctx)
+            ctx.drawLinearGradient(gradient, start: startPoint, end: endPoint, options: CGGradientDrawingOptions(rawValue: 0))
+            ctx.restoreGState()
         }
         else if (state.backgroundColor != nil) {
-            CGContextAddPath(ctx, borderPath)
-            CGContextSetFillColorWithColor(ctx, state.backgroundColor.CGColor)
-            CGContextFillPath(ctx)
+            ctx.addPath(borderPath)
+            ctx.setFillColor(state.backgroundColor.cgColor)
+            ctx.fillPath()
         }
 		
 		// highlight coloring useful for Pro Tools automation modes
-		if (self.highlighted)
+		if (self.isHighlighted)
 		{
-			CGContextAddPath(ctx, borderPath)
-			CGContextSetFillColorWithColor(ctx, highlightColor.colorWithAlphaComponent(0.5).CGColor)
-			CGContextFillPath(ctx)
+			ctx.addPath(borderPath)
+			ctx.setFillColor(highlightColor.withAlphaComponent(0.5).cgColor)
+			ctx.fillPath()
 		}
 		
         // Draw border
         if (state.borderWidth > 0) {
-            CGContextAddPath(ctx, borderPath)
-            CGContextSetStrokeColorWithColor(ctx, state.borderColor.CGColor)
-            CGContextSetLineWidth(ctx, CGFloat(state.borderWidth))
-            CGContextDrawPath(ctx, .Stroke)
+            ctx.addPath(borderPath)
+            ctx.setStrokeColor(state.borderColor.cgColor)
+            ctx.setLineWidth(CGFloat(state.borderWidth))
+            ctx.drawPath(using: .stroke)
         }
         
     }
@@ -186,16 +209,16 @@ class CCButton: UIButton {
         return currentState
     }
     
-    func setCurrentState(newState: Int) {
+    func setCurrentState(_ newState: Int) {
         currentState = newState
         self.setNeedsDisplay()
         let state: CCButtonState = self.stateForIndex(currentState)
         // set color
         if (state.textColor != nil) {
-            self.setTitleColor(state.textColor, forState: .Normal)
+            self.setTitleColor(state.textColor, for: UIControlState())
         }
         else {
-            self.setTitleColor(originalColor, forState: .Normal)
+            self.setTitleColor(originalColor, for: UIControlState())
         }
         // set font
         if (state.textFont != nil) {
@@ -207,8 +230,8 @@ class CCButton: UIButton {
         
     }
     
-    func setText(text: String) {
-        self.setTitle(text, forState: .Normal)
+    func setText(_ text: String) {
+        self.setTitle(text, for: UIControlState())
     }
 
 }
