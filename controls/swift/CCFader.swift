@@ -394,5 +394,20 @@ override var isHighlighted: Bool {
     func getFaderHeight() -> Float {
         return Float(self.bounds.size.height)
     }
-
+	func setCapTouched(isTouched:Bool)
+	{
+		if capTouched==isTouched
+		{
+			return;
+		}
+		capTouched = isTouched;
+		if (capTouched == true)
+		{
+			self.sendActions(for: .editingDidBegin)
+		}
+		else
+		{
+			self.sendActions(for: .editingDidEnd)
+		}
+	}
 }

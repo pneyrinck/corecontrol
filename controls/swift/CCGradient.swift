@@ -50,7 +50,7 @@ class CCGradient: NSObject {
         }
         colorspace = CGColorSpaceCreateDeviceRGB()
         gradient = CGGradient(colorsSpace: colorspace, colors: components as CFArray, locations: locations)!
-    
+   
         return gradient
     }
 

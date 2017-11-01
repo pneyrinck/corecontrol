@@ -27,13 +27,13 @@ class CCFaderCap: CCButton {
     
     func handleDoubleTap(_ recognizer: UITapGestureRecognizer? = nil) {
         let faderView: CCFader = self.superview as! CCFader
-        faderView.capTouched = false
+        faderView.setCapTouched(isTouched: false)
         faderView.handleDoubleTap()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         let faderView: CCFader = self.superview as! CCFader
-        faderView.capTouched = true
+        faderView.setCapTouched(isTouched: true)
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -62,7 +62,7 @@ class CCFaderCap: CCButton {
         let t: [AnyObject] = Array(touches)
         let numTouches: Int = t.count
         if numTouches != 1 { return }
-        faderView.capTouched = false
+        faderView.setCapTouched(isTouched: false)
     }
     
 }
