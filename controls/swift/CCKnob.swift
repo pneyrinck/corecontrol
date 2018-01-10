@@ -370,12 +370,12 @@ class CCKnob: UIControl {
         // Apply the transform to the context
         // Calculate the start and ending angles
         if arcAngle > 0 {
-            start = Float(90 - startAngle - arcAngle) * Float(M_PI / 180)
-            end = Float(90 - startAngle) * Float(M_PI / 180)
+            start = Float(90 - startAngle - arcAngle) * Float.pi / 180
+            end = Float(90 - startAngle) * Float.pi / 180
         }
         else {
-            start = Float(90 - startAngle) * Float(M_PI / 180)
-            end = Float(90 - startAngle - arcAngle) * Float(M_PI / 180)
+            start = Float(90 - startAngle) * Float.pi / 180
+            end = Float(90 - startAngle - arcAngle) * Float.pi / 180
         }
         // Add the Arc to the path
         context.addArc(center: CGPoint(x: 0, y: 0), radius: CGFloat(radius), startAngle: CGFloat(start), endAngle: CGFloat(end), clockwise: false)

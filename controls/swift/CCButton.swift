@@ -33,7 +33,7 @@ fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 
 
 func degToRad (_ deg:CGFloat) -> CGFloat{
-    return deg / 180.0 * CGFloat(M_PI)
+    return deg / 180.0 * .pi
 }
 
 class CCButton: UIButton {
@@ -105,7 +105,10 @@ class CCButton: UIButton {
         self.titleLabel!.textAlignment = .center
         let i1 = String.fontAwesomeIconWithCode(icon)
         let i2 = String.fontAwesomeIconWithCode(icon2)
-        self.setTitle("\(i1) \(i2)", for: UIControlState())
+        
+        if i1 != nil && i2 != nil {
+            self.setTitle("\(i1!) \(i2!)", for: UIControlState())
+        }
     }
 
     func setState(_ state: CCButtonState, forIndex index: Int) {
