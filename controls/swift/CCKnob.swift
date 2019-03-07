@@ -149,8 +149,9 @@ class CCKnob: UIControl {
         
         
         if rawposition >= 0.0 || absoluteMode == true {
-            let radiusinner = knobData["backRadiusInner"]as? Float
-            let radiusouter = knobData["backRadiusOuter"] as? Float
+            let radiusinner = knobData["backRadiusInner"] as? CGFloat
+            let radiusouter = knobData["backRadiusOuter"] as? CGFloat
+            
             // draw inner circles-
             let outerRadius = rect.size.width * 0.5 * (1.0 - (knobData["circle1Radius"] as! CGFloat))
             let innerRadius = rect.size.width * 0.5 * (1.0 - (knobData["circle2Radius"] as! CGFloat))
@@ -166,12 +167,12 @@ class CCKnob: UIControl {
       
             
             ctx.setFillColor((knobData["displayBackColor"] as! UIColor).cgColor)
-            self.strokeArc(ctx, r: rect, startAngle: 45, arcAngle: 270, radius: radiusouter!, radius2: radiusinner!)
+            self.strokeArc(ctx, r: rect, startAngle: 45, arcAngle: 270, radius: Float(radiusouter!), radius2: Float(radiusinner!))
             ctx.setFillColor((knobData["displayLightColor"] as! UIColor).cgColor)
            
             
             
-            self.strokeArc(ctx, r: rect, startAngle: Int(45+(270 * start)), arcAngle:Int(270*arcdistance), radius: radiusouter!, radius2: radiusinner!)
+            self.strokeArc(ctx, r: rect, startAngle: Int(45+(270 * start)), arcAngle:Int(270*arcdistance), radius: Float(radiusouter!), radius2: Float(radiusinner!))
 
         }
 
