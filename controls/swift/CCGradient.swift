@@ -34,7 +34,6 @@ class CCGradient: NSObject {
     
     
     func getGradient() -> CGGradient {
-        var gradient: CGGradient
         var colorspace: CGColorSpace
         let num_locations: Int = pos.count
         var locations :[CGFloat] = []
@@ -49,9 +48,8 @@ class CCGradient: NSObject {
             components.insert(CGFloat((rgba_col & 0x000000FF) >> 0) / 255.0, at: (i * 4 + 3))
         }
         colorspace = CGColorSpaceCreateDeviceRGB()
-        gradient = CGGradient(colorsSpace: colorspace, colors: components as CFArray, locations: locations)!
-   
-        return gradient
+        let grad = CGGradient(colorSpace: colorspace, colorComponents: components, locations: locations, count: num_locations)
+        return grad!
     }
 
 }

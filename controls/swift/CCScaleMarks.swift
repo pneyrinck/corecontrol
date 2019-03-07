@@ -83,7 +83,7 @@ class CCScaleMarks: UIView {
 
  
         if (master != nil && master.isKind(of: CCFader.self)){
-            masterFader = master as! CCFader
+            masterFader = (master as! CCFader)
             masterIsFader = true
             
         } else {
