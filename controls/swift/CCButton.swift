@@ -193,9 +193,12 @@ class CCButton: UIButton {
 		// highlight coloring useful for Pro Tools automation modes
 		if (self.isHighlighted)
 		{
-			ctx.addPath(borderPath)
-			ctx.setFillColor(highlightColor.withAlphaComponent(0.5).cgColor)
-			ctx.fillPath()
+            if highlightColor.cgColor.alpha > 0
+            {
+                ctx.addPath(borderPath)
+                ctx.setFillColor(highlightColor.withAlphaComponent(0.5).cgColor)
+                ctx.fillPath()
+            }
 		}
 		
         // Draw border
