@@ -13,6 +13,7 @@ func rgba(_ r:Int, g:Int, b:Int, a:Int )->Int{
     return (r << 24) | (g << 16) | (b << 8) | (a * 255)
 }
 
+@objcMembers
 class CCGradient: NSObject {
     
     var pos: NSMutableArray!

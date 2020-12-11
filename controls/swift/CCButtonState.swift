@@ -9,7 +9,7 @@
 import UIKit
 import Foundation
 
-
+@objcMembers
 class CCButtonState: NSObject {
     
     var borderRadiusTL : CGFloat!

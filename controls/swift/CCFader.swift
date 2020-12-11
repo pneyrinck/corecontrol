@@ -20,6 +20,7 @@ struct CCTaperMark
    
 };
 
+@objcMembers
 class CCFader: UIControl{
 
     var capButton: CCFaderCap!

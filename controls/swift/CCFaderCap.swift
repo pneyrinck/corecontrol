@@ -42,7 +42,7 @@ class CCFaderCap: CCButton {
             return
         }
         
-        var t: [AnyObject] = Array(touches)
+        let t: [AnyObject] = Array(touches)
         let numTouches: Int = t.count
         if numTouches != 1 { return }
         let touch: UITouch = t[0] as! UITouch
