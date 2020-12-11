@@ -165,14 +165,14 @@ class CCScaleMarks: UIView {
                     let textStyle = NSMutableParagraphStyle()
                     textStyle.alignment = .right
                     let textFontAttributes = [
-                        NSFontAttributeName: font,
-                        NSParagraphStyleAttributeName: textStyle
+                        convertFromNSAttributedStringKey(NSAttributedString.Key.font): font,
+                        convertFromNSAttributedStringKey(NSAttributedString.Key.paragraphStyle): textStyle
                     ]
                     let label:UILabel = UILabel();
                     label.frame = rect;
                     label.textColor = labelColor;
                     label.clipsToBounds = false;
-                    label.attributedText = NSAttributedString.init(string: marks[i].name, attributes: textFontAttributes);
+                    label.attributedText = NSAttributedString.init(string: marks[i].name, attributes: convertToOptionalNSAttributedStringKeyDictionary(textFontAttributes));
                     if (scaleIsVertical == true){
                         label.textAlignment = .right;
                     } else {
@@ -188,4 +188,15 @@ class CCScaleMarks: UIView {
     }
 
 
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromNSAttributedStringKey(_ input: NSAttributedString.Key) -> String {
+	return input.rawValue
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToOptionalNSAttributedStringKeyDictionary(_ input: [String: Any]?) -> [NSAttributedString.Key: Any]? {
+	guard let input = input else { return nil }
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (NSAttributedString.Key(rawValue: key), value)})
 }

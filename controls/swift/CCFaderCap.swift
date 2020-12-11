@@ -25,7 +25,7 @@ class CCFaderCap: CCButton {
     }
     
     
-    func handleDoubleTap(_ recognizer: UITapGestureRecognizer? = nil) {
+    @objc func handleDoubleTap(_ recognizer: UITapGestureRecognizer? = nil) {
         let faderView: CCFader = self.superview as! CCFader
         faderView.setCapTouched(isTouched: false)
         faderView.handleDoubleTap()

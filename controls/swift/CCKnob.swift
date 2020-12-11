@@ -271,7 +271,7 @@ class CCKnob: UIControl {
         
     }
     
-    func handlePan(_ recognizer: UIPanGestureRecognizer) {
+    @objc func handlePan(_ recognizer: UIPanGestureRecognizer) {
         let translation: CGPoint = recognizer.location(in: self)
         var x: CGFloat
         var y: CGFloat

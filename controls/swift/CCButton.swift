@@ -62,7 +62,7 @@ class CCButton: UIButton {
     
     func setup(){
         buttonStates = NSMutableDictionary()
-        originalColor = self.titleColor(for: UIControlState())
+        originalColor = self.titleColor(for: UIControl.State())
         originalFont = self.titleLabel!.font
         self.setState(CCButtonState.grayButton(), forIndex: 0)
         self.currentState = 0
@@ -73,14 +73,14 @@ class CCButton: UIButton {
         originalFont = UIFont.fontAwesomeOfSize(sz)
         self.titleLabel!.font = originalFont
         self.titleLabel!.textAlignment = .center
-        self.setTitle(String.fontAwesomeIconWithName(icon), for: UIControlState())
+        self.setTitle(String.fontAwesomeIconWithName(icon), for: UIControl.State())
     }
     
     func setIcon(_ icon: FontAwesome, withSize size: CGFloat){
         originalFont = UIFont.fontAwesomeOfSize(size)
         self.titleLabel!.font = originalFont
         self.titleLabel!.textAlignment = .center
-        self.setTitle(String.fontAwesomeIconWithName(icon), for: UIControlState())
+        self.setTitle(String.fontAwesomeIconWithName(icon), for: UIControl.State())
     }
     
     func setIcon(_ fa_string : String){
@@ -88,14 +88,14 @@ class CCButton: UIButton {
         originalFont = UIFont.fontAwesomeOfSize(sz)
         self.titleLabel!.font = originalFont
         self.titleLabel!.textAlignment = .center
-        self.setTitle(String.fontAwesomeIconWithCode(fa_string), for: UIControlState())
+        self.setTitle(String.fontAwesomeIconWithCode(fa_string), for: UIControl.State())
     }
     
     func setIcon(_ fa_string : String, withSize size:CGFloat){
         originalFont = UIFont.fontAwesomeOfSize(size)
         self.titleLabel!.font = originalFont
         self.titleLabel!.textAlignment = .center
-        self.setTitle(String.fontAwesomeIconWithCode(fa_string), for: UIControlState())
+        self.setTitle(String.fontAwesomeIconWithCode(fa_string), for: UIControl.State())
     }
 
     
@@ -107,7 +107,7 @@ class CCButton: UIButton {
         let i2 = String.fontAwesomeIconWithCode(icon2)
         
         if i1 != nil && i2 != nil {
-            self.setTitle("\(i1!) \(i2!)", for: UIControlState())
+            self.setTitle("\(i1!) \(i2!)", for: UIControl.State())
         }
     }
 
@@ -221,10 +221,10 @@ class CCButton: UIButton {
         let state: CCButtonState = self.stateForIndex(currentState)
         // set color
         if (state.textColor != nil) {
-            self.setTitleColor(state.textColor, for: UIControlState())
+            self.setTitleColor(state.textColor, for: UIControl.State())
         }
         else {
-            self.setTitleColor(originalColor, for: UIControlState())
+            self.setTitleColor(originalColor, for: UIControl.State())
         }
         // set font
         if (state.textFont != nil) {
@@ -237,7 +237,7 @@ class CCButton: UIButton {
     }
     
     func setText(_ text: String) {
-        self.setTitle(text, for: UIControlState())
+        self.setTitle(text, for: UIControl.State())
     }
 
 }
